@@ -13,8 +13,8 @@ class _HomePageState extends State<HomePage> {
 
   // List of pages corresponding to each tab
   final List<Widget> _pages = [
-    ExplorePage(),   // The Explore page
-    CameraPage(),    // The Camera page (you'll need to define this in camera.dart)
+    ExplorePage(), // The Explore page
+    CameraPage(), // The Camera page (you'll need to define this in camera.dart)
     ProfileScreen(), // The Profile page
   ];
 
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
+            icon: Icon(Icons.camera_alt),
             label: 'Camera',
           ),
           BottomNavigationBarItem(
@@ -49,6 +49,9 @@ class _HomePageState extends State<HomePage> {
             label: 'Profile',
           ),
         ],
+        selectedItemColor: Colors.red[800], // Color for selected tab
+        unselectedItemColor: Colors.grey[800], // Color for unselected tabs
+        type: BottomNavigationBarType.fixed, // Prevent shifting behavior
       ),
     );
   }
