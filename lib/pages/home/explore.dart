@@ -37,39 +37,27 @@ class ExplorePage extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          print('Amazing Views');
-                        },
+                        onTap: () {},
                         child: categoryIcon(Icons.landscape, "Amazing views"),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          print('Icons');
-                        },
+                        onTap: () {},
                         child: categoryIcon(Icons.star, "Icons"),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          print('Amazing Pools');
-                        },
+                        onTap: () {},
                         child: categoryIcon(Icons.pool, "Amazing pools"),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          print('Farm Houses');
-                        },
+                        onTap: () {},
                         child: categoryIcon(Icons.agriculture, "Farms"),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          print('Mansions');
-                        },
+                        onTap: () {},
                         child: categoryIcon(Icons.house, "Mansions"),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          print('Camping Sites');
-                        },
+                        onTap: () {},
                         child: categoryIcon(Icons.fireplace, "Camping"),
                       ),
                     ],

@@ -11,6 +11,8 @@ class SignupPage extends StatelessWidget {
 
   final AuthService _authService = AuthService();
 
+  SignupPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,9 +28,7 @@ class SignupPage extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.only(left: 10),
             decoration: const BoxDecoration(
-                color: Color(0xffF7F7F9),
-                shape: BoxShape.circle
-            ),
+                color: Color(0xffF7F7F9), shape: BoxShape.circle),
             child: const Center(
               child: Icon(
                 Icons.arrow_back_ios_new_rounded,
@@ -275,8 +275,9 @@ class SignupPage extends StatelessWidget {
           context: context,
         );
       },
-      child: const Text("Signup",
-      style: TextStyle(color: Colors.white), // Set text color to white)
+      child: const Text(
+        "Signup",
+        style: TextStyle(color: Colors.white), // Set text color to white)
       ),
     );
   }

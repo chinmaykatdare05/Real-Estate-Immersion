@@ -18,7 +18,8 @@ class AuthService {
     required BuildContext context,
   }) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -34,7 +35,9 @@ class AuthService {
       await Future.delayed(const Duration(seconds: 1));
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (BuildContext context) => HomePage()), // Updated HomePage()
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const HomePage()), // Updated HomePage()
       );
     } on FirebaseAuthException catch (e) {
       String message = '';
@@ -77,7 +80,9 @@ class AuthService {
       await Future.delayed(const Duration(seconds: 1));
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (BuildContext context) => HomePage()), // Updated HomePage()
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                HomePage()), // Updated HomePage()
       );
     } on FirebaseAuthException catch (e) {
       String message = '';
@@ -113,7 +118,9 @@ class AuthService {
     await Future.delayed(const Duration(seconds: 1));
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (BuildContext context) => Login()), // Login remains unchanged
+      MaterialPageRoute(
+          builder: (BuildContext context) =>
+              Login()), // Login remains unchanged
     );
   }
 
