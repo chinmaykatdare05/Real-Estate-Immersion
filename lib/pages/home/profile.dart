@@ -57,26 +57,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
-        Map<String, dynamic> userData = snapshot.data!.data() as Map<String, dynamic>;
+        Map<String, dynamic> userData =
+            snapshot.data!.data() as Map<String, dynamic>;
         _usernameController.text = userData['name'] ?? '';
         _emailController.text = userData['email'] ?? '';
         _phoneController.text = userData['phoneNumber'] ?? '';
         _panController.text = userData['panCard'] ?? '';
 
         return Scaffold(
-          appBar: AppBar(title: const Text('Profile')),
+          // appBar: AppBar(title: const Text('Profile')),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextField(controller: _usernameController, decoration: const InputDecoration(labelText: 'Name')),
+                TextField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(labelText: 'Name')),
                 const SizedBox(height: 16),
-                TextField(controller: _emailController, decoration: const InputDecoration(labelText: 'Email')),
+                TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(labelText: 'Email')),
                 const SizedBox(height: 16),
-                TextField(controller: _phoneController, decoration: const InputDecoration(labelText: 'Phone Number')),
+                TextField(
+                    controller: _phoneController,
+                    decoration:
+                        const InputDecoration(labelText: 'Phone Number')),
                 const SizedBox(height: 16),
-                TextField(controller: _panController, decoration: const InputDecoration(labelText: 'PAN Card Number')),
+                TextField(
+                    controller: _panController,
+                    decoration:
+                        const InputDecoration(labelText: 'PAN Card Number')),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: _updateUserInfo,
@@ -90,7 +101,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   child: Text(
                     'Update Profile',
-                    style: GoogleFonts.poppins(fontSize: 16, color: Colors.white),
+                    style:
+                        GoogleFonts.poppins(fontSize: 16, color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -106,7 +118,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   child: Text(
                     'Logout',
-                    style: GoogleFonts.poppins(fontSize: 16, color: Colors.white),
+                    style:
+                        GoogleFonts.poppins(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ],
