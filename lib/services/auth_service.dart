@@ -82,7 +82,7 @@ class AuthService {
         context,
         MaterialPageRoute(
             builder: (BuildContext context) =>
-                HomePage()), // Updated HomePage()
+                const HomePage()), // Updated HomePage()
       );
     } on FirebaseAuthException catch (e) {
       String message = '';
