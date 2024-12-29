@@ -1,7 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -43,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _logout() async {
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed('/');
   }
 
   @override
@@ -99,10 +100,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     minimumSize: const Size(double.infinity, 60),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Update Profile',
-                    style:
-                        GoogleFonts.poppins(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -116,10 +116,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     minimumSize: const Size(double.infinity, 60),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Logout',
-                    style:
-                        GoogleFonts.poppins(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ],

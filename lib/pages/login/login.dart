@@ -33,11 +33,11 @@ class Login extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: const Center(
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.black,
-              ),
-            ),
+                // child: Icon(
+                //   Icons.arrow_back_ios_new_rounded,
+                //   color: Colors.black,
+                // ),
+                ),
           ),
         ),
       ),
@@ -66,7 +66,7 @@ class Login extends StatelessWidget {
               const SizedBox(height: 50),
               _signin(context),
               const SizedBox(height: 10), // Added space between buttons
-              _forgotPassword(context),  // New Forgot Password button
+              _forgotPassword(context), // New Forgot Password button
             ],
           ),
         ),
@@ -202,7 +202,8 @@ class Login extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ForgotPasswordPage(), // Navigate to ForgotPasswordPage
+            builder: (context) =>
+                ForgotPasswordPage(), // Navigate to ForgotPasswordPage
           ),
         );
       },

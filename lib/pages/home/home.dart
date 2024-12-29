@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'explore.dart';
@@ -55,9 +57,9 @@ class _HomePageState extends State<HomePage> {
             color: _selectedIndex == 2 ? Colors.white : Colors.white,
           ),
         ],
-        color: const Color.fromARGB(255, 1, 24, 76),
-        buttonBackgroundColor: const Color.fromARGB(255, 234, 185, 5),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        color: Colors.blueAccent,
+        buttonBackgroundColor: Colors.red,
+        backgroundColor: Colors.transparent,
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 600),
         onTap: _onItemTapped,
