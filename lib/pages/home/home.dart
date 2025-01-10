@@ -1,24 +1,39 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'explore.dart';
-import 'camera.dart';
-import 'profile.dart';
+import 'package:flutter03/pages/home/camera.dart';
+import 'package:flutter03/pages/home/explore.dart';
+import 'package:flutter03/pages/home/profile.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Navigation Bar Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomePage(),
+    );
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0; // Tracks which tab is selected
 
-  // List of pages corresponding to each tab
   final List<Widget> _pages = [
-    ExplorePage(), // The Explore page
+    ExplorePage(), // Explore page
     const CameraPage(), // The Camera page
     const ProfileScreen(), // The Profile page
   ];
@@ -33,37 +48,27 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex, // Manages the screen based on the selected index
-        children: _pages,
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
-        index: _selectedIndex,
-        height: 60.0,
-        items: <Widget>[
-          Icon(
-            Icons.explore,
-            size: 30,
-            color: _selectedIndex == 0 ? Colors.white : Colors.white,
+      body: _pages[_selectedIndex], // Display the selected page
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex, // Highlight the selected item
+        onTap: _onItemTapped, // Handle navigation
+        type: BottomNavigationBarType.fixed, // Keeps all items visible
+        selectedItemColor: Colors.red, // Active item color
+        unselectedItemColor: Colors.black54, // Inactive item color
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Explore',
           ),
-          Icon(
-            Icons.photo_camera,
-            size: 30,
-            color: _selectedIndex == 1 ? Colors.white : Colors.white,
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera_alt),
+            label: 'Camera',
           ),
-          Icon(
-            Icons.person,
-            size: 30,
-            color: _selectedIndex == 2 ? Colors.white : Colors.white,
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
-        color: Colors.blueAccent,
-        buttonBackgroundColor: Colors.red,
-        backgroundColor: Colors.transparent,
-        animationCurve: Curves.easeInOut,
-        animationDuration: const Duration(milliseconds: 600),
-        onTap: _onItemTapped,
-        letIndexChange: (index) => true,
       ),
     );
   }

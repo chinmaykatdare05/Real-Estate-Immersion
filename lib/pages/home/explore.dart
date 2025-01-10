@@ -33,48 +33,14 @@ class ExplorePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
 
-                // Horizontal List of Categories
-                SizedBox(
-                  height: 60,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: categoryIcon(Icons.landscape, "Amazing views"),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: categoryIcon(Icons.star, "Icons"),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: categoryIcon(Icons.pool, "Amazing pools"),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: categoryIcon(Icons.agriculture, "Farms"),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: categoryIcon(Icons.house, "Mansions"),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: categoryIcon(Icons.fireplace, "Camping"),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Recommended for you',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
+                // const Text(
+                //   'Recommended for you',
+                //   style: TextStyle(
+                //     fontSize: 18,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
+                // const SizedBox(height: 10),
 
                 // StreamBuilder for Firestore data
                 StreamBuilder<QuerySnapshot>(
@@ -168,7 +134,7 @@ class PropertyTile extends StatelessWidget {
                 child: Image.network(
                   imageUrl,
                   width: double.infinity,
-                  height: 200,
+                  height: 300,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
@@ -403,7 +369,7 @@ class PropertyDetailsPage extends StatelessWidget {
 
 Widget categoryIcon(IconData icon, String title) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+    padding: const EdgeInsets.symmetric(horizontal: .0),
     child: Column(
       children: [
         Icon(icon, size: 30),

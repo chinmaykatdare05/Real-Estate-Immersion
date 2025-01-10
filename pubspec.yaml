@@ -78,11 +78,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins-Black.ttf
+  # fonts:
+  #   - family: Poppins
+  #     fonts:
+  #       - asset: assets/fonts/Poppins-Regular.ttf
+  #       - asset: assets/fonts/Poppins-Black.ttf
+  # - family: Merriweather
+  #   fonts:
+  #     - asset: assets/fonts/Merriweather-Regular.ttf
 
   #
   # For details regarding fonts from package dependencies,
