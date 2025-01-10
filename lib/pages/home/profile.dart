@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,7 +41,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _logout() async {
     await FirebaseAuth.instance.signOut();
-    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacementNamed('/');
   }
 
@@ -241,6 +240,31 @@ class PersonalInfoScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Add update logic if needed
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .update({
+                    'name': usernameController.text,
+                    'email': emailController.text,
+                    'phoneNumber': phoneController.text,
+                    'panCard': panController.text,
+                  }).then((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Profile updated successfully!')),
+                    );
+                  }).catchError((error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text('Failed to update profile: $error')),
+                    );
+                  });
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfileScreen(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15),
