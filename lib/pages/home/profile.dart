@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter03/pages/home/home.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -65,24 +66,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 ListTile(
                   leading: CircleAvatar(
-                    radius: 36, // Increase the size of the CircleAvatar
-                    backgroundColor:
-                        Colors.blue, // Add background color to the CircleAvatar
+                    radius: 36,
+                    backgroundColor: Colors.blue[700],
                     child: Text(
                       userData['name'][0].toUpperCase(),
-                      style: const TextStyle(
-                          fontSize: 30,
-                          color: Colors
-                              .white), // Increase the font size and set text color to white
+                      style: const TextStyle(fontSize: 30, color: Colors.white),
                     ),
                   ),
                   title: Text(
                     userData['name'],
-                    style:
-                        const TextStyle(fontSize: 24), // Increase the font size
+                    style: const TextStyle(fontSize: 24),
                   ),
                   subtitle: const Text('RI user'),
-                  onTap: () {}, // Add profile viewing functionality if needed
+                  onTap: () {},
                   trailing: const SizedBox(height: 30),
                 ),
                 const SizedBox(height: 15),
@@ -165,8 +161,6 @@ class PersonalInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController usernameController =
         TextEditingController(text: name);
-    final TextEditingController emailController =
-        TextEditingController(text: email);
     final TextEditingController phoneController =
         TextEditingController(text: phone);
     final TextEditingController panController =
@@ -205,17 +199,6 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  prefixIcon: const Icon(Icons.email),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
                 controller: phoneController,
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
@@ -239,13 +222,11 @@ class PersonalInfoScreen extends StatelessWidget {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  // Add update logic if needed
                   FirebaseFirestore.instance
                       .collection('users')
                       .doc(FirebaseAuth.instance.currentUser!.uid)
                       .update({
                     'name': usernameController.text,
-                    'email': emailController.text,
                     'phoneNumber': phoneController.text,
                     'panCard': panController.text,
                   }).then((_) {
@@ -253,18 +234,19 @@ class PersonalInfoScreen extends StatelessWidget {
                       const SnackBar(
                           content: Text('Profile updated successfully!')),
                     );
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomePage(),
+                      ),
+                      (route) => false,
+                    );
                   }).catchError((error) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                           content: Text('Failed to update profile: $error')),
                     );
                   });
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfileScreen(),
-                    ),
-                  );
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15),
@@ -278,7 +260,7 @@ class PersonalInfoScreen extends StatelessWidget {
                   'Update Profile',
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
-              ),
+              )
             ],
           ),
         ),
