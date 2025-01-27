@@ -7,7 +7,6 @@ class SignupPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController panCardController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
 
   final AuthService _authService = AuthService();
@@ -152,8 +151,6 @@ class SignupPage extends StatelessWidget {
                             const SizedBox(height: 20),
                             _password(),
                             const SizedBox(height: 20),
-                            _panCard(),
-                            const SizedBox(height: 20),
                             _phoneNumber(),
                           ],
                         ),
@@ -177,7 +174,6 @@ class SignupPage extends StatelessWidget {
                             name: nameController.text.trim(),
                             email: emailController.text.trim(),
                             password: passwordController.text.trim(),
-                            panCard: panCardController.text.trim(),
                             phoneNumber: phoneNumberController.text.trim(),
                             context: context,
                           );
@@ -282,41 +278,6 @@ class SignupPage extends StatelessWidget {
           decoration: InputDecoration(
             filled: true,
             hintText: 'Enter your password',
-            fillColor: const Color.fromARGB(255, 255, 255, 255),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                  color: Colors.blue, width: 1.5), // Border color and width
-              borderRadius: BorderRadius.circular(14),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                  color: Colors.blue, width: 1.5), // Border when enabled
-              borderRadius: BorderRadius.circular(14),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                  color: Colors.green, width: 2.0), // Border when focused
-              borderRadius: BorderRadius.circular(14),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _panCard() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('PAN Card',
-            style: GoogleFonts.raleway(color: Colors.black, fontSize: 16)),
-        const SizedBox(height: 16),
-        TextField(
-          controller: panCardController,
-          decoration: InputDecoration(
-            filled: true,
-            hintText: 'Enter your PAN card number',
-            //hintStyle: TextStyle(color: Color(0xff6A6A6A), fontSize: 14),
             fillColor: const Color.fromARGB(255, 255, 255, 255),
             border: OutlineInputBorder(
               borderSide: const BorderSide(

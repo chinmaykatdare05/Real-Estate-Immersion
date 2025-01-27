@@ -15,7 +15,6 @@ class AuthService {
     required String name,
     required String email,
     required String password,
-    required String panCard,
     required String phoneNumber,
     required BuildContext context,
   }) async {
@@ -30,7 +29,6 @@ class AuthService {
       await _firestore.collection('users').doc(userCredential.user!.uid).set({
         'name': name,
         'email': email,
-        'panCard': panCard,
         'phoneNumber': phoneNumber,
       });
 

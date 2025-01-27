@@ -35,7 +35,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           name: userData['name'] ?? '',
           email: userData['email'] ?? '',
           phone: userData['phoneNumber'] ?? '',
-          pan: userData['panCard'] ?? '',
         ),
       ),
     );
@@ -62,8 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         return Scaffold(
           body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-                20.0, 60.0, 20.0, 20.0), // Added padding at the top
+            padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 20.0),
             child: Column(
               children: [
                 ListTile(
@@ -79,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     userData['name'],
                     style: const TextStyle(fontSize: 24),
                   ),
-                  subtitle: const Text('Real Estate Intelligence '),
+                  subtitle: const Text('Real Estate Intelligence'),
                   onTap: () {},
                   trailing: const SizedBox(height: 30),
                 ),
@@ -103,11 +101,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   leading: const Icon(Icons.phone),
                   title: const Text('Phone Number'),
                   subtitle: Text(userData['phoneNumber']),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.credit_card),
-                  title: const Text('PAN Card Number'),
-                  subtitle: Text(userData['panCard']),
                 ),
                 const ListTile(
                   title: Text(
@@ -157,14 +150,12 @@ class UpdateProfile extends StatelessWidget {
   final String name;
   final String email;
   final String phone;
-  final String pan;
 
   const UpdateProfile({
     super.key,
     required this.name,
     required this.email,
     required this.phone,
-    required this.pan,
   });
 
   @override
@@ -175,8 +166,6 @@ class UpdateProfile extends StatelessWidget {
         TextEditingController(text: email);
     final TextEditingController phoneController =
         TextEditingController(text: phone);
-    final TextEditingController panController =
-        TextEditingController(text: pan);
 
     var formKey;
     return Scaffold(
@@ -235,27 +224,12 @@ class UpdateProfile extends StatelessWidget {
                   LengthLimitingTextInputFormatter(10),
                 ],
               ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: panController,
-                decoration: InputDecoration(
-                  labelText: 'PAN Card Number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  prefixIcon: const Icon(Icons.credit_card),
-                ),
-                inputFormatters: <TextInputFormatter>[
-                  LengthLimitingTextInputFormatter(10),
-                ],
-              ),
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
                   if (usernameController.text.isEmpty ||
                       // emailController.text.isEmpty ||
-                      phoneController.text.isEmpty ||
-                      panController.text.isEmpty) {
+                      phoneController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                           content: Text('Please fill in all fields.')),
@@ -269,7 +243,6 @@ class UpdateProfile extends StatelessWidget {
                     'name': usernameController.text,
                     'email': emailController.text,
                     'phoneNumber': phoneController.text,
-                    'panCard': panController.text,
                   }).catchError((error) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
