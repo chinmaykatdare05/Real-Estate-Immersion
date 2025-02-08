@@ -1,7 +1,7 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: library_private_types_in_public_api
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ExplorePage extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
@@ -67,8 +67,8 @@ class ExplorePage extends StatelessWidget {
                         final property = properties[index];
                         final title = property['title'] ?? 'No Title';
                         final price = property['price'] ?? 'No Price';
-                        final imageUrl = property['imageUrl']?.isNotEmpty ==
-                                true
+                        final imageUrl = property['imageUrl'] != null &&
+                                property['imageUrl'].isNotEmpty
                             ? property['imageUrl']
                             : 'assets/images/images.png'; // Fallback to default
 
@@ -109,10 +109,12 @@ class PropertyTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PropertyDetailsPage(
-              title: title,
-              price: price,
+            builder: (context) => HomeDetailsPage(
               imageUrl: imageUrl,
+              location: title,
+              distance:
+                  'Unknown distance', // Replace with actual distance if available
+              price: price,
             ),
           ),
         );
@@ -190,138 +192,228 @@ class PropertyTile extends StatelessWidget {
   }
 }
 
-class PropertyDetailsPage extends StatelessWidget {
-  final String title;
-  final String price;
+class HomeDetailsPage extends StatefulWidget {
   final String imageUrl;
+  final String location;
+  final String distance;
+  final String price;
 
-  const PropertyDetailsPage({
+  const HomeDetailsPage({
     super.key,
-    required this.title,
-    required this.price,
     required this.imageUrl,
+    required this.location,
+    required this.distance,
+    required this.price,
   });
+
+  @override
+  _HomeDetailsPageState createState() => _HomeDetailsPageState();
+}
+
+class _HomeDetailsPageState extends State<HomeDetailsPage> {
+  DateTimeRange? selectedDates;
+
+  Future<void> _selectDates(BuildContext context) async {
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 1),
+    );
+
+    if (picked != null && picked != selectedDates) {
+      setState(() {
+        selectedDates = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          ListView(
-            children: [
-              Stack(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.ios_share, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.favorite_border, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(widget.imageUrl,
+                height: 250, width: double.infinity, fit: BoxFit.cover),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Hero(
-                    tag: title,
-                    child: Image.network(
-                      imageUrl,
-                      width: double.infinity,
-                      height: 400,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          height: 400,
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child:
-                                Icon(Icons.error, color: Colors.red, size: 40),
+                  Text(widget.location,
+                      style: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Text(widget.distance,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text("Hosted by Anirudh",
+                      style: TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 16),
+                  const Text('9 guests • 3 bedrooms • 6 beds • 3.5 bathrooms'),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+                  const SizedBox(height: 16),
+
+                  // Description
+                  const Text(
+                    'The Glasshouse! This charming glass room offers cosy furnishings and beautiful French windows, as well as access to modern amenities and an expansive outdoor space.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+                  const SizedBox(height: 16),
+
+                  // Amenities Section
+                  const Text('Amenities Available',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      amenitiesItem('Furnished'),
+                      amenitiesItem('Air Conditioning'),
+                      amenitiesItem('Internet/Wi-Fi'),
+                      amenitiesItem('Power Backup'),
+                      amenitiesItem('Elevator/Lift'),
+                      amenitiesItem('Gas Pipeline'),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+                  const SizedBox(height: 16),
+
+                  // Calendar Section
+                  const Text('Select Dates',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: () => _selectDates(context),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            selectedDates == null
+                                ? 'Choose your dates'
+                                : '${selectedDates!.start.day}/${selectedDates!.start.month}/${selectedDates!.start.year} - ${selectedDates!.end.day}/${selectedDates!.end.month}/${selectedDates!.end.year}',
+                            style: const TextStyle(fontSize: 16),
                           ),
-                        );
-                      },
+                          const Icon(Icons.calendar_today, color: Colors.grey),
+                        ],
+                      ),
                     ),
                   ),
-                  Positioned(
-                    top: 40,
-                    left: 16,
-                    child: IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    ),
-                  ),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+
+                  // Cancellation Policy
+                  const Text('Cancellation Policy',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text(
+                      'This reservation is non-refundable. Review the host’s cancellation policy.'),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+
+                  // House Rules
+                  const Text('House Rules',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text('Check-in: 3:00 PM - 6:00 PM'),
+                  const Text('Checkout: Before 11:00 AM'),
+                  const Text('No smoking, No pets, 9 guests maximum'),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+
+                  // Safety & Property
+                  const Text('Safety & Property',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text('Smoke alarm, Security cameras, No noise alarm'),
+                  const SizedBox(height: 16),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            top:
+                BorderSide(color: Color.fromARGB(255, 231, 229, 229), width: 2),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Price
+              Text('₹${widget.price}',
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.bold)),
+              SizedBox(
+                width: 160,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Handle reservation action
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 243, 61, 70),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      price,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Divider(color: Colors.grey),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Description',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'This is a placeholder description for the property. '
-                      'Update this section to include real data fetched from Firestore.',
-                      style: TextStyle(fontSize: 16, height: 1.5),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Amenities',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Row(
-                      children: [
-                        Icon(Icons.pool, color: Colors.blue, size: 28),
-                        SizedBox(width: 10),
-                        Text('Swimming Pool', style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    const Row(
-                      children: [
-                        Icon(Icons.wifi, color: Colors.blue, size: 28),
-                        SizedBox(width: 10),
-                        Text('Free Wi-Fi', style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Booking Successful')),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: Colors.blue,
-                      ),
-                      child: const Text(
-                        'BOOK NOW',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  child: const Text(
+                    'Reserve',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget amenitiesItem(String amenity) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          const Icon(Icons.check_circle, color: Colors.green),
+          const SizedBox(width: 8),
+          Text(amenity, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );

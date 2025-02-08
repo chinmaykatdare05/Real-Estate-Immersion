@@ -71,5 +71,4 @@ class DefaultFirebaseOptions {
     authDomain: 'flutter03-7dc78.firebaseapp.com',
     storageBucket: 'flutter03-7dc78.appspot.com',
   );
-
 }

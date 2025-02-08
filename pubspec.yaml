@@ -41,6 +41,7 @@ dependencies:
   cloud_firestore: ^5.4.1
   curved_navigation_bar: ^1.0.6
   animate_do: ^3.3.4
+  url_launcher: ^6.0.12
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/images.jpg
+    - assets/images/images.png
     - assets/images/background.png
     - assets/images/light-1.png
     - assets/images/clock.png

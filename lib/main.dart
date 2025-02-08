@@ -26,9 +26,10 @@ class MyApp extends StatelessWidget {
       // Add routing for easy navigation
       initialRoute: '/',
       routes: {
-        '/': (context) => Login(),  // Login Page
-        '/signup': (context) => SignupPage(),  // Signup Page
-        '/forgot_password': (context) => ForgotPasswordPage(),  // Forgot Password Page
+        '/': (context) => Login(), // Login Page
+        '/signup': (context) => SignupPage(), // Signup Page
+        '/forgot_password': (context) =>
+            ForgotPasswordPage(), // Forgot Password Page
       },
     );
   }
