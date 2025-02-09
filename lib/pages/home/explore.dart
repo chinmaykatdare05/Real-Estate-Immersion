@@ -42,7 +42,9 @@ class ExplorePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection('properties').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('properties')
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -108,8 +110,8 @@ class PropertyTile extends StatelessWidget {
               beds: beds,
               bathrooms: bathrooms,
               address: address,
-              amenities: amenities, 
-              //location: 'Kodaikanal, Tamil Nadu', 
+              amenities: amenities,
+              //location: 'Kodaikanal, Tamil Nadu',
               //distance: '2.5 km from city center',
             ),
           ),
@@ -125,7 +127,8 @@ class PropertyTile extends StatelessWidget {
             Hero(
               tag: landmark,
               child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(15)),
                 child: Image.network(
                   imageUrl,
                   width: double.infinity,
@@ -148,9 +151,12 @@ class PropertyTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(landmark, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text(landmark,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  Text('₹$price', style: const TextStyle(fontSize: 16, color: Colors.grey)),
+                  Text('₹$price',
+                      style: const TextStyle(fontSize: 16, color: Colors.grey)),
                 ],
               ),
             ),
@@ -254,17 +260,25 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.landmark, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                  Text(widget.landmark,
+                      style: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  Text(widget.area, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(widget.area,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
                   const Divider(color: Color.fromARGB(255, 255, 255, 255)),
-                  Text('Hosted by ${widget.hostName}', style: const TextStyle(color: Color.fromARGB(255, 212, 11, 11))),
+                  Text('Hosted by ${widget.hostName}',
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 212, 11, 11))),
                   const SizedBox(height: 16),
                   const Divider(color: Color.fromARGB(255, 255, 255, 255)),
-                  Text('${widget.guests} guests • ${widget.bedrooms} bedrooms • ${widget.beds} beds • ${widget.bathrooms} bathrooms', style: const TextStyle(fontSize: 16)),
+                  Text(
+                      '${widget.guests} guests • ${widget.bedrooms} bedrooms • ${widget.beds} beds • ${widget.bathrooms} bathrooms',
+                      style: const TextStyle(fontSize: 16)),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
-                  Text('${widget.address}', style: const TextStyle(fontSize: 16)),
+                  Text(widget.address, style: const TextStyle(fontSize: 16)),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   // const SizedBox(height: 16),
@@ -272,11 +286,15 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   // const SizedBox(height: 16),
                   //const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text('Amenities Available', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text('Amenities Available',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: widget.amenities.entries.where((entry) => entry.value == true).map((entry) {
+                    children: widget.amenities.entries
+                        .where((entry) => entry.value == true)
+                        .map((entry) {
                       return Row(
                         children: [
                           const Icon(Icons.check_circle, color: Colors.green),
@@ -289,7 +307,9 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text('Select Dates', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text('Select Dates',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   GestureDetector(
                     onTap: () => _selectDates(context),
@@ -316,19 +336,26 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text('Cancellation Policy', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  const Text('This reservation is non-refundable. Review the host’s cancellation policy.'),
+                  const Text('Cancellation Policy',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text(
+                      'This reservation is non-refundable. Review the host’s cancellation policy.'),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text('House Rules', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text('House Rules',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const Text('Check-in: 3:00 PM - 6:00 PM'),
                   const Text('Checkout: Before 11:00 AM'),
                   const Text('No smoking, No pets, 9 guests maximum'),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text('Safety & Property', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text('Safety & Property',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const Text('Smoke alarm, Security cameras, No noise alarm'),
                   const SizedBox(height: 16),
                 ],
@@ -339,24 +366,30 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: Color.fromARGB(255, 231, 229, 229), width: 2)),
+          border: Border(
+              top: BorderSide(
+                  color: Color.fromARGB(255, 231, 229, 229), width: 2)),
         ),
         child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('₹${widget.price}', style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+              Text('₹${widget.price}',
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.bold)),
               SizedBox(
                 width: 160,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 243, 61, 70),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: const Text('Reserve', style: TextStyle(fontSize: 18, color: Colors.white)),
+                  child: const Text('Reserve',
+                      style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ),
             ],

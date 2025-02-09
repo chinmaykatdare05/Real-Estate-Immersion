@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter03/services/auth_service.dart'; // Import your AuthService
 import 'package:animate_do/animate_do.dart';
@@ -204,10 +205,13 @@ class SignupPage extends StatelessWidget {
         const SizedBox(height: 16),
         TextField(
           controller: nameController,
+          keyboardType: TextInputType.text,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
+          ],
           decoration: InputDecoration(
             filled: true,
             hintText: 'Enter your name',
-            //hintStyle: TextStyle(color: Color(0xff6A6A6A), fontSize: 14),
             fillColor: const Color.fromARGB(255, 255, 255, 255),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
@@ -239,10 +243,13 @@ class SignupPage extends StatelessWidget {
         const SizedBox(height: 16),
         TextField(
           controller: emailController,
+          keyboardType: TextInputType.emailAddress,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9@._-]')),
+          ],
           decoration: InputDecoration(
             filled: true,
             hintText: 'Enter your email',
-            //hintStyle: TextStyle(color: Color(0xff6A6A6A), fontSize: 14),
             fillColor: const Color.fromARGB(255, 255, 255, 255),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
@@ -309,10 +316,14 @@ class SignupPage extends StatelessWidget {
         const SizedBox(height: 16),
         TextField(
           controller: phoneNumberController,
+          keyboardType: TextInputType.phone,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+            LengthLimitingTextInputFormatter(10),
+          ],
           decoration: InputDecoration(
             filled: true,
             hintText: 'Enter your phone number',
-            //hintStyle: TextStyle(color: Color(0xff6A6A6A), fontSize: 14),
             fillColor: const Color.fromARGB(255, 255, 255, 255),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
