@@ -82,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   trailing: const SizedBox(height: 30),
                 ),
                 const SizedBox(height: 15),
-                const Divider(),
+                const Divider(color: Color.fromARGB(255, 0, 0, 0)),
                 const ListTile(
                   title: Text(
                     'Personal Information',
@@ -102,6 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: const Text('Phone Number'),
                   subtitle: Text(userData['phoneNumber']),
                 ),
+                const Divider(color: Color.fromARGB(255, 0, 0, 0)),
                 const ListTile(
                   title: Text(
                     'Settings',
@@ -137,6 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: _logout,
                 ),
                 const SizedBox(height: 20),
+                // const Divider(color: Color.fromARGB(255, 0, 0, 0)),
               ],
             ),
           ),
