@@ -258,7 +258,7 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   Text('Hosted by ${widget.hostName}',
                       style: const TextStyle(
                           color: Color.fromARGB(255, 212, 11, 11))),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   const Divider(color: Color.fromARGB(255, 255, 255, 255)),
                   Text(
                       '${widget.guests} guests • ${widget.bedrooms} bedrooms • ${widget.beds} beds • ${widget.bathrooms} bathrooms',
