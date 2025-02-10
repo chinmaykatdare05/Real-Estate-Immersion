@@ -131,18 +131,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: _logout,
                     style: ElevatedButton.styleFrom(
                       // Button color
-                      foregroundColor: Colors.black, // Text color
+                      foregroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 15),
+                          horizontal: 30, vertical: 20),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(10), // Rounded border
-                        side: const BorderSide(
-                            color: Colors.black), // Border color
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(color: Colors.red),
                       ),
                       elevation: 0, // No shadow
                       textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold, // Slightly bold text
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     child: const Text('Log out'),
