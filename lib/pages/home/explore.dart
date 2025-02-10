@@ -202,19 +202,6 @@ class HomeDetailsPage extends StatefulWidget {
 class _HomeDetailsPageState extends State<HomeDetailsPage> {
   DateTimeRange? selectedDates;
 
-  Future<void> _selectDates(BuildContext context) async {
-    final DateTimeRange? picked = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year + 1),
-    );
-    if (picked != null && picked != selectedDates) {
-      setState(() {
-        selectedDates = picked;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -278,6 +265,11 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                       style: const TextStyle(fontSize: 16)),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
+                  const SizedBox(height: 16),
+                  const Text('Address',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
                   Text(widget.address, style: const TextStyle(fontSize: 16)),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
@@ -303,35 +295,6 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                         ],
                       );
                     }).toList(),
-                  ),
-                  const SizedBox(height: 16),
-                  const Divider(color: Colors.grey),
-                  const SizedBox(height: 16),
-                  const Text('Select Dates',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: () => _selectDates(context),
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            selectedDates == null
-                                ? 'Choose your dates'
-                                : '${selectedDates!.start.day}/${selectedDates!.start.month}/${selectedDates!.start.year} - ${selectedDates!.end.day}/${selectedDates!.end.month}/${selectedDates!.end.year}',
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          const Icon(Icons.calendar_today, color: Colors.grey),
-                        ],
-                      ),
-                    ),
                   ),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),

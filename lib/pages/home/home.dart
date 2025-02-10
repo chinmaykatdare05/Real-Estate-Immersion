@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter03/pages/home/explore.dart';
-import 'package:flutter03/pages/home/camera.dart'; // Updated from Camera to Trips
+import 'package:flutter03/pages/home/camera.dart';
 import 'package:flutter03/pages/home/profile.dart';
 
 void main() {
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     ExplorePage(), // Explore page
-    const CameraPage(), // Updated from CameraPage to TripsPage
+    const CameraPage(),
     const ProfileScreen(), // Profile page
   ];
 
@@ -62,8 +62,8 @@ class _HomePageState extends State<HomePage> {
             label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.airbnb), // Changed from Camera to Trips
-            label: 'Trips',
+            icon: Icon(FontAwesomeIcons.airbnb),
+            label: 'Camera',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
