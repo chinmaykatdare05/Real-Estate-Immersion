@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0; // Tracks which tab is selected
 
   final List<Widget> _pages = [
-    ExplorePage(), // Explore page
+    const ExplorePage(), // Explore page
     const CameraPage(),
     const ProfileScreen(), // Profile page
   ];
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.airbnb),
+            icon: Icon(FontAwesomeIcons.vrCardboard),
             label: 'Camera',
           ),
           BottomNavigationBarItem(
