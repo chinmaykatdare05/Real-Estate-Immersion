@@ -1,10 +1,6 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, prefer_typing_uninitialized_variables
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter03/pages/home/home.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -25,19 +21,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<DocumentSnapshot> fetchUserData() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     return await FirebaseFirestore.instance.collection('users').doc(uid).get();
-  }
-
-  void _navigateToPersonalInfo(Map<String, dynamic> userData) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => UpdateProfile(
-          name: userData['name'] ?? '',
-          email: userData['email'] ?? '',
-          phone: userData['phoneNumber'] ?? '',
-        ),
-      ),
-    );
   }
 
   Future<void> _logout() async {
@@ -61,84 +44,110 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         return Scaffold(
           body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 20.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             child: Column(
               children: [
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.deepOrange,
-                    child: Text(
-                      userData['name'][0].toUpperCase(),
-                      style: const TextStyle(fontSize: 30, color: Colors.white),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Profile",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 25),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundColor: Colors.deepOrange,
+                          child: Text(
+                            userData['name'][0], // First letter of the name
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 30),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                userData['name'],
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                "Guest",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  title: Text(
-                    userData['name'],
-                    style: const TextStyle(fontSize: 24),
-                  ),
-                  subtitle: const Text('Real Estate Intelligence'),
-                  onTap: () {},
-                  trailing: const SizedBox(height: 30),
                 ),
                 const SizedBox(height: 15),
-                const Divider(color: Color.fromARGB(255, 0, 0, 0)),
-                const ListTile(
-                  title: Text(
-                    'Personal Information',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PersonalInfoScreen(
+                      userData: {
+                        'name': userData['name'],
+                        'email': userData['email'],
+                        'phone': userData['phoneNumber'],
+                      },
                     ),
-                  ),
+                  ],
                 ),
-                ListTile(
-                  leading: const Icon(Icons.email),
-                  title: const Text('Email'),
-                  subtitle: Text(userData['email']),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.phone),
-                  title: const Text('Phone Number'),
-                  subtitle: Text(userData['phoneNumber']),
-                ),
-                const Divider(color: Color.fromARGB(255, 0, 0, 0)),
-                const ListTile(
-                  title: Text(
-                    'Settings',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.update),
-                  title: const Text('Update Profile'),
-                  onTap: () => _navigateToPersonalInfo(userData),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.password),
-                  title: const Text('Change Password'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ChangePassword(),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _logout,
+                    style: ElevatedButton.styleFrom(
+                      // Button color
+                      foregroundColor: Colors.black, // Text color
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(10), // Rounded border
+                        side: const BorderSide(
+                            color: Colors.black), // Border color
                       ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text(
-                    'Logout',
-                    style: TextStyle(color: Colors.red),
+                      elevation: 0, // No shadow
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.bold, // Slightly bold text
+                      ),
+                    ),
+                    child: const Text('Log out'),
                   ),
-                  onTap: _logout,
                 ),
-                const SizedBox(height: 20),
-                // const Divider(color: Color.fromARGB(255, 0, 0, 0)),
               ],
             ),
           ),
@@ -148,276 +157,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-class UpdateProfile extends StatelessWidget {
-  final String name;
-  final String email;
-  final String phone;
+class PersonalInfoScreen extends StatelessWidget {
+  final Map<String, dynamic> userData;
 
-  const UpdateProfile({
-    super.key,
-    required this.name,
-    required this.email,
-    required this.phone,
-  });
+  const PersonalInfoScreen({super.key, required this.userData});
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController usernameController =
-        TextEditingController(text: name);
-    final TextEditingController emailController =
-        TextEditingController(text: email);
-    final TextEditingController phoneController =
-        TextEditingController(text: phone);
-
-    var formKey;
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Update your personal information',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 30),
-              TextField(
-                controller: usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  prefixIcon: const Icon(Icons.person),
-                ),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
-              ),
-              const SizedBox(height: 20),
-              // TextField(
-              //   controller: emailController,
-              //   decoration: InputDecoration(
-              //     labelText: 'Email',
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //     prefixIcon: const Icon(Icons.email),
-              //   ),
-              // ),
-              // const SizedBox(height: 20),
-              TextField(
-                controller: phoneController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  prefixIcon: const Icon(Icons.phone),
-                ),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(10),
-                ],
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  if (usernameController.text.isEmpty ||
-                      // emailController.text.isEmpty ||
-                      phoneController.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Please fill in all fields.')),
-                    );
-                    return;
-                  }
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .update({
-                    'name': usernameController.text,
-                    'email': emailController.text,
-                    'phoneNumber': phoneController.text,
-                  }).catchError((error) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text('Failed to update profile: $error')),
-                    );
-                  });
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomePage(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  backgroundColor: Colors.blue[700],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  minimumSize: const Size(double.infinity, 60),
-                ),
-                child: const Text(
-                  'Update Profile',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
-            ],
-          ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Personal info",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            PersonalInfoItem(title: "Name", value: userData['name']),
+            PersonalInfoItem(title: "Email address", value: userData['email']),
+            PersonalInfoItem(
+              title: "Phone number",
+              value: userData['phone'] ??
+                  "Add a number so confirmed guests and Airbnb can get in touch.",
+              isMultiline: true,
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class ChangePassword extends StatefulWidget {
-  const ChangePassword({super.key});
+class PersonalInfoItem extends StatelessWidget {
+  final String title;
+  final String value;
+  final bool isMultiline;
 
-  @override
-  _ChangePasswordState createState() => _ChangePasswordState();
-}
-
-class _ChangePasswordState extends State<ChangePassword> {
-  final TextEditingController _currentPasswordController =
-      TextEditingController();
-  final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
-  Future<void> _changePassword() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    try {
-      // Get current user
-      User? user = FirebaseAuth.instance.currentUser;
-
-      // Re-authenticate user to update the password
-      AuthCredential credential = EmailAuthProvider.credential(
-        email: user!.email!,
-        password: _currentPasswordController.text,
-      );
-
-      await user.reauthenticateWithCredential(credential);
-
-      // Update password
-      await user.updatePassword(_newPasswordController.text);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password changed successfully')),
-      );
-
-      // Navigate back after successful password change
-      Navigator.pop(context);
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to change password: $error')),
-      );
-    }
-  }
+  const PersonalInfoItem({
+    super.key,
+    required this.title,
+    required this.value,
+    this.isMultiline = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Change Password',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              TextFormField(
-                controller: _currentPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Current Password',
-                  prefixIcon: Icon(Icons.lock),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your current password';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _newPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'New Password',
-                  prefixIcon: Icon(Icons.lock_outline),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a new password';
-                  }
-                  if (value.length < 6) {
-                    return 'Password should be at least 6 characters';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _confirmPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Confirm New Password',
-                  prefixIcon: Icon(Icons.lock_outline),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please confirm your new password';
-                  }
-                  if (value != _newPasswordController.text) {
-                    return 'Passwords do not match';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: _changePassword,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  backgroundColor: Colors.blue[700],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  minimumSize: const Size(double.infinity, 60),
-                ),
-                child: const Text('Change Password'),
-              ),
-            ],
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-      ),
+        const SizedBox(height: 5),
+        Text(
+          value,
+          style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+          maxLines: isMultiline ? null : 1,
+          overflow: isMultiline ? null : TextOverflow.ellipsis,
+        ),
+        const SizedBox(height: 15),
+        const Divider(),
+        const SizedBox(height: 10),
+      ],
     );
   }
 }
