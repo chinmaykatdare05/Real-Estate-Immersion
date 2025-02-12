@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<DocumentSnapshot> fetchUserData() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    return await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    return await FirebaseFirestore.instance.collection('Users').doc(uid).get();
   }
 
   Future<void> _logout() async {
@@ -43,12 +45,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             snapshot.data!.data() as Map<String, dynamic>;
 
         return Scaffold(
+          backgroundColor: const Color.fromARGB(204, 255, 255, 255),
           body: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             child: Column(
               children: [
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 25),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -64,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 Card(
+                  color: const Color.fromARGB(255, 255, 203, 99),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -75,11 +79,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 35,
-                          backgroundColor: Colors.deepOrange,
+                          backgroundColor: Colors.black,
                           child: Text(
-                            userData['name'][0], // First letter of the name
+                            userData['Name'][0], // First letter of the name
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Color.fromARGB(255, 255, 203, 99),
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                             ),
@@ -91,17 +95,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                userData['name'],
+                                userData['Name'],
                                 style: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 "Guest",
                                 style: TextStyle(
                                   fontSize: 16,
-                                  color: Colors.grey[600],
+                                  color: Colors.black87,
                                 ),
                               ),
                             ],
@@ -118,9 +122,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     PersonalInfoScreen(
                       userData: {
-                        'name': userData['name'],
-                        'email': userData['email'],
-                        'phone': userData['phoneNumber'],
+                        'Name': userData['Name'],
+                        'Email': userData['Email'],
+                        'Phone': userData['Phone'],
                       },
                     ),
                   ],
@@ -130,20 +134,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: ElevatedButton(
                     onPressed: _logout,
                     style: ElevatedButton.styleFrom(
-                      // Button color
-                      foregroundColor: Colors.red,
+                      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      // foregroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30, vertical: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: const BorderSide(color: Colors.red),
+                        side: const BorderSide(
+                            color: Color.fromARGB(255, 17, 13, 12)),
                       ),
                       elevation: 0, // No shadow
                       textStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    child: const Text('Log out'),
+                    child: const Text(
+                      'Log out',
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                    ),
                   ),
                 ),
               ],
@@ -173,12 +182,11 @@ class PersonalInfoScreen extends StatelessWidget {
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            PersonalInfoItem(title: "Name", value: userData['name']),
-            PersonalInfoItem(title: "Email address", value: userData['email']),
+            PersonalInfoItem(title: "Name", value: userData['Name']),
+            PersonalInfoItem(title: "Email address", value: userData['Email']),
             PersonalInfoItem(
               title: "Phone number",
-              value: userData['phone'] ??
-                  "Add a number so confirmed guests and Airbnb can get in touch.",
+              value: userData['Phone'],
               isMultiline: true,
             ),
           ],

@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(204, 255, 255, 255),
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex, // Highlight the selected item
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
         unselectedItemColor: Colors.black54, // Inactive item color
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.magnifyingGlassLocation),
+            icon: Icon(FontAwesomeIcons.magnifyingGlass),
             label: 'Explore',
           ),
           BottomNavigationBarItem(

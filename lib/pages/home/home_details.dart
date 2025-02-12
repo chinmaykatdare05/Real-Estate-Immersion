@@ -1,7 +1,9 @@
+// ignore_for_file: deprecated_member_use, library_private_types_in_public_api
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-/// Helper function to remove the data URL prefix from a Base64 string.
 String sanitizeBase64(String base64String) {
   if (base64String.startsWith("data:")) {
     int commaIndex = base64String.indexOf(',');
@@ -12,37 +14,56 @@ String sanitizeBase64(String base64String) {
   return base64String;
 }
 
-/// HomeDetailsPage displays the detailed view of the property.
 class HomeDetailsPage extends StatefulWidget {
-  final bool useBase64;
-  final String imageData;
-  final String landmark;
-  final String area;
-  final String price;
-  final String hostName;
-  final String guests;
-  final String bedrooms;
-  final String beds;
-  final String bathrooms;
+  final Map<String, dynamic> data;
+  final bool model3D;
   final String address;
   final Map<String, dynamic> amenities;
+  final String ac;
+  final bool furnish;
+  final bool gas;
+  final bool lift;
+  final bool parking;
+  final String waterSupply;
+  final bool wifi;
+  final String area;
+  final String busStop;
+  final String description;
+  final String image;
+  final String landmark;
+  final String price;
+  final String railwayStn;
+  final String rooms;
+  final bool sale;
+  final String sellerContact;
+  final String sellerName;
+  final String washroom;
 
-  // Note: The required 'imageUrl' parameter is kept as in the original code.
   const HomeDetailsPage({
     super.key,
-    required this.useBase64,
-    required this.imageData,
-    required this.landmark,
-    required this.area,
-    required this.price,
-    required this.hostName,
-    required this.guests,
-    required this.bedrooms,
-    required this.beds,
-    required this.bathrooms,
+    required this.wifi,
+    required this.washroom,
+    required this.waterSupply,
+    required this.sellerName,
+    required this.sellerContact,
+    required this.sale,
+    required this.rooms,
+    required this.railwayStn,
+    required this.parking,
+    required this.model3D,
+    required this.lift,
+    required this.gas,
+    required this.furnish,
+    required this.description,
+    required this.busStop,
+    required this.ac,
     required this.address,
     required this.amenities,
-    required String imageUrl,
+    required this.price,
+    required this.landmark,
+    required this.area,
+    this.data = const {},
+    required this.image,
   });
 
   @override
@@ -66,113 +87,210 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget imageWidget;
-    if (widget.useBase64) {
-      imageWidget = Image.memory(
-        base64Decode(sanitizeBase64(widget.imageData)),
-        height: 250,
-        width: double.infinity,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return Container(
-            height: 250,
-            color: Colors.grey[200],
-            child: const Center(
-                child: Icon(Icons.error, color: Colors.red, size: 40)),
-          );
-        },
-      );
-    } else {
-      if (widget.imageData.isNotEmpty) {
-        imageWidget = Image.network(
-          widget.imageData,
-          height: 250,
-          width: double.infinity,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              height: 250,
-              color: Colors.grey[200],
-              child: const Center(
-                  child: Icon(Icons.error, color: Colors.red, size: 40)),
-            );
-          },
-        );
-      } else {
-        imageWidget = Image.asset(
-          'assets/images/images.png',
-          height: 250,
-          width: double.infinity,
-          fit: BoxFit.cover,
-        );
-      }
-    }
     return Scaffold(
-      // Detailed property view.
+      backgroundColor: const Color.fromARGB(204, 255, 255, 255),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            imageWidget,
+            if (widget.image.isNotEmpty)
+              Image.memory(
+                base64Decode(sanitizeBase64(widget.image)),
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 200,
+              ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.landmark,
-                    style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.area,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Hosted by ${widget.hostName}',
-                    style: const TextStyle(color: Colors.redAccent),
-                  ),
-                  Text(
-                    '${widget.guests} guests • ${widget.bedrooms} bedrooms • ${widget.beds} beds • ${widget.bathrooms} bathrooms',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 16),
-                  const Divider(color: Colors.grey),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Address',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(widget.address, style: const TextStyle(fontSize: 16)),
-                  const SizedBox(height: 16),
-                  const Divider(color: Colors.grey),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Amenities Available',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: widget.amenities.entries
-                        .where((entry) => entry.value == true)
-                        .map((entry) {
-                      return Row(
-                        children: [
-                          const Icon(Icons.check_circle, color: Colors.green),
-                          const SizedBox(width: 8),
-                          Text(entry.key, style: const TextStyle(fontSize: 16)),
-                        ],
-                      );
-                    }).toList(),
+                    children: [
+                      Text(
+                        widget.address,
+                        style: const TextStyle(
+                            fontSize: 26, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        widget.landmark,
+                        style: TextStyle(
+                            fontSize: 16, color: Colors.grey.shade600),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${widget.rooms} rooms, ${widget.washroom} washrooms, ${widget.area} sqft',
+                        style: TextStyle(
+                            fontSize: 14, color: Colors.grey.shade700),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Description',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.description,
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'What this place offers',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.ac != '0')
+                        Row(
+                          children: [
+                            const Icon(FontAwesomeIcons.snowflake),
+                            const SizedBox(width: 22),
+                            Text(widget.ac)
+                          ],
+                        ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(FontAwesomeIcons.couch),
+                          const SizedBox(width: 22),
+                          Text(widget.furnish ? 'Furnished' : 'Unfurnished'),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(FontAwesomeIcons.fire),
+                          const SizedBox(width: 22),
+                          Text(widget.gas ? 'Gas Stove' : 'No Gas Stove'),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(FontAwesomeIcons.elevator),
+                          const SizedBox(width: 22),
+                          Text(widget.lift ? 'Lift' : 'No Lift'),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(FontAwesomeIcons.car),
+                          const SizedBox(width: 22),
+                          Text(widget.parking ? 'Parking' : 'No Parking'),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(FontAwesomeIcons.water),
+                          const SizedBox(width: 22),
+                          Text("Water Supply - ${widget.waterSupply}")
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(FontAwesomeIcons.wifi),
+                          const SizedBox(width: 22),
+                          Text(widget.wifi ? 'Wifi' : 'No Wifi'),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Nearest Transit',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Icon(FontAwesomeIcons.busAlt),
+                      const SizedBox(width: 22),
+                      Text(widget.busStop),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      const Icon(FontAwesomeIcons.trainSubway),
+                      const SizedBox(width: 22),
+                      Text(widget.railwayStn),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Meet your Host',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 35,
+                        backgroundColor: Colors.deepOrange,
+                        child: Text(
+                          widget.sellerName[0], // First letter of the name
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.sellerName,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              widget.sellerContact,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(color: Colors.grey),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Where you'll be",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    widget.address,
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                  ),
+
+                  // Google Maps widget
+
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
@@ -203,34 +321,6 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Divider(color: Colors.grey),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Cancellation Policy',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const Text(
-                    'This reservation is non-refundable. Review the host’s cancellation policy.',
-                  ),
-                  const SizedBox(height: 16),
-                  const Divider(color: Colors.grey),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'House Rules',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const Text('Check-in: 3:00 PM - 6:00 PM'),
-                  const Text('Checkout: Before 11:00 AM'),
-                  const Text('No smoking, No pets, 9 guests maximum'),
-                  const SizedBox(height: 16),
-                  const Divider(color: Colors.grey),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Safety & Property',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const Text('Smoke alarm, Security cameras, No noise alarm'),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -248,19 +338,19 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(15.0), // Decreased padding
+          padding: const EdgeInsets.fromLTRB(30, 15, 15, 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '₹${widget.price}',
+                '₹ ${widget.price}',
                 style: const TextStyle(
-                  fontSize: 20, // Decreased font size
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(
-                width: 140, // Decreased width
+                width: 140,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
@@ -269,12 +359,13 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 12), // Decreased padding
+                        vertical: 16), // Increased height
                   ),
-                  child: const Text(
-                    'Reserve',
-                    style: TextStyle(
+                  child: Text(
+                    widget.model3D ? '3D Model' : 'Reserve',
+                    style: const TextStyle(
                         fontSize: 16,
+                        fontWeight: FontWeight.bold,
                         color: Colors.white), // Decreased font size
                   ),
                 ),

@@ -6,7 +6,7 @@ class CameraPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text('Camera')),
+      backgroundColor: const Color.fromARGB(204, 255, 255, 255),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -18,7 +18,7 @@ class CameraPage extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: Colors.blue, // Set the text color to white
+                backgroundColor: Colors.black, // Set the text color to white
               ),
               onPressed: () {
                 // Future functionality: Capture image

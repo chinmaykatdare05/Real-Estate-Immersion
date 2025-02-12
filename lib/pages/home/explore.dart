@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,7 +19,7 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // AppBar removed as requested.
+      backgroundColor: const Color.fromARGB(204, 255, 255, 255),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -57,7 +57,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
+                      color: const Color.fromARGB(204, 255, 255, 255),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
@@ -79,8 +79,9 @@ class _ExplorePageState extends State<ExplorePage> {
                                   height: 50,
                                   decoration: BoxDecoration(
                                     color: isSelected
-                                        ? Colors.blue
-                                        : Colors.transparent,
+                                        ? Colors.black
+                                        : const Color.fromARGB(
+                                            204, 255, 255, 255),
                                     borderRadius: BorderRadius.circular(30),
                                     boxShadow: isSelected
                                         ? [
@@ -103,7 +104,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     fontWeight: FontWeight.bold,
                                     color: isSelected
                                         ? Colors.white
-                                        : Colors.black87,
+                                        : Colors.black,
                                   ),
                                 ),
                               ],
@@ -118,8 +119,8 @@ class _ExplorePageState extends State<ExplorePage> {
                 // Properties from Firestore filtered by selected type.
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('properties')
-                      .where('sale', isEqualTo: selectedIndex == 0)
+                      .collection('Properties')
+                      .where('Sale', isEqualTo: selectedIndex == 0)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -156,23 +157,28 @@ class PropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> data = property.data() as Map<String, dynamic>;
-
-    final String landmark = property['landmark'] ?? 'No Landmark';
-    final String price = property['price'] ?? 'No Price';
-    final String description = property['area'] ?? 'Lake and garden views';
-    final String hostName = property['hostName'] ?? 'Unknown Host';
-    final String guests = property['guests']?.toString() ?? 'N/A';
-    final String bedrooms = property['bedrooms']?.toString() ?? 'N/A';
-    final String beds = property['beds']?.toString() ?? 'N/A';
-    final String bathrooms = property['bathrooms']?.toString() ?? 'N/A';
-    final String address = property['address'] ?? 'No Address';
-    final Map<String, dynamic> amenities = property['amenities'] ?? {};
-    final String imageBase64 =
-        data.containsKey('imageBase64') ? data['imageBase64'] as String : "";
-    final String imageUrl =
-        data.containsKey('imageUrl') ? data['imageUrl'] as String : "";
-    final bool useBase64 = imageBase64.isNotEmpty;
+    final bool model3D = property['3D Model'];
+    final String address = property['Address'];
+    final Map<String, dynamic> amenities = property['Amenities'] ?? {};
+    final String ac = amenities['AC']?.toString() ?? '';
+    final bool furnish = amenities['Furnish'];
+    final bool gas = amenities['Gas'];
+    final bool lift = amenities['Lift'];
+    final bool parking = amenities['Parking'];
+    final String waterSupply = amenities['Water Supply'];
+    final bool wifi = amenities['Wifi'];
+    final String area = property['Area']?.toString() ?? '';
+    final String busStop = property['Bus Stop'];
+    final String description = property['Description'];
+    final String image = property['Image'] ?? '';
+    final String landmark = property['Landmark'];
+    final String price = property['Price']?.toString() ?? '';
+    final String railwayStn = property['Railway Stn'];
+    final String rooms = property['Rooms']?.toString() ?? '';
+    final bool sale = property['Sale'];
+    final String sellerContact = property['Seller Contact'];
+    final String sellerName = property['Seller Name'];
+    final String washroom = property['Washroom']?.toString() ?? '';
 
     return GestureDetector(
       onTap: () {
@@ -180,19 +186,28 @@ class PropertyCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => HomeDetailsPage(
-              imageUrl: imageUrl,
-              landmark: landmark,
-              area: description,
-              price: price,
-              hostName: hostName,
-              guests: guests,
-              bedrooms: bedrooms,
-              beds: beds,
-              bathrooms: bathrooms,
               address: address,
-              amenities: amenities,
-              imageData: useBase64 ? imageBase64 : imageUrl,
-              useBase64: useBase64,
+              ac: ac,
+              area: area,
+              busStop: busStop,
+              description: description,
+              furnish: furnish,
+              gas: gas,
+              image: image,
+              landmark: landmark,
+              lift: lift,
+              model3D: model3D,
+              parking: parking,
+              price: price,
+              railwayStn: railwayStn,
+              rooms: rooms,
+              sale: sale,
+              sellerContact: sellerContact,
+              sellerName: sellerName,
+              waterSupply: waterSupply,
+              washroom: washroom,
+              wifi: wifi,
+              amenities: const {},
             ),
           ),
         );
@@ -207,55 +222,29 @@ class PropertyCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: useBase64
-                  ? Image.memory(
-                      base64Decode(sanitizeBase64(imageBase64)),
-                      width: double.infinity,
-                      height: 300,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          height: 200,
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child:
-                                Icon(Icons.error, color: Colors.red, size: 40),
-                          ),
-                        );
-                      },
-                    )
-                  : (imageUrl.isNotEmpty
-                      ? Image.network(
-                          imageUrl,
-                          width: double.infinity,
-                          height: 300,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              height: 200,
-                              color: Colors.grey[200],
-                              child: const Center(
-                                child: Icon(Icons.error,
-                                    color: Colors.red, size: 40),
-                              ),
-                            );
-                          },
-                        )
-                      : Image.asset(
-                          'assets/images/images.png',
-                          width: double.infinity,
-                          height: 300,
-                          fit: BoxFit.cover,
-                        )),
+              child: Image.memory(
+                base64Decode(sanitizeBase64(image)),
+                width: double.infinity,
+                height: 300,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 200,
+                    color: Colors.grey[200],
+                    child: const Center(
+                      child: Icon(Icons.error, color: Colors.red, size: 40),
+                    ),
+                  );
+                },
+              ),
             ),
-            // Property details.
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    landmark,
+                    address,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -263,7 +252,7 @@ class PropertyCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    description,
+                    landmark,
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
                   const SizedBox(height: 8),

@@ -26,18 +26,18 @@ class AuthService {
       );
 
       // Write user data to Firestore after successful signup
-      await _firestore.collection('users').doc(userCredential.user!.uid).set({
-        'name': name,
-        'email': email,
-        'phoneNumber': phoneNumber,
+      await _firestore.collection('Users').doc(userCredential.user!.uid).set({
+        'Name': name,
+        'Email': email,
+        'Phone': phoneNumber,
+        'Buyer': true,
+        'Password': password
       });
 
       await Future.delayed(const Duration(seconds: 1));
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-            builder: (BuildContext context) =>
-                const HomePage()), // Updated HomePage()
+        MaterialPageRoute(builder: (BuildContext context) => const HomePage()),
       );
     } on FirebaseAuthException catch (e) {
       String message = 'Fields cannot be empty';
