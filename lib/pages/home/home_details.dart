@@ -1,8 +1,10 @@
-// ignore_for_file: deprecated_member_use, library_private_types_in_public_api
+// ignore_for_file: deprecated_member_use, library_private_types_in_public_api, use_super_parameters
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 String sanitizeBase64(String base64String) {
   if (base64String.startsWith("data:")) {
@@ -15,22 +17,22 @@ String sanitizeBase64(String base64String) {
 }
 
 class HomeDetailsPage extends StatefulWidget {
-  final Map<String, dynamic> data;
-  final bool model3D;
-  final String address;
-  final Map<String, dynamic> amenities;
   final String ac;
-  final bool furnish;
-  final bool gas;
-  final bool lift;
-  final bool parking;
-  final String waterSupply;
-  final bool wifi;
+  final Map<String, dynamic> amenities;
   final String area;
+  final String address;
   final String busStop;
   final String description;
+  final bool furnish;
+  final bool gas;
   final String image;
   final String landmark;
+  final String latitude;
+  final bool lift;
+  final String longitude;
+  final bool model3D;
+  final bool parking;
+  final String pincode;
   final String price;
   final String railwayStn;
   final String rooms;
@@ -38,32 +40,36 @@ class HomeDetailsPage extends StatefulWidget {
   final String sellerContact;
   final String sellerName;
   final String washroom;
+  final String waterSupply;
+  final bool wifi;
 
   const HomeDetailsPage({
     super.key,
-    required this.wifi,
-    required this.washroom,
-    required this.waterSupply,
-    required this.sellerName,
-    required this.sellerContact,
-    required this.sale,
-    required this.rooms,
-    required this.railwayStn,
-    required this.parking,
-    required this.model3D,
-    required this.lift,
-    required this.gas,
-    required this.furnish,
-    required this.description,
-    required this.busStop,
     required this.ac,
     required this.address,
     required this.amenities,
-    required this.price,
-    required this.landmark,
     required this.area,
-    this.data = const {},
+    required this.busStop,
+    required this.description,
+    required this.furnish,
+    required this.gas,
     required this.image,
+    required this.landmark,
+    required this.latitude,
+    required this.lift,
+    required this.longitude,
+    required this.model3D,
+    required this.parking,
+    required this.pincode,
+    required this.price,
+    required this.railwayStn,
+    required this.rooms,
+    required this.sale,
+    required this.sellerContact,
+    required this.sellerName,
+    required this.waterSupply,
+    required this.washroom,
+    required this.wifi,
   });
 
   @override
@@ -122,6 +128,12 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                       const SizedBox(height: 4),
                       Text(
                         '${widget.rooms} rooms, ${widget.washroom} washrooms, ${widget.area} sqft',
+                        style: TextStyle(
+                            fontSize: 14, color: Colors.grey.shade700),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Pincode: ${widget.pincode}',
                         style: TextStyle(
                             fontSize: 14, color: Colors.grey.shade700),
                       ),
@@ -290,6 +302,23 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   ),
 
                   // Google Maps widget
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    height: 200,
+                    child: GoogleMap(
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(double.parse(widget.latitude),
+                            double.parse(widget.longitude)),
+                        zoom: 14,
+                      ),
+                      markers: {
+                        Marker(
+                            markerId: const MarkerId('location'),
+                            position: LatLng(double.parse(widget.latitude),
+                                double.parse(widget.longitude))),
+                      },
+                    ),
+                  ),
 
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),

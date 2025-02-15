@@ -172,6 +172,9 @@ class PropertyCard extends StatelessWidget {
     final String description = property['Description'];
     final String image = property['Image'] ?? '';
     final String landmark = property['Landmark'];
+    final String latitude = property['Latitude']?.toString() ?? '';
+    final String longitude = property['Longitude']?.toString() ?? '';
+    final String pincode = property['Pincode']?.toString() ?? '';
     final String price = property['Price']?.toString() ?? '';
     final String railwayStn = property['Railway Stn'];
     final String rooms = property['Rooms']?.toString() ?? '';
@@ -195,9 +198,12 @@ class PropertyCard extends StatelessWidget {
               gas: gas,
               image: image,
               landmark: landmark,
+              latitude: latitude,
+              longitude: longitude,
               lift: lift,
               model3D: model3D,
               parking: parking,
+              pincode: pincode,
               price: price,
               railwayStn: railwayStn,
               rooms: rooms,
