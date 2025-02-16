@@ -22,6 +22,7 @@ android {
     defaultConfig {
         applicationId = "com.example.flutter03"
         minSdk = 23
+        // minSdkVersion = 21
         targetSdk = 34 // ✅ Ensure target SDK is up to date
         versionCode = 1
         versionName = "1.0"
