@@ -72,6 +72,7 @@ flutter:
     - assets/images/background.png
     - assets/images/light-1.png
     - assets/images/clock.png
+    - assets/kawashaki_ninja_h2.glb
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
