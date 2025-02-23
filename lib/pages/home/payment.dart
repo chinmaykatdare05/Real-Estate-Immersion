@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'payment.dart';
+import 'package:flutter03/pages/home/home_details.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -216,7 +216,7 @@ double getTotalAmount() {
   ],
 ),
 
-
+const Divider(),
 
                 const SizedBox(height: 20),
 
@@ -237,7 +237,7 @@ double getTotalAmount() {
               ),
 
               const SizedBox(height: 20),
-
+const Divider(),
               // Ground Rules
               const Text(
                 'Ground Rules',
@@ -255,11 +255,12 @@ double getTotalAmount() {
               const SizedBox(height: 20),
 
               // Booking Rules
+              const Divider(),
               const Text(
                 'Booking Rules',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 20),
               const Text(
                 '• If booking is above 30 days, 10% discount is applied.',
                 style: TextStyle(fontSize: 16),
@@ -269,17 +270,18 @@ double getTotalAmount() {
                 style: TextStyle(fontSize: 16),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 0),
               const Text(
-                'Cancellation Policy',
+                '',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 0),
               const Text(
-                'This reservation is non-refundable.',
+                '',
                 style: TextStyle(fontSize: 16),
               ),
-              const SizedBox(height: 20),
+              // const Divider(),
+              const SizedBox(height: 0),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

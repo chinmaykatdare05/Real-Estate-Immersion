@@ -344,34 +344,34 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   ),
 
                   const SizedBox(height: 16),
-                  const Divider(color: Colors.grey),
+                  // const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text('Select Dates',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: () => _selectDates(context),
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            selectedDates == null
-                                ? 'Choose your dates'
-                                : '${selectedDates!.start.day}/${selectedDates!.start.month}/${selectedDates!.start.year} - ${selectedDates!.end.day}/${selectedDates!.end.month}/${selectedDates!.end.year}',
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          const Icon(Icons.calendar_today, color: Colors.grey),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // const Text('Select Dates',
+                  //     style:
+                  //         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  // const SizedBox(height: 8),
+                  // GestureDetector(
+                  //   onTap: () => _selectDates(context),
+                  //   child: Container(
+                  //     padding: const EdgeInsets.all(12),
+                  //     decoration: BoxDecoration(
+                  //       border: Border.all(color: Colors.grey),
+                  //       borderRadius: BorderRadius.circular(8),
+                  //     ),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         Text(
+                  //           selectedDates == null
+                  //               ? 'Choose your dates'
+                  //               : '${selectedDates!.start.day}/${selectedDates!.start.month}/${selectedDates!.start.year} - ${selectedDates!.end.day}/${selectedDates!.end.month}/${selectedDates!.end.year}',
+                  //           style: const TextStyle(fontSize: 16),
+                  //         ),
+                  //         const Icon(Icons.calendar_today, color: Colors.grey),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
                 ],
               ),
@@ -402,7 +402,8 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                 ),
               ),
               SizedBox(
-                width: 120,
+                height: 55,
+                width: 110,
                 child: ElevatedButton(
                   onPressed: () {
                     if (widget.model3D) {
@@ -412,7 +413,7 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 243, 61, 70),
+                    backgroundColor: const Color.fromARGB(255, 236, 76, 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -422,14 +423,15 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   child: Text(
                     widget.model3D ? '3D Model' : 'Reserve',
                     style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                         color: Colors.white), // Decreased font size
                   ),
                 ),
               ),
               SizedBox(
-                width: 100,
+                height: 55,
+                width: 105,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -438,7 +440,7 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 243, 61, 70),
+                    backgroundColor: const Color.fromARGB(255, 0, 0, 0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -446,7 +448,7 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   ),
                   child: const Text(
                     'Reserve',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                 ),
               ),
