@@ -94,30 +94,30 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
     }
   }
 
-  void _show3DModel(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: const Text('Model Viewer')),
-          body: const ModelViewer(
-            backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-            src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
-            alt: 'A 3D model of an astronaut',
-            ar: true,
-            autoRotate: true,
-            iosSrc: 'https://modelviewer.dev/shared-assets/models/Astronaut.usdz',
-            disableZoom: true,
-          ),
+ void _show3DModel(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => Scaffold(
+        appBar: AppBar(title: const Text('Model Viewer')),
+        body: const ModelViewer(
+          backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
+          src: 'assets/home.glb',  // Use the relative asset path here
+          alt: 'A 3D model of my living room',
+          ar: true,
+          autoRotate: true,
+          // Remove iosSrc if you don't have an iOS USDZ version or update accordingly
+          disableZoom: false,
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

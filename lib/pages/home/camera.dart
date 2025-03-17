@@ -1,8 +1,37 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_unity_widget/flutter_unity_widget.dart';
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus/flag.dart';
 
-class CameraPage extends StatelessWidget {
+class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
+
+  @override
+  State<CameraPage> createState() => _CameraPageState();
+}
+
+class _CameraPageState extends State<CameraPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Use addPostFrameCallback to ensure the context is fully built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _openUnityApp();
+    });
+  }
+
+  void _openUnityApp() async {
+    const intent = AndroidIntent(
+      action: 'android.intent.action.MAIN',
+      package: 'com.perrytheboss.pineapple',
+      componentName: 'com.unity3d.player.UnityPlayerActivity',
+    );
+
+    try {
+      await intent.launch();
+    } catch (e) {
+      print("Error launching Unity app: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,24 +40,10 @@ class CameraPage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Coming Soon!', style: TextStyle(fontSize: 24)),
-            const SizedBox(height: 20),
-            const Text('Tap the button below for Amazing visualizations'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.black, // Set the text color to white
-              ),
-              onPressed: () {
-                // Future functionality: Capture image
-              },
-              child: const Text('Open ARVR Camera'),
-            ),
-
-            // Uncomment if you want to show a loading indicator
-            // CircularProgressIndicator(),
+          children: const [
+            Text('Redirecting to Unity...', style: TextStyle(fontSize: 24)),
+            SizedBox(height: 20),
+            CircularProgressIndicator(),
           ],
         ),
       ),

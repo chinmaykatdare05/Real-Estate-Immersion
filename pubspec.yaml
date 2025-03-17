@@ -41,10 +41,17 @@ dependencies:
   cloud_firestore: ^5.4.1
   curved_navigation_bar: ^1.0.6
   animate_do: ^3.3.4
-  url_launcher: ^6.0.12
+  url_launcher: ^6.0.20
+  path_provider: ^2.0.11
+  open_file: ^3.2.1
   font_awesome_flutter: ^10.1.0
   google_maps_flutter: ^2.10.0
   model_viewer_plus: ^1.8.0
+  android_intent_plus: ^5.3.0
+  flutter_svg: ^2.0.10 
+ 
+  #device_apps: ^2.2.0
+  #package_info_plus: ^8.2.1
   # flutter_unity_widget: ^2022.2.0
 
 dev_dependencies:
@@ -74,6 +81,8 @@ flutter:
     - assets/images/light-1.png
     - assets/images/clock.png
     - assets/kawashaki_ninja_h2.glb
+    - assets/home.glb
+    - assets/303.glb
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

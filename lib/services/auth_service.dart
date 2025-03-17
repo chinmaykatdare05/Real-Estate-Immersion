@@ -1,16 +1,36 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore import
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../pages/home/home.dart'; // Import the correct HomePage
+import '../pages/home/home.dart';
 import '../pages/login/login.dart';
 
 class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Checks if user is logged in and redirects accordingly
+  void checkUserSession(BuildContext context) {
+    _auth.authStateChanges().listen((User? user) {
+      if (user == null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Login()), // Go to login page
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()), // Go to home page
+        );
+      }
+    });
+  }
+
+  // Get current user details
+  User? get currentUser => _auth.currentUser;
+
+  // Sign Up with Email & Password
   Future<void> signup({
     required String name,
     required String email,
@@ -19,26 +39,23 @@ class AuthService {
     required BuildContext context,
   }) async {
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Write user data to Firestore after successful signup
       await _firestore.collection('Users').doc(userCredential.user!.uid).set({
         'Name': name,
         'Email': email,
         'Phone': phoneNumber,
         'Buyer': true,
-        'Password': password
+        'Password': password,
       });
 
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => const HomePage()),
-      );
+
+      // Redirect based on session
+      checkUserSession(context);
     } on FirebaseAuthException catch (e) {
       String message = 'Fields cannot be empty';
       if (e.code == 'weak-password') {
@@ -47,39 +64,27 @@ class AuthService {
         message = 'An account already exists with that email.';
       }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text(message), backgroundColor: Colors.red),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("An error occurred: ${e.toString()}"),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text("An error occurred: ${e.toString()}"), backgroundColor: Colors.red),
       );
     }
   }
 
+  // Sign In with Email & Password
   Future<void> signin({
     required String email,
     required String password,
     required BuildContext context,
   }) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) =>
-                const HomePage()), // Updated HomePage()
-      );
+
+      // Redirect based on session
+      checkUserSession(context);
     } on FirebaseAuthException catch (e) {
       String message = '';
       if (e.code == 'invalid-email') {
@@ -107,23 +112,24 @@ class AuthService {
     }
   }
 
+  // Sign Out
   Future<void> signout({
     required BuildContext context,
   }) async {
-    await FirebaseAuth.instance.signOut();
+    await _auth.signOut();
     await Future.delayed(const Duration(seconds: 1));
+
+    // Redirect to Login Page
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-          builder: (BuildContext context) =>
-              Login()), // Login remains unchanged
+      MaterialPageRoute(builder: (BuildContext context) => Login()),
     );
   }
 
-  // New method to send password reset email
+  // Reset Password
   Future<void> resetPassword({required String email}) async {
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      await _auth.sendPasswordResetEmail(email: email);
       Fluttertoast.showToast(
         msg: "Password reset email sent!",
         toastLength: Toast.LENGTH_SHORT,

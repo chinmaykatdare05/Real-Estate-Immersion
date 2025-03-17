@@ -1,8 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api, deprecated_member_use
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import the EventPage class
 import 'home_details.dart';
+import 'event_page.dart';
+import 'building.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -16,10 +18,20 @@ class _ExplorePageState extends State<ExplorePage> {
   int selectedIndex = 0; // 0 for Buy, 1 for Rent
   final List<String> categories = ['Buy', 'Rent'];
 
+  final List<Map<String, dynamic>> propertyTypes = [
+    {'name': 'Event', 'icon': Icons.event,},
+    {'name': 'Building', 'icon': Icons.apartment},
+    {'name': 'Pool', 'icon': Icons.pool},
+    {'name': 'Garden', 'icon': Icons.park},
+    {'name': 'Resort', 'icon': Icons.beach_access},
+    {'name': 'Concert', 'icon': Icons.music_note},
+    {'name': 'Function', 'icon': Icons.event_seat},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(204, 255, 255, 255),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -28,8 +40,6 @@ class _ExplorePageState extends State<ExplorePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                // Slider (Buy / Rent)
-                // Search Field
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Material(
@@ -50,6 +60,60 @@ class _ExplorePageState extends State<ExplorePage> {
                     ),
                   ),
                 ),
+
+                const SizedBox(height: 2),
+                // Sliding Buttons for Property Types
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: propertyTypes.map((property) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (property['name'] == 'Event') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const EventPage(),
+                                ),
+                              );
+                            } else if (property['name'] == 'Building') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const BuildingPage(),
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.all(12),
+                          ),
+                          child: Icon(property['icon'], size: 40),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                // Filter Button
+
+                // Add filter functionality
+                //  Align(
+                //   alignment: Alignment.centerRight,
+                //   child: IconButton(
+                //     icon: const Icon(Icons.filter_list, size: 30),
+                //     onPressed: () {
+                //     },
+                //   ),
+                // ),
+
                 // Slider (Buy / Rent)
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -57,7 +121,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(204, 255, 255, 255),
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
@@ -80,16 +144,14 @@ class _ExplorePageState extends State<ExplorePage> {
                                   decoration: BoxDecoration(
                                     color: isSelected
                                         ? Colors.black
-                                        : const Color.fromARGB(
-                                            204, 255, 255, 255),
+                                        : Colors.white,
                                     borderRadius: BorderRadius.circular(30),
                                     boxShadow: isSelected
                                         ? [
                                             BoxShadow(
-                                              color:
-                                                  Colors.black.withOpacity(0.1),
-                                              blurRadius: 5,
-                                            )
+                                                color: Colors.black
+                                                    .withOpacity(0.1),
+                                                blurRadius: 5)
                                           ]
                                         : [],
                                   ),
@@ -115,7 +177,9 @@ class _ExplorePageState extends State<ExplorePage> {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 10),
+
                 // Properties from Firestore filtered by selected type.
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -231,11 +295,11 @@ class PropertyCard extends StatelessWidget {
               child: Image.memory(
                 base64Decode(sanitizeBase64(image)),
                 width: double.infinity,
-                height: 300,
+                height: 250,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    height: 200,
+                    height: 100,
                     color: Colors.grey[200],
                     child: const Center(
                       child: Icon(Icons.error, color: Colors.red, size: 40),
@@ -269,7 +333,7 @@ class PropertyCard extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 20),
                 ],
               ),
             )

@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             snapshot.data!.data() as Map<String, dynamic>;
 
         return Scaffold(
-          backgroundColor: const Color.fromARGB(204, 255, 255, 255),
+          backgroundColor: Colors.white,
           body: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             child: Column(
