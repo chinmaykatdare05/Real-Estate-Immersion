@@ -81,18 +81,6 @@ class HomeDetailsPage extends StatefulWidget {
 class _HomeDetailsPageState extends State<HomeDetailsPage> {
   DateTimeRange? selectedDates;
 
-  Future<void> _selectDates(BuildContext context) async {
-    final DateTimeRange? picked = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year + 1),
-    );
-    if (picked != null && picked != selectedDates) {
-      setState(() {
-        selectedDates = picked;
-      });
-    }
-  }
 
  void _show3DModel(BuildContext context) {
   Navigator.push(

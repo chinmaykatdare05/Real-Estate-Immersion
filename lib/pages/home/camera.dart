@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:android_intent_plus/android_intent.dart';
-import 'package:android_intent_plus/flag.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});

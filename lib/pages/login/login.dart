@@ -73,7 +73,7 @@ class Login extends StatelessWidget {
                           ),
                         ),
                       ),
-                        const SizedBox(height: 16.0),
+                        const SizedBox(height: 24),
                         // Password Field
                         TextFormField(
                           controller: _passwordController,
@@ -128,29 +128,21 @@ class Login extends StatelessWidget {
                           ),
                           child: const Text("Sign In"),
                         ),
-                        const SizedBox(height: 16.0),
+                        const SizedBox(height: 30),
                         // Forgot Password Button
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Forgot Password?',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color
-                                      ?.withOpacity(0.64),
-                                ),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Forgot Password?',
+                            style: const TextStyle(color: Color.fromARGB(255, 240, 61, 61)),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ForgotPasswordPage(),
+                                  ),
+                                );
+                              },
                           ),
                         ),
                         // Spacer for bottom

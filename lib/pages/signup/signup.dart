@@ -41,10 +41,10 @@ class SignupPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          "Sign up",
-          style: TextStyle(color: Color.fromARGB(255, 251, 81, 81)),
-        ),
+        // title: const Text(
+        //   "Sign up",
+        //   style: TextStyle(color: Color.fromARGB(255, 251, 81, 81)),
+        // ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Color(0xFF757575)),
       ),
@@ -57,7 +57,7 @@ class SignupPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 // Big "Complete Profile" title
                 const Text(
-                  "Complete Profile",
+                  "Sign up",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
@@ -66,11 +66,11 @@ class SignupPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 // Subtitle
-                const Text(
-                  "Complete your details or continue \nwith social media",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xFF757575)),
-                ),
+                // const Text(
+                //   "Complete your details or continue \nwith social media",
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(color: Color(0xFF757575)),
+                // ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                 // The form
@@ -191,27 +191,25 @@ class SignupPage extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    backgroundColor: const Color.fromARGB(255, 255, 67, 67),
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                    ),
-                  ),
+                            elevation: 0,
+                            backgroundColor: const Color.fromARGB(255, 244, 83, 83),
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(double.infinity, 48),
+                            shape: const StadiumBorder(),
+                          ),
                   child: const Text("Continue"),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.10),
 
                 // Terms and Conditions Text
-                const Text(
-                  "By continuing your confirm that you agree \nwith our Term and Condition",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF757575),
-                  ),
-                ),
-                const SizedBox(height: 16),
+                // const Text(
+                //   "By continuing your confirm that you agree \nwith our Term and Condition",
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //     color: Color(0xFF757575),
+                //   ),
+                // ),
+                // const SizedBox(height: 16),
               ],
             ),
           ),
