@@ -80,6 +80,7 @@ flutter:
     - assets/images/background.png
     - assets/images/light-1.png
     - assets/images/clock.png
+    - assets/images/buiding.jpeg
     - assets/kawashaki_ninja_h2.glb
     - assets/home.glb
     - assets/303.glb

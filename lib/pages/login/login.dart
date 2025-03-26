@@ -32,7 +32,7 @@ class Login extends StatelessWidget {
                   SizedBox(height: constraints.maxHeight * 0.1),
                   // Logo (optional)
                   Image.network(
-                    "https://i.postimg.cc/nz0YBQcH/Logo-light.png",
+                    "https://i.postimg.cc/d361wj1v/Screenshot-2025-03-18-014224.png",
                     height: 100,
                   ),
                   SizedBox(height: constraints.maxHeight * 0.1),
@@ -66,9 +66,16 @@ class Login extends StatelessWidget {
                               const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                           // You can add an SVG icon for email if you like:
                           // suffix: SvgPicture.string(emailIcon),
-                          border: authOutlineInputBorder,
-                          enabledBorder: authOutlineInputBorder,
-                          focusedBorder: authOutlineInputBorder.copyWith(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(80.0),
+                            borderSide: const BorderSide(color: Color(0xFF757575)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(80.0),
+                            borderSide: const BorderSide(color: Color(0xFF757575)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(80.0),
                             borderSide: const BorderSide(color: Color(0xFFFF7643)),
                           ),
                         ),
@@ -86,9 +93,16 @@ class Login extends StatelessWidget {
                           hintStyle: const TextStyle(color: Color(0xFF757575)),
                           contentPadding:
                               const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                          border: authOutlineInputBorder,
-                          enabledBorder: authOutlineInputBorder,
-                          focusedBorder: authOutlineInputBorder.copyWith(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(80.0),
+                            borderSide: const BorderSide(color: Color(0xFF757575)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(80.0),
+                            borderSide: const BorderSide(color: Color(0xFF757575)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(80.0),
                             borderSide: const BorderSide(color: Color(0xFFFF7643)),
                           ),
                         ),
@@ -113,7 +127,7 @@ class Login extends StatelessWidget {
                                     content: Text(
                                       "Login failed. Please try again.",
                                     ),
-                                    backgroundColor: Colors.redAccent,
+                                    backgroundColor: Color.fromARGB(255, 216, 16, 83),
                                   ),
                                 );
                               }
@@ -121,7 +135,7 @@ class Login extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: const Color.fromARGB(255, 244, 83, 83),
+                            backgroundColor: const Color.fromARGB(255, 216, 16, 83),
                             foregroundColor: Colors.white,
                             minimumSize: const Size(double.infinity, 48),
                             shape: const StadiumBorder(),

@@ -14,11 +14,29 @@ class _BuildingPageState extends State<BuildingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      // AppBar added with a back button that behaves differently depending on the view.
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            if (showDetails) {
+              setState(() {
+                showDetails = false; // Go back to card view
+              });
+            } else {
+              Navigator.pop(context); // Navigate back from page
+            }
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 40), // Added space before the card
             if (!showDetails) ...[
               // 🏠 Card View
               GestureDetector(
@@ -41,18 +59,19 @@ class _BuildingPageState extends State<BuildingPage> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.asset(
-                              'assets/building.jpg',
+                              'assets/images/buiding.jpeg',
                               width: double.infinity,
                               height: 220,
                               fit: BoxFit.cover,
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             top: 10,
                             right: 10,
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
-                              child: Icon(Icons.favorite_border, color: Colors.black),
+                              child:
+                                  Icon(Icons.favorite_border, color: Colors.black),
                             ),
                           ),
                         ],
@@ -62,9 +81,10 @@ class _BuildingPageState extends State<BuildingPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Flat in Downtown Dubai',
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               'Modern Haven Near Burj Khalifa',
@@ -74,24 +94,19 @@ class _BuildingPageState extends State<BuildingPage> {
                               'Free cancellation',
                               style: TextStyle(color: Colors.grey[600]),
                             ),
-                            SizedBox(height: 5),
+                            const SizedBox(height: 5),
                             Row(
                               children: [
-                                Text(
-                                  '₹11,804',
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                ),
-                                Text(' night · '),
-                                Text(
-                                  '₹1,10,973 total',
+                                const Text(
+                                  '₹3500/night',
                                   style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: Colors.blue,
-                                  ),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                Spacer(),
-                                Icon(Icons.star, color: Colors.black, size: 18),
-                                Text(' 4.75 (4)'),
+                                const Spacer(),
+                                const Icon(Icons.star,
+                                    color: Colors.black, size: 18),
+                                const Text(' 4.75 (4)'),
                               ],
                             ),
                           ],
@@ -106,24 +121,24 @@ class _BuildingPageState extends State<BuildingPage> {
               Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.black),
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
                     onPressed: () {
                       setState(() {
                         showDetails = false; // Go back to card view
                       });
                     },
                   ),
-                  Text(
+                  const Text(
                     'Mountainview Paradise',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   IconButton(
-                    icon: Icon(Icons.share, color: Colors.black),
+                    icon: const Icon(Icons.share, color: Colors.black),
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: Icon(Icons.favorite_border, color: Colors.black),
+                    icon: const Icon(Icons.favorite_border, color: Colors.black),
                     onPressed: () {},
                   ),
                 ],
@@ -132,7 +147,7 @@ class _BuildingPageState extends State<BuildingPage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    'assets/building.jpg',
+                    'assets/images/buiding.jpeg',
                     width: 350,
                     height: 200,
                     fit: BoxFit.cover,
@@ -148,51 +163,58 @@ class _BuildingPageState extends State<BuildingPage> {
                       'Entire rental unit in Karjat, India',
                       style: TextStyle(color: Colors.grey[600]),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
                       '6 guests · 1 bedroom · 1 bed · 2 bathrooms',
                       style: TextStyle(color: Colors.grey[600]),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
-                        Icon(Icons.star, color: Colors.black, size: 18),
-                        Text(' 4.94 (51 reviews) · Guest Favourite'),
+                        const Icon(Icons.star,
+                            color: Colors.black, size: 18),
+                        const Text(' 4.94 (51 reviews) · Guest Favourite'),
                       ],
                     ),
-                    SizedBox(height: 10),
-                    Divider(),
+                    const SizedBox(height: 10),
+                    const Divider(),
                     ListTile(
-                      leading: Icon(Icons.ac_unit, color: Colors.blue),
-                      title: Text('Designed for staying cool'),
-                      subtitle: Text('A/C, portable fan, and ceiling fan'),
+                      leading: const Icon(Icons.ac_unit, color: Colors.blue),
+                      title: const Text('Designed for staying cool'),
+                      subtitle:
+                          const Text('A/C, portable fan, and ceiling fan'),
                     ),
                     ListTile(
-                      leading: Icon(Icons.laptop_mac, color: Colors.blue),
-                      title: Text('Dedicated workspace'),
-                      subtitle: Text('A room with WiFi that’s well suited for working'),
+                      leading:
+                          const Icon(Icons.laptop_mac, color: Colors.blue),
+                      title: const Text('Dedicated workspace'),
+                      subtitle: const Text(
+                          'A room with WiFi that’s well suited for working'),
                     ),
-                    Divider(),
+                    const Divider(),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Row(
                         children: [
-                          Text(
-                            '₹3,440 ',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          const Text(
+                            '₹3,500 ',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          Text('/ night'),
-                          Spacer(),
+                          const Text('/ night'),
+                          const Spacer(),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.pink,
-                              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                             onPressed: () {},
-                            child: Text('3D Tour', style: TextStyle(color: Colors.white)),
+                            child: const Text('3D Tour',
+                                style: TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),

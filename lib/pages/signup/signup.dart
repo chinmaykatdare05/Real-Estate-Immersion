@@ -57,7 +57,7 @@ class SignupPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 // Big "Complete Profile" title
                 const Text(
-                  "Sign up",
+                  "Sign Up",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
@@ -192,7 +192,7 @@ class SignupPage extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: const Color.fromARGB(255, 244, 83, 83),
+                            backgroundColor: const Color.fromARGB(255, 216, 16, 83),
                             foregroundColor: Colors.white,
                             minimumSize: const Size(double.infinity, 48),
                             shape: const StadiumBorder(),

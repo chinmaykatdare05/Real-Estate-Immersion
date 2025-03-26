@@ -81,30 +81,46 @@ class HomeDetailsPage extends StatefulWidget {
 class _HomeDetailsPageState extends State<HomeDetailsPage> {
   DateTimeRange? selectedDates;
 
-
- void _show3DModel(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => Scaffold(
-        appBar: AppBar(title: const Text('Model Viewer')),
-        body: const ModelViewer(
-          backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-          src: 'assets/home.glb',  // Use the relative asset path here
-          alt: 'A 3D model of my living room',
-          ar: true,
-          autoRotate: true,
-          // Remove iosSrc if you don't have an iOS USDZ version or update accordingly
-          disableZoom: false,
+  void _show3DModel(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            title: const Text('Model Viewer', style: TextStyle(color: Colors.black)),
+            centerTitle: true,
+          ),
+          body: const ModelViewer(
+            backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
+            src: 'assets/home.glb', // Use the relative asset path here
+            alt: 'A 3D model of my living room',
+            ar: true,
+            autoRotate: true,
+            // Remove iosSrc if you don't have an iOS USDZ version or update accordingly
+            disableZoom: false,
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -309,57 +325,35 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   ),
                   Text(
                     widget.address,
-                    style: TextStyle(fontSize: 16, color: const Color.fromARGB(255, 11, 7, 235)),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            const Color.fromARGB(255, 11, 7, 235)),
                   ),
-
-                  // Google Maps widget
                   const SizedBox(height: 8),
+                  // Google Maps widget
                   SizedBox(
                     height: 200,
                     child: GoogleMap(
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(double.parse(widget.latitude),
-                            double.parse(widget.longitude)),
+                        target: LatLng(
+                          double.parse(widget.latitude),
+                          double.parse(widget.longitude),
+                        ),
                         zoom: 14,
                       ),
                       markers: {
                         Marker(
-                            markerId: const MarkerId('location'),
-                            position: LatLng(double.parse(widget.latitude),
-                                double.parse(widget.longitude))),
+                          markerId: const MarkerId('location'),
+                          position: LatLng(
+                            double.parse(widget.latitude),
+                            double.parse(widget.longitude),
+                          ),
+                        ),
                       },
                     ),
                   ),
-
                   const SizedBox(height: 16),
-                  // const Divider(color: Colors.grey),
-                  const SizedBox(height: 16),
-                  // const Text('Select Dates',
-                  //     style:
-                  //         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  // const SizedBox(height: 8),
-                  // GestureDetector(
-                  //   onTap: () => _selectDates(context),
-                  //   child: Container(
-                  //     padding: const EdgeInsets.all(12),
-                  //     decoration: BoxDecoration(
-                  //       border: Border.all(color: Colors.grey),
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //       children: [
-                  //         Text(
-                  //           selectedDates == null
-                  //               ? 'Choose your dates'
-                  //               : '${selectedDates!.start.day}/${selectedDates!.start.month}/${selectedDates!.start.year} - ${selectedDates!.end.day}/${selectedDates!.end.month}/${selectedDates!.end.year}',
-                  //           style: const TextStyle(fontSize: 16),
-                  //         ),
-                  //         const Icon(Icons.calendar_today, color: Colors.grey),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                   const SizedBox(height: 16),
                 ],
               ),
@@ -390,8 +384,8 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                 ),
               ),
               SizedBox(
-                height: 55,
-                width: 110,
+                height: 65,
+                width: 120,
                 child: ElevatedButton(
                   onPressed: () {
                     if (widget.model3D) {
@@ -401,30 +395,30 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 236, 76, 8),
+                    backgroundColor: const Color.fromARGB(255, 216, 16, 83),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16), // Increased height
+                    padding: const EdgeInsets.symmetric(vertical: 24),
                   ),
                   child: Text(
                     widget.model3D ? '3D Model' : 'Reserve',
                     style: const TextStyle(
-                        fontSize: 13,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white), // Decreased font size
+                        color: Colors.white),
                   ),
                 ),
               ),
               SizedBox(
-                height: 55,
-                width: 105,
+                height: 65,
+                width: 120,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const PaymentScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const PaymentScreen()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -432,11 +426,11 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 24),
                   ),
                   child: const Text(
                     'Reserve',
-                    style: TextStyle(fontSize: 14, color: Colors.white),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),

@@ -19,13 +19,24 @@ class _ExplorePageState extends State<ExplorePage> {
   final List<String> categories = ['Buy', 'Rent'];
 
   final List<Map<String, dynamic>> propertyTypes = [
-    {'name': 'Event', 'icon': Icons.event,},
+    {'name': 'Event', 'icon': Icons.event},
     {'name': 'Building', 'icon': Icons.apartment},
     {'name': 'Pool', 'icon': Icons.pool},
     {'name': 'Garden', 'icon': Icons.park},
     {'name': 'Resort', 'icon': Icons.beach_access},
     {'name': 'Concert', 'icon': Icons.music_note},
     {'name': 'Function', 'icon': Icons.event_seat},
+  ];
+
+  // Soft pastel colors for each item (one per property type)
+  final List<Color> pastelColors = [
+    Colors.pink.shade50,
+    Colors.blue.shade50,
+    Colors.orange.shade50,
+    Colors.green.shade50,
+    Colors.yellow.shade50,
+    Colors.purple.shade50,
+    Colors.teal.shade50,
   ];
 
   @override
@@ -40,6 +51,8 @@ class _ExplorePageState extends State<ExplorePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
+
+                // Search Bar
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Material(
@@ -61,16 +74,23 @@ class _ExplorePageState extends State<ExplorePage> {
                   ),
                 ),
 
-                const SizedBox(height: 2),
-                // Sliding Buttons for Property Types
+                const SizedBox(height: 20),
+
+                // Sliding Buttons for Property Types (RESTYLED HERE)
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: propertyTypes.map((property) {
+                    children: propertyTypes.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final property = entry.value;
+                      // Pick a pastel color based on the index
+                      final backgroundColor =
+                          pastelColors[index % pastelColors.length];
+
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: ElevatedButton(
-                          onPressed: () {
+                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        child: InkWell(
+                          onTap: () {
                             if (property['name'] == 'Event') {
                               Navigator.push(
                                 context,
@@ -86,38 +106,57 @@ class _ExplorePageState extends State<ExplorePage> {
                                 ),
                               );
                             }
+                            // Add more navigation logic if needed
                           },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            width: 85,
+                            height: 67,
+                            decoration: BoxDecoration(
+                              color: backgroundColor,
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            padding: const EdgeInsets.all(12),
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  property['icon'],
+                                  size: 25,
+                                  color: Colors.black54,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  property['name'].toString().toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Icon(property['icon'], size: 40),
                         ),
                       );
+                      
                     }).toList(),
                   ),
                 ),
-
                 const SizedBox(height: 5),
+                Divider(
+                  color: const Color.fromARGB(255, 237, 232, 232), // Line color
+                  thickness: 1, // Line thickness
+                  indent: 0, // Left spacing
+                  endIndent: 0, // Right spacing
+                ),
 
-                // Filter Button
-
-                // Add filter functionality
-                //  Align(
-                //   alignment: Alignment.centerRight,
-                //   child: IconButton(
-                //     icon: const Icon(Icons.filter_list, size: 30),
-                //     onPressed: () {
-                //     },
-                //   ),
-                // ),
+                const SizedBox(height: 02),
 
                 // Slider (Buy / Rent)
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
@@ -143,15 +182,16 @@ class _ExplorePageState extends State<ExplorePage> {
                                   height: 50,
                                   decoration: BoxDecoration(
                                     color: isSelected
-                                        ? Colors.black
+                                        ? const Color.fromARGB(255, 216, 16, 83)
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(30),
                                     boxShadow: isSelected
                                         ? [
                                             BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.1),
-                                                blurRadius: 5)
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              blurRadius: 5,
+                                            )
                                           ]
                                         : [],
                                   ),
@@ -164,9 +204,8 @@ class _ExplorePageState extends State<ExplorePage> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.black,
+                                    color:
+                                        isSelected ? Colors.white : Colors.black,
                                   ),
                                 ),
                               ],
@@ -342,4 +381,14 @@ class PropertyCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// A quick helper to handle potential data URL prefixes or whitespace in the base64 string.
+String sanitizeBase64(String base64String) {
+  // Remove any data URL prefix if present
+  if (base64String.contains(',')) {
+    base64String = base64String.split(',').last;
+  }
+  // Trim whitespace
+  return base64String.trim();
 }

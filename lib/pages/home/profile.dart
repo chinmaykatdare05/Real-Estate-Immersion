@@ -67,23 +67,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 Card(
-                  color: const Color.fromARGB(255, 255, 203, 99),
+                  color: const Color.fromARGB(255, 234, 233, 231),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 25, vertical: 25),
+                        horizontal: 20, vertical: 20),
                     child: Row(
                       children: [
                         CircleAvatar(
                           radius: 35,
-                          backgroundColor: Colors.black,
+                          backgroundColor: const Color.fromARGB(255, 216, 16, 83),
                           child: Text(
                             userData['Name'][0], // First letter of the name
                             style: const TextStyle(
-                              color: Color.fromARGB(255, 255, 203, 99),
+                              color: Color.fromARGB(255, 239, 238, 234),
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                             ),
@@ -134,14 +134,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: ElevatedButton(
                     onPressed: _logout,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      backgroundColor: const Color.fromARGB(255, 216, 16, 83),
                       // foregroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30, vertical: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: const BorderSide(
-                            color: Color.fromARGB(255, 17, 13, 12)),
+                            color: Color.fromARGB(255, 216, 16, 83)),
                       ),
                       elevation: 0, // No shadow
                       textStyle: const TextStyle(
