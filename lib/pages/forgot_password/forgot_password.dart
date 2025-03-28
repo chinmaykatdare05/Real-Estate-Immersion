@@ -87,7 +87,7 @@ class ForgotPasswordPage extends StatelessWidget {
           const SizedBox(height: 40),
           ElevatedButton(
   onPressed: () async {
-    
+    print('Email: ${_emailController.text}');
   },
   style: ElevatedButton.styleFrom(
     elevation: 0,
