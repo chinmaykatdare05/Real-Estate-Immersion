@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:flutter03/services/auth_service.dart';
+import 'package:flutter03/auth/auth_service.dart';
 
 // Icons (same as in your first code)
 const userIcon =
@@ -81,21 +81,23 @@ class SignupPage extends StatelessWidget {
                       TextFormField(
                         controller: nameController,
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z\s]')),
                         ],
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
-                          hintText: "Enter your name",
+                          hintText: "Enter your Name",
                           labelText: "Name",
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           hintStyle: const TextStyle(color: Color(0xFF757575)),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
                           suffix: SvgPicture.string(userIcon),
                           border: authOutlineInputBorder,
                           enabledBorder: authOutlineInputBorder,
                           focusedBorder: authOutlineInputBorder.copyWith(
-                            borderSide: const BorderSide(color: Color(0xFFFF7643)),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFFF7643)),
                           ),
                         ),
                       ),
@@ -106,7 +108,8 @@ class SignupPage extends StatelessWidget {
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9@._-]')),
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z0-9@._-]')),
                         ],
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
@@ -114,14 +117,15 @@ class SignupPage extends StatelessWidget {
                           labelText: "Email Address",
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           hintStyle: const TextStyle(color: Color(0xFF757575)),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
                           // You can add an SVG icon for email if you like:
                           // suffix: SvgPicture.string(emailIcon),
                           border: authOutlineInputBorder,
                           enabledBorder: authOutlineInputBorder,
                           focusedBorder: authOutlineInputBorder.copyWith(
-                            borderSide: const BorderSide(color: Color(0xFFFF7643)),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFFF7643)),
                           ),
                         ),
                       ),
@@ -137,12 +141,13 @@ class SignupPage extends StatelessWidget {
                           labelText: "Password",
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           hintStyle: const TextStyle(color: Color(0xFF757575)),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
                           border: authOutlineInputBorder,
                           enabledBorder: authOutlineInputBorder,
                           focusedBorder: authOutlineInputBorder.copyWith(
-                            borderSide: const BorderSide(color: Color(0xFFFF7643)),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFFF7643)),
                           ),
                         ),
                       ),
@@ -153,7 +158,8 @@ class SignupPage extends StatelessWidget {
                         controller: phoneNumberController,
                         keyboardType: TextInputType.phone,
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^[0-9]*$')),
                           LengthLimitingTextInputFormatter(10),
                         ],
                         decoration: InputDecoration(
@@ -161,13 +167,14 @@ class SignupPage extends StatelessWidget {
                           labelText: "Phone Number",
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           hintStyle: const TextStyle(color: Color(0xFF757575)),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
                           suffix: SvgPicture.string(phoneIcon),
                           border: authOutlineInputBorder,
                           enabledBorder: authOutlineInputBorder,
                           focusedBorder: authOutlineInputBorder.copyWith(
-                            borderSide: const BorderSide(color: Color(0xFFFF7643)),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFFF7643)),
                           ),
                         ),
                       ),
@@ -191,12 +198,12 @@ class SignupPage extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: const Color.fromARGB(255, 216, 16, 83),
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(double.infinity, 48),
-                            shape: const StadiumBorder(),
-                          ),
+                    elevation: 0,
+                    backgroundColor: const Color.fromARGB(255, 216, 16, 83),
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 48),
+                    shape: const StadiumBorder(),
+                  ),
                   child: const Text("Continue"),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.10),

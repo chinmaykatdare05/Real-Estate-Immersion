@@ -1,9 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter03/pages/signup/signup.dart';
-import 'package:flutter03/pages/forgot_password/forgot_password.dart';
-import 'package:flutter03/services/auth_service.dart';
+import 'package:flutter03/auth/signup.dart';
+import 'package:flutter03/auth/forgot_password.dart';
+import 'package:flutter03/auth/auth_service.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -54,59 +56,84 @@ class Login extends StatelessWidget {
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9@._-]')),
-                        ],
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          hintText: "Enter your email",
-                          labelText: "Email Address",
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          hintStyle: const TextStyle(color: Color(0xFF757575)),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                          // You can add an SVG icon for email if you like:
-                          // suffix: SvgPicture.string(emailIcon),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(80.0),
-                            borderSide: const BorderSide(color: Color(0xFF757575)),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[a-zA-Z0-9@._-]')),
+                          ],
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            hintText: "Enter your Email",
+                            labelText: "Email Address",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            hintStyle:
+                                const TextStyle(color: Color(0xFF757575)),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 16),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(80.0),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF757575)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(80.0),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF757575)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(80.0),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFFFF7643)),
+                            ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(80.0),
-                            borderSide: const BorderSide(color: Color(0xFF757575)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(80.0),
-                            borderSide: const BorderSide(color: Color(0xFFFF7643)),
-                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Email cannot be empty';
+                            } else if (!RegExp(
+                                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                                .hasMatch(value)) {
+                              return 'Enter a valid email address';
+                            }
+                            return null;
+                          },
                         ),
-                      ),
                         const SizedBox(height: 24),
                         // Password Field
                         TextFormField(
                           controller: _passwordController,
                           obscureText: true,
                           textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          hintText: "Enter your password",
-                          labelText: "Password",
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          hintStyle: const TextStyle(color: Color(0xFF757575)),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(80.0),
-                            borderSide: const BorderSide(color: Color(0xFF757575)),
+                          decoration: InputDecoration(
+                            hintText: "Enter your Password",
+                            labelText: "Password",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            hintStyle:
+                                const TextStyle(color: Color(0xFF757575)),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 16),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(80.0),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF757575)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(80.0),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF757575)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(80.0),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFFFF7643)),
+                            ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(80.0),
-                            borderSide: const BorderSide(color: Color(0xFF757575)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(80.0),
-                            borderSide: const BorderSide(color: Color(0xFFFF7643)),
-                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Password cannot be empty';
+                            } else if (value.length < 8) {
+                              return 'Password must be at least 8 characters long';
+                            }
+                            return null;
+                          },
                         ),
-                      ),
                         const SizedBox(height: 24.0),
                         // Sign In Button
                         ElevatedButton(
@@ -127,7 +154,8 @@ class Login extends StatelessWidget {
                                     content: Text(
                                       "Login failed. Please try again.",
                                     ),
-                                    backgroundColor: Color.fromARGB(255, 216, 16, 83),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 216, 16, 83),
                                   ),
                                 );
                               }
@@ -135,7 +163,8 @@ class Login extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: const Color.fromARGB(255, 216, 16, 83),
+                            backgroundColor:
+                                const Color.fromARGB(255, 216, 16, 83),
                             foregroundColor: Colors.white,
                             minimumSize: const Size(double.infinity, 48),
                             shape: const StadiumBorder(),
@@ -147,7 +176,8 @@ class Login extends StatelessWidget {
                         RichText(
                           text: TextSpan(
                             text: 'Forgot Password?',
-                            style: const TextStyle(color: Color.fromARGB(255, 240, 61, 61)),
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 240, 61, 61)),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.push(
@@ -178,7 +208,8 @@ class Login extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: "Sign Up",
-                                style: const TextStyle(color: Color.fromARGB(255, 240, 61, 61)),
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 240, 61, 61)),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.push(

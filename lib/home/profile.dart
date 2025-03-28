@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 15.0, 10.0),
             child: Column(
               children: [
                 const Padding(
@@ -79,7 +79,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 35,
-                          backgroundColor: const Color.fromARGB(255, 216, 16, 83),
+                          backgroundColor:
+                              const Color.fromARGB(255, 216, 16, 83),
                           child: Text(
                             userData['Name'][0], // First letter of the name
                             style: const TextStyle(
@@ -101,9 +102,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const Text(
-                                "Guest",
-                                style: TextStyle(
+                              Text(
+                                userData['Buyer'] ? "Buyer" : "Seller",
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.black87,
                                 ),

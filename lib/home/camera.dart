@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches
+
 import 'package:flutter/material.dart';
 import 'package:android_intent_plus/android_intent.dart';
 
@@ -27,19 +29,17 @@ class _CameraPageState extends State<CameraPage> {
 
     try {
       await intent.launch();
-    } catch (e) {
-      print("Error launching Unity app: $e");
-    }
+    } catch (e) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(204, 255, 255, 255),
+    return const Scaffold(
+      backgroundColor: Color.fromARGB(204, 255, 255, 255),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text('Redirecting to Unity...', style: TextStyle(fontSize: 24)),
             SizedBox(height: 20),
             CircularProgressIndicator(),

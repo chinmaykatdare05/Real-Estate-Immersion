@@ -1,10 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../pages/home/home.dart';
-import '../pages/login/login.dart';
+import '../home/bottom_navigation.dart';
+import 'signin.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -21,7 +23,8 @@ class AuthService {
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()), // Go to home page
+          MaterialPageRoute(
+              builder: (context) => const HomePage()), // Go to home page
         );
       }
     });
@@ -39,38 +42,56 @@ class AuthService {
     required BuildContext context,
   }) async {
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      // Create user using email and password
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
+      // Set user data in Firestore
       await _firestore.collection('Users').doc(userCredential.user!.uid).set({
         'Name': name,
         'Email': email,
         'Phone': phoneNumber,
         'Buyer': true,
-        'Password': password,
+        'Password':
+            password, // You should ideally avoid storing plaintext passwords
       });
 
-      await Future.delayed(const Duration(seconds: 1));
-
-      // Redirect based on session
+      // Redirect based on session immediately after signup
       checkUserSession(context);
     } on FirebaseAuthException catch (e) {
-      String message = 'Fields cannot be empty';
-      if (e.code == 'weak-password') {
-        message = 'The password provided is too weak.';
-      } else if (e.code == 'email-already-in-use') {
-        message = 'An account already exists with that email.';
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: Colors.red),
-      );
+      // Display error messages based on FirebaseAuthException code
+      String message = _getErrorMessage(e.code);
+      _showSnackBar(context, message);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("An error occurred: ${e.toString()}"), backgroundColor: Colors.red),
-      );
+      // Catch any other exceptions and display a generic error message
+      _showSnackBar(context, "An error occurred: ${e.toString()}");
     }
+  }
+
+// Helper method to get error message based on FirebaseAuthException code
+  String _getErrorMessage(String errorCode) {
+    switch (errorCode) {
+      case 'weak-password':
+        return 'The password provided is too weak.';
+      case 'email-already-in-use':
+        return 'An account already exists with that email.';
+      case 'invalid-email':
+        return 'No user found for that email.';
+      case 'invalid-credential':
+        return 'Wrong password provided for that user.';
+      default:
+        return 'An unexpected error occurred.';
+    }
+  }
+
+// Helper method to show a Snackbar with a given message
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
   }
 
   // Sign In with Email & Password
@@ -80,36 +101,32 @@ class AuthService {
     required BuildContext context,
   }) async {
     try {
+      // Perform sign-in operation
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      await Future.delayed(const Duration(seconds: 1));
 
-      // Redirect based on session
+      // Redirect based on session immediately after sign-in
       checkUserSession(context);
     } on FirebaseAuthException catch (e) {
-      String message = '';
-      if (e.code == 'invalid-email') {
-        message = 'No user found for that email.';
-      } else if (e.code == 'invalid-credential') {
-        message = 'Wrong password provided for that user.';
-      }
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+      // Custom message mapping for Firebase Auth exceptions
+      String message = _getErrorMessage(e.code);
+
+      _showToast(message);
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: "An error occurred: ${e.toString()}",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+      // Catch any other exceptions and display a generic error message
+      _showToast("An error occurred: ${e.toString()}");
     }
+  }
+
+// Helper method to show toast messages
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.SNACKBAR,
+      backgroundColor: Colors.black54,
+      textColor: Colors.white,
+      fontSize: 14.0,
+    );
   }
 
   // Sign Out

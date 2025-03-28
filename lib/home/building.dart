@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class BuildingPage extends StatefulWidget {
@@ -70,8 +72,8 @@ class _BuildingPageState extends State<BuildingPage> {
                             right: 10,
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
-                              child:
-                                  Icon(Icons.favorite_border, color: Colors.black),
+                              child: Icon(Icons.favorite_border,
+                                  color: Colors.black),
                             ),
                           ),
                         ],
@@ -95,18 +97,17 @@ class _BuildingPageState extends State<BuildingPage> {
                               style: TextStyle(color: Colors.grey[600]),
                             ),
                             const SizedBox(height: 5),
-                            Row(
+                            const Row(
                               children: [
-                                const Text(
+                                Text(
                                   '₹3500/night',
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                const Spacer(),
-                                const Icon(Icons.star,
-                                    color: Colors.black, size: 18),
-                                const Text(' 4.75 (4)'),
+                                Spacer(),
+                                Icon(Icons.star, color: Colors.black, size: 18),
+                                Text(' 4.75 (4)'),
                               ],
                             ),
                           ],
@@ -138,7 +139,8 @@ class _BuildingPageState extends State<BuildingPage> {
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: const Icon(Icons.favorite_border, color: Colors.black),
+                    icon:
+                        const Icon(Icons.favorite_border, color: Colors.black),
                     onPressed: () {},
                   ),
                 ],
@@ -169,26 +171,23 @@ class _BuildingPageState extends State<BuildingPage> {
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 10),
-                    Row(
+                    const Row(
                       children: [
-                        const Icon(Icons.star,
-                            color: Colors.black, size: 18),
-                        const Text(' 4.94 (51 reviews) · Guest Favourite'),
+                        Icon(Icons.star, color: Colors.black, size: 18),
+                        Text(' 4.94 (51 reviews) · Guest Favourite'),
                       ],
                     ),
                     const SizedBox(height: 10),
                     const Divider(),
-                    ListTile(
-                      leading: const Icon(Icons.ac_unit, color: Colors.blue),
-                      title: const Text('Designed for staying cool'),
-                      subtitle:
-                          const Text('A/C, portable fan, and ceiling fan'),
+                    const ListTile(
+                      leading: Icon(Icons.ac_unit, color: Colors.blue),
+                      title: Text('Designed for staying cool'),
+                      subtitle: Text('A/C, portable fan, and ceiling fan'),
                     ),
-                    ListTile(
-                      leading:
-                          const Icon(Icons.laptop_mac, color: Colors.blue),
-                      title: const Text('Dedicated workspace'),
-                      subtitle: const Text(
+                    const ListTile(
+                      leading: Icon(Icons.laptop_mac, color: Colors.blue),
+                      title: Text('Dedicated workspace'),
+                      subtitle: Text(
                           'A room with WiFi that’s well suited for working'),
                     ),
                     const Divider(),

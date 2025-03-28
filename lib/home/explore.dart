@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, deprecated_member_use
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import the EventPage class
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home_details.dart';
 import 'event_page.dart';
 import 'building.dart';
@@ -139,13 +139,12 @@ class _ExplorePageState extends State<ExplorePage> {
                           ),
                         ),
                       );
-                      
                     }).toList(),
                   ),
                 ),
                 const SizedBox(height: 5),
-                Divider(
-                  color: const Color.fromARGB(255, 237, 232, 232), // Line color
+                const Divider(
+                  color: Color.fromARGB(255, 237, 232, 232), // Line color
                   thickness: 1, // Line thickness
                   indent: 0, // Left spacing
                   endIndent: 0, // Right spacing
@@ -155,8 +154,8 @@ class _ExplorePageState extends State<ExplorePage> {
 
                 // Slider (Buy / Rent)
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 10),
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
@@ -204,8 +203,9 @@ class _ExplorePageState extends State<ExplorePage> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color:
-                                        isSelected ? Colors.white : Colors.black,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
                                 ),
                               ],

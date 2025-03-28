@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter03/firebase_options.dart';
-import 'package:flutter03/pages/home/home.dart'; // Home Page Import
-import 'package:flutter03/pages/login/login.dart';
-import 'package:flutter03/pages/signup/signup.dart'; // Signup import
-import 'package:flutter03/pages/forgot_password/forgot_password.dart'; // Forgot Password import
+import 'package:flutter03/home/bottom_navigation.dart'; // Home Page Import
+import 'package:flutter03/auth/signin.dart';
+import 'package:flutter03/auth/signup.dart'; // Signup import
+import 'package:flutter03/auth/forgot_password.dart'; // Forgot Password import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
- 
+
   // Initialize Firebase with your Firebase options
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -28,15 +28,18 @@ class MyApp extends StatelessWidget {
       // Add routing for easy navigation
       routes: {
         '/signup': (context) => SignupPage(), // Signup Page
-        '/forgot_password': (context) => ForgotPasswordPage(), // Forgot Password Page
+        '/forgot_password': (context) =>
+            ForgotPasswordPage(), // Forgot Password Page
       },
-      home: AuthWrapper(), // Handles session management
+      home: const AuthWrapper(), // Handles session management
     );
   }
 }
 
 // AuthWrapper: Checks if user is logged in and redirects accordingly
 class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(

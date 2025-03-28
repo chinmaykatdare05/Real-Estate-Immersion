@@ -58,11 +58,14 @@ class ForgotPasswordPage extends StatelessWidget {
     );
   }
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   Widget _buildEmailForm(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Column(
         children: [
-            TextFormField(
+          TextFormField(
             controller: _emailController,
             decoration: InputDecoration(
               hintText: "Enter your email",
@@ -70,37 +73,48 @@ class ForgotPasswordPage extends StatelessWidget {
               floatingLabelBehavior: FloatingLabelBehavior.always,
               hintStyle: const TextStyle(color: Color(0xFF757575)),
               contentPadding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 16,
+                horizontal: 24,
+                vertical: 16,
               ),
               suffix: SvgPicture.string(mailIcon),
               border: authOutlineInputBorder,
               enabledBorder: authOutlineInputBorder,
               focusedBorder: authOutlineInputBorder.copyWith(
-              borderSide: const BorderSide(color: Color(0xFFFF7643)),
+                borderSide: const BorderSide(color: Color(0xFFFF7643)),
               ),
             ),
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9@._-]')),
             ],
-            ),
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Email is required';
+              }
+              final emailRegex =
+                  RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+              if (!emailRegex.hasMatch(value)) {
+                return 'Enter a valid email address';
+              }
+              return null;
+            },
+          ),
           const SizedBox(height: 40),
           ElevatedButton(
-  onPressed: () async {
-    print('Email: ${_emailController.text}');
-  },
-  style: ElevatedButton.styleFrom(
-    elevation: 0,
-    backgroundColor: const Color.fromARGB(255, 216, 16, 83),
-    foregroundColor: Colors.white,
-    minimumSize: const Size(double.infinity, 48),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(100)),
-    ),  // Added comma here
-  ),
-  child: const Text("Continue"),
-)
-
+            onPressed: () async {
+              if (_formKey.currentState?.validate() ?? false) {}
+            },
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              backgroundColor: const Color.fromARGB(255, 216, 16, 83),
+              foregroundColor: Colors.white,
+              minimumSize: const Size(double.infinity, 48),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+              ), // Added comma here
+            ),
+            child: const Text("Continue"),
+          )
         ],
       ),
     );

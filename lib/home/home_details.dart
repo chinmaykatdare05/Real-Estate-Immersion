@@ -93,7 +93,8 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
               icon: const Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            title: const Text('Model Viewer', style: TextStyle(color: Colors.black)),
+            title: const Text('Model Viewer',
+                style: TextStyle(color: Colors.black)),
             centerTitle: true,
           ),
           body: const ModelViewer(
@@ -325,10 +326,8 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   ),
                   Text(
                     widget.address,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color:
-                            const Color.fromARGB(255, 11, 7, 235)),
+                    style: const TextStyle(
+                        fontSize: 16, color: Color.fromARGB(255, 11, 7, 235)),
                   ),
                   const SizedBox(height: 8),
                   // Google Maps widget
@@ -418,7 +417,9 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const PaymentScreen()),
+                          builder: (context) => PaymentScreen(propertyData: {
+                                'Price': widget.price,
+                              })),
                     );
                   },
                   style: ElevatedButton.styleFrom(
