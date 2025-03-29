@@ -17,12 +17,12 @@ class AuthService {
       if (user == null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Login()),
+          MaterialPageRoute(builder: (context) => SignIn()),
         );
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const BottomNavigation()),
         );
       }
     });
@@ -119,7 +119,7 @@ class AuthService {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (BuildContext context) => Login()),
+      MaterialPageRoute(builder: (BuildContext context) => SignIn()),
     );
   }
 

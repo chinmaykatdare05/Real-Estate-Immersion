@@ -18,25 +18,25 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const BottomNavigation(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class BottomNavigation extends StatefulWidget {
+  const BottomNavigation({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<BottomNavigation> createState() => _BottomNavigationState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _BottomNavigationState extends State<BottomNavigation> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
     const ExplorePage(),
-    const CameraPage(),
-    const ProfileScreen(),
+    const Camera(),
+    const Profile(),
   ];
 
   void _onItemTapped(int index) {

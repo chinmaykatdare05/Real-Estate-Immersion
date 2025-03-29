@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/signup': (context) => SignupPage(),
-        '/forgot_password': (context) => ForgotPasswordPage(),
+        '/signup': (context) => SignUp(),
+        '/forgot_password': (context) => ForgotPassword(),
       },
       home: const AuthWrapper(),
     );
@@ -42,9 +42,9 @@ class AuthWrapper extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
-            return const HomePage();
+            return const BottomNavigation();
           } else {
-            return Login();
+            return SignIn();
           }
         }
         return const Scaffold(

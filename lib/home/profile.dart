@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class Profile extends StatefulWidget {
+  const Profile({super.key});
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileState extends State<Profile> {
   late Future<DocumentSnapshot> _userData;
 
   @override
@@ -121,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    PersonalInfoScreen(
+                    PersonalInfo(
                       userData: {
                         'Name': userData['Name'],
                         'Email': userData['Email'],
@@ -164,10 +164,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-class PersonalInfoScreen extends StatelessWidget {
+class PersonalInfo extends StatelessWidget {
   final Map<String, dynamic> userData;
 
-  const PersonalInfoScreen({super.key, required this.userData});
+  const PersonalInfo({super.key, required this.userData});
 
   @override
   Widget build(BuildContext context) {

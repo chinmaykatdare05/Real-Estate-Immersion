@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:android_intent_plus/android_intent.dart';
 
-class CameraPage extends StatefulWidget {
-  const CameraPage({super.key});
+class Camera extends StatefulWidget {
+  const Camera({super.key});
 
   @override
-  State<CameraPage> createState() => _CameraPageState();
+  State<Camera> createState() => _CameraState();
 }
 
-class _CameraPageState extends State<CameraPage> {
+class _CameraState extends State<Camera> {
   @override
   void initState() {
     super.initState();

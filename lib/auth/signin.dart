@@ -7,8 +7,13 @@ import 'package:flutter03/auth/signup.dart';
 import 'package:flutter03/auth/forgot_password.dart';
 import 'package:flutter03/auth/auth_service.dart';
 
-class Login extends StatelessWidget {
-  Login({super.key});
+const authOutlineInputBorder = OutlineInputBorder(
+  borderSide: BorderSide(color: Color(0xFF757575)),
+  borderRadius: BorderRadius.all(Radius.circular(100)),
+);
+
+class SignIn extends StatelessWidget {
+  SignIn({super.key});
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -27,8 +32,8 @@ class Login extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: constraints.maxHeight * 0.1),
-                  Image.network(
-                    "https://i.postimg.cc/d361wj1v/Screenshot-2025-03-18-014224.png",
+                  Image.asset(
+                    'assets/images/logo.png',
                     height: 100,
                   ),
                   SizedBox(height: constraints.maxHeight * 0.1),
@@ -60,19 +65,19 @@ class Login extends StatelessWidget {
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(80.0),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF757575)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(100)),
+                              borderSide: authOutlineInputBorder.borderSide,
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(80.0),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF757575)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(100)),
+                              borderSide: authOutlineInputBorder.borderSide,
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(80.0),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFFFF7643)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(100)),
+                              borderSide: authOutlineInputBorder.borderSide,
                             ),
                           ),
                           validator: (value) {
@@ -100,19 +105,19 @@ class Login extends StatelessWidget {
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(80.0),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF757575)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(100)),
+                              borderSide: authOutlineInputBorder.borderSide,
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(80.0),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF757575)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(100)),
+                              borderSide: authOutlineInputBorder.borderSide,
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(80.0),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFFFF7643)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(100)),
+                              borderSide: authOutlineInputBorder.borderSide,
                             ),
                           ),
                           validator: (value) {
@@ -141,7 +146,7 @@ class Login extends StatelessWidget {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
-                                      "Login failed. Please try again.",
+                                      "SignIn failed. Please try again.",
                                     ),
                                     backgroundColor:
                                         Color.fromARGB(255, 216, 16, 83),
@@ -171,7 +176,7 @@ class Login extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ForgotPasswordPage(),
+                                    builder: (context) => ForgotPassword(),
                                   ),
                                 );
                               },
@@ -201,7 +206,7 @@ class Login extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => SignupPage(),
+                                        builder: (context) => SignUp(),
                                       ),
                                     );
                                   },
