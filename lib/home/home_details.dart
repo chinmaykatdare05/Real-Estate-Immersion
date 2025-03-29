@@ -78,8 +78,6 @@ class HomeDetailsPage extends StatefulWidget {
 }
 
 class _HomeDetailsPageState extends State<HomeDetailsPage> {
-  DateTimeRange? selectedDates;
-
   void _show3DModel(BuildContext context) {
     Navigator.push(
       context,
@@ -112,25 +110,31 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.image.isNotEmpty)
-              Image.memory(
-                base64Decode(sanitizeBase64(widget.image)),
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 200,
+              Stack(
+                children: [
+                  Image.memory(
+                    base64Decode(sanitizeBase64(widget.image)),
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 200,
+                  ),
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                ],
               ),
             Padding(
               padding: const EdgeInsets.all(20),
@@ -170,7 +174,11 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   const SizedBox(height: 16),
                   const Text(
                     'Description',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Text(
@@ -180,93 +188,100 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text(
-                    'What this place offers',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text(
+                        'What this place offers',
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
                       if (widget.ac != '0')
-                        Row(
-                          children: [
-                            const Icon(FontAwesomeIcons.snowflake),
-                            const SizedBox(width: 22),
-                            Text(widget.ac)
-                          ],
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: const Icon(FontAwesomeIcons.snowflake,
+                              color: Colors.blue),
+                          title: const Text('Air Conditioning'),
+                          subtitle: Text(widget.ac),
                         ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Icon(FontAwesomeIcons.couch),
-                          const SizedBox(width: 22),
-                          Text(widget.furnish ? 'Furnished' : 'Unfurnished'),
-                        ],
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(FontAwesomeIcons.couch,
+                            color: Colors.blue),
+                        title: const Text('Living Room'),
+                        subtitle:
+                            Text(widget.furnish ? 'Furnished' : 'Unfurnished'),
                       ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Icon(FontAwesomeIcons.fire),
-                          const SizedBox(width: 22),
-                          Text(widget.gas ? 'Gas Stove' : 'No Gas Stove'),
-                        ],
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(FontAwesomeIcons.fire,
+                            color: Colors.blue),
+                        title: const Text('Kitchen'),
+                        subtitle:
+                            Text(widget.gas ? 'Gas Stove' : 'No Gas Stove'),
                       ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Icon(FontAwesomeIcons.elevator),
-                          const SizedBox(width: 22),
-                          Text(widget.lift ? 'Lift' : 'No Lift'),
-                        ],
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(FontAwesomeIcons.elevator,
+                            color: Colors.blue),
+                        title: const Text('Building Facilities'),
+                        subtitle:
+                            Text(widget.lift ? 'Lift available' : 'No Lift'),
                       ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Icon(FontAwesomeIcons.car),
-                          const SizedBox(width: 22),
-                          Text(widget.parking ? 'Parking' : 'No Parking'),
-                        ],
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(FontAwesomeIcons.car,
+                            color: Colors.blue),
+                        title: const Text('Parking'),
+                        subtitle: Text(widget.parking
+                            ? 'Parking available'
+                            : 'No Parking'),
                       ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Icon(FontAwesomeIcons.water),
-                          const SizedBox(width: 22),
-                          Text("Water Supply - ${widget.waterSupply}")
-                        ],
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(FontAwesomeIcons.water,
+                            color: Colors.blue),
+                        title: const Text('Water Supply'),
+                        subtitle: Text("Water Supply - ${widget.waterSupply}"),
                       ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Icon(FontAwesomeIcons.wifi),
-                          const SizedBox(width: 22),
-                          Text(widget.wifi ? 'Wifi' : 'No Wifi'),
-                        ],
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(FontAwesomeIcons.wifi,
+                            color: Colors.blue),
+                        title: const Text('Internet'),
+                        subtitle:
+                            Text(widget.wifi ? 'Wifi available' : 'No Wifi'),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Nearest Transit',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(FontAwesomeIcons.busAlt),
-                      const SizedBox(width: 22),
-                      Text(widget.busStop),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      const Icon(FontAwesomeIcons.trainSubway),
-                      const SizedBox(width: 22),
-                      Text(widget.railwayStn),
+                      const Text(
+                        'Nearest Transit',
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(FontAwesomeIcons.busAlt,
+                            color: Colors.blue),
+                        title: const Text('Bus Stop'),
+                        subtitle: Text(widget.busStop),
+                      ),
+                      const SizedBox(height: 12),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(FontAwesomeIcons.train,
+                            color: Colors.blue),
+                        title: const Text('Train Station'),
+                        subtitle: Text(widget.railwayStn),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -318,38 +333,53 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text(
-                    "Where you'll be",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    widget.address,
-                    style: const TextStyle(
-                        fontSize: 16, color: Color.fromARGB(255, 11, 7, 235)),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 200,
-                    child: GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(
-                          double.parse(widget.latitude),
-                          double.parse(widget.longitude),
-                        ),
-                        zoom: 14,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Where you'll be",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
                       ),
-                      markers: {
-                        Marker(
-                          markerId: const MarkerId('location'),
-                          position: LatLng(
-                            double.parse(widget.latitude),
-                            double.parse(widget.longitude),
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.address,
+                        style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border:
+                              Border.all(color: Colors.grey.shade300, width: 1),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: SizedBox(
+                            height: 300,
+                            child: GoogleMap(
+                              initialCameraPosition: CameraPosition(
+                                target: LatLng(
+                                  double.parse(widget.latitude),
+                                  double.parse(widget.longitude),
+                                ),
+                                zoom: 14,
+                              ),
+                              markers: {
+                                Marker(
+                                  markerId: const MarkerId('location'),
+                                  position: LatLng(
+                                    double.parse(widget.latitude),
+                                    double.parse(widget.longitude),
+                                  ),
+                                ),
+                              },
+                            ),
                           ),
                         ),
-                      },
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
                   const SizedBox(height: 16),
                 ],
               ),
@@ -378,35 +408,47 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
-                height: 65,
-                width: 120,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (widget.model3D) {
-                      _show3DModel(context);
-                    } else {}
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 216, 16, 83),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 24),
+              ElevatedButton(
+                onPressed: () {
+                  if (widget.model3D) {
+                    _show3DModel(context);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text(
-                    widget.model3D ? '3D Model' : 'Reserve',
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
                 ),
+                child: widget.model3D
+                    ? const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.threed_rotation, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text(
+                            '3D Model',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
+                    : const Text(
+                        'Reserve',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
-              SizedBox(
-                height: 65,
-                width: 120,
-                child: ElevatedButton(
+              if (widget.model3D)
+                ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -419,16 +461,16 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 0, 0, 0),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 12),
                   ),
                   child: const Text(
                     'Reserve',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
-              ),
             ],
           ),
         ),
