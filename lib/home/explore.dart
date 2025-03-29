@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api, deprecated_member_use, use_build_context_synchronously
 import 'dart:convert';
-import 'dart:math';
-import 'package:http/http.dart' as http;
+import 'utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home_details.dart';
@@ -9,47 +8,6 @@ import 'event_page.dart';
 import 'building.dart';
 
 int selectedIndex = 0;
-
-/// Converts an address string into latitude, longitude, and pincode.
-Future<Map<String, dynamic>?> getLatLngPincode(String address) async {
-  const String apiKey = "AIzaSyCQghbrbSPfhZ0GC5fZ5eGhPSofstkt1vU";
-  const String baseUrl = "https://maps.googleapis.com/maps/api/geocode/json";
-  final Uri url =
-      Uri.parse("$baseUrl?address=${Uri.encodeComponent(address)}&key=$apiKey");
-
-  final response = await http.get(url);
-  if (response.statusCode == 200) {
-    final data = json.decode(response.body);
-    if (data["status"] == "OK") {
-      final results = data["results"][0];
-      final double lat = results["geometry"]["location"]["lat"];
-      final double lng = results["geometry"]["location"]["lng"];
-      String? pincode;
-      for (var component in results["address_components"]) {
-        if ((component["types"] as List).contains("postal_code")) {
-          pincode = component["long_name"];
-          break;
-        }
-      }
-      return {"lat": lat, "lng": lng, "pincode": pincode};
-    }
-  }
-  return null;
-}
-
-/// Calculates the distance between two coordinates in kilometers using the Haversine formula.
-double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-  const double R = 6371; // Radius of Earth in kilometers
-  final double dLat = _deg2rad(lat2 - lat1);
-  final double dLon = _deg2rad(lon2 - lon1);
-  final double a = sin(dLat / 2) * sin(dLat / 2) +
-      cos(_deg2rad(lat1)) * cos(_deg2rad(lat2)) * sin(dLon / 2) * sin(dLon / 2);
-  final double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-  final double distance = R * c;
-  return distance;
-}
-
-double _deg2rad(double deg) => deg * (pi / 180);
 
 /// Recommends properties by filtering Firestore documents based on their proximity to the geocoded [address].
 /// Returns a list of Firestore DocumentSnapshots for properties within [maxDistanceKm].
@@ -86,8 +44,7 @@ Future<List<DocumentSnapshot>> getRecommendedProperties(String address,
       }
     }
   }
-
-  // Optionally, sort the filtered properties by distance from the user.
+  // Sort properties by distance from the user location.
   recommendedProperties.sort((a, b) {
     final Map<String, dynamic> propA = a.data() as Map<String, dynamic>;
     final Map<String, dynamic> propB = b.data() as Map<String, dynamic>;
