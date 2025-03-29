@@ -15,7 +15,7 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   final TextEditingController searchController = TextEditingController();
-  int selectedIndex = 0; // 0 for Buy, 1 for Rent
+  int selectedIndex = 0;
   final List<String> categories = ['Buy', 'Rent'];
 
   final List<Map<String, dynamic>> propertyTypes = [
@@ -28,7 +28,6 @@ class _ExplorePageState extends State<ExplorePage> {
     {'name': 'Function', 'icon': Icons.event_seat},
   ];
 
-  // Soft pastel colors for each item (one per property type)
   final List<Color> pastelColors = [
     Colors.pink.shade50,
     Colors.blue.shade50,
@@ -51,8 +50,6 @@ class _ExplorePageState extends State<ExplorePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-
-                // Search Bar
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Material(
@@ -73,17 +70,13 @@ class _ExplorePageState extends State<ExplorePage> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
-                // Sliding Buttons for Property Types (RESTYLED HERE)
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: propertyTypes.asMap().entries.map((entry) {
                       final index = entry.key;
                       final property = entry.value;
-                      // Pick a pastel color based on the index
                       final backgroundColor =
                           pastelColors[index % pastelColors.length];
 
@@ -106,7 +99,6 @@ class _ExplorePageState extends State<ExplorePage> {
                                 ),
                               );
                             }
-                            // Add more navigation logic if needed
                           },
                           child: Container(
                             width: 85,
@@ -144,15 +136,12 @@ class _ExplorePageState extends State<ExplorePage> {
                 ),
                 const SizedBox(height: 5),
                 const Divider(
-                  color: Color.fromARGB(255, 237, 232, 232), // Line color
-                  thickness: 1, // Line thickness
-                  indent: 0, // Left spacing
-                  endIndent: 0, // Right spacing
+                  color: Color.fromARGB(255, 237, 232, 232),
+                  thickness: 1,
+                  indent: 0,
+                  endIndent: 0,
                 ),
-
                 const SizedBox(height: 02),
-
-                // Slider (Buy / Rent)
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 10),
@@ -216,10 +205,7 @@ class _ExplorePageState extends State<ExplorePage> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 10),
-
-                // Properties from Firestore filtered by selected type.
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Properties')
@@ -383,12 +369,9 @@ class PropertyCard extends StatelessWidget {
   }
 }
 
-/// A quick helper to handle potential data URL prefixes or whitespace in the base64 string.
 String sanitizeBase64(String base64String) {
-  // Remove any data URL prefix if present
   if (base64String.contains(',')) {
     base64String = base64String.split(',').last;
   }
-  // Trim whitespace
   return base64String.trim();
 }

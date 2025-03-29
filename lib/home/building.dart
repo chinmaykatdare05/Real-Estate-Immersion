@@ -10,13 +10,12 @@ class BuildingPage extends StatefulWidget {
 }
 
 class _BuildingPageState extends State<BuildingPage> {
-  bool showDetails = false; // Toggle variable
+  bool showDetails = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // AppBar added with a back button that behaves differently depending on the view.
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -25,10 +24,10 @@ class _BuildingPageState extends State<BuildingPage> {
           onPressed: () {
             if (showDetails) {
               setState(() {
-                showDetails = false; // Go back to card view
+                showDetails = false;
               });
             } else {
-              Navigator.pop(context); // Navigate back from page
+              Navigator.pop(context);
             }
           },
         ),
@@ -38,13 +37,12 @@ class _BuildingPageState extends State<BuildingPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 40), // Added space before the card
+            const SizedBox(height: 40),
             if (!showDetails) ...[
-              // 🏠 Card View
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    showDetails = true; // Show detailed UI when tapped
+                    showDetails = true;
                   });
                 },
                 child: Card(
@@ -65,15 +63,6 @@ class _BuildingPageState extends State<BuildingPage> {
                               width: double.infinity,
                               height: 220,
                               fit: BoxFit.cover,
-                            ),
-                          ),
-                          const Positioned(
-                            top: 10,
-                            right: 10,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.favorite_border,
-                                  color: Colors.black),
                             ),
                           ),
                         ],
@@ -105,9 +94,6 @@ class _BuildingPageState extends State<BuildingPage> {
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Spacer(),
-                                Icon(Icons.star, color: Colors.black, size: 18),
-                                Text(' 4.75 (4)'),
                               ],
                             ),
                           ],
@@ -118,14 +104,13 @@ class _BuildingPageState extends State<BuildingPage> {
                 ),
               ),
             ] else ...[
-              // 📜 Detailed UI View
               Row(
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.black),
                     onPressed: () {
                       setState(() {
-                        showDetails = false; // Go back to card view
+                        showDetails = false;
                       });
                     },
                   ),

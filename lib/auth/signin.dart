@@ -12,17 +12,13 @@ class Login extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // Keep your controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  // Adjust this if you prefer a different fill color
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // SafeArea + LayoutBuilder for responsive spacing
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -30,15 +26,12 @@ class Login extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
-                  // Top spacing
                   SizedBox(height: constraints.maxHeight * 0.1),
-                  // Logo (optional)
                   Image.network(
                     "https://i.postimg.cc/d361wj1v/Screenshot-2025-03-18-014224.png",
                     height: 100,
                   ),
                   SizedBox(height: constraints.maxHeight * 0.1),
-                  // "Sign In" title
                   Text(
                     "Sign In",
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -46,12 +39,10 @@ class Login extends StatelessWidget {
                         ),
                   ),
                   SizedBox(height: constraints.maxHeight * 0.05),
-                  // The Form
                   Form(
                     key: _formKey,
                     child: Column(
                       children: [
-                        // Email Field
                         TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
@@ -96,7 +87,6 @@ class Login extends StatelessWidget {
                           },
                         ),
                         const SizedBox(height: 24),
-                        // Password Field
                         TextFormField(
                           controller: _passwordController,
                           obscureText: true,
@@ -135,7 +125,6 @@ class Login extends StatelessWidget {
                           },
                         ),
                         const SizedBox(height: 24.0),
-                        // Sign In Button
                         ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
@@ -172,7 +161,6 @@ class Login extends StatelessWidget {
                           child: const Text("Sign In"),
                         ),
                         const SizedBox(height: 30),
-                        // Forgot Password Button
                         RichText(
                           text: TextSpan(
                             text: 'Forgot Password?',
@@ -189,9 +177,7 @@ class Login extends StatelessWidget {
                               },
                           ),
                         ),
-                        // Spacer for bottom
                         const SizedBox(height: 16.0),
-                        // Sign Up Text
                         Text.rich(
                           TextSpan(
                             text: "Don’t have an account? ",

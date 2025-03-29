@@ -82,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           backgroundColor:
                               const Color.fromARGB(255, 216, 16, 83),
                           child: Text(
-                            userData['Name'][0], // First letter of the name
+                            userData['Name'][0],
                             style: const TextStyle(
                               color: Color.fromARGB(255, 239, 238, 234),
                               fontSize: 30,
@@ -136,7 +136,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: _logout,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 216, 16, 83),
-                      // foregroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30, vertical: 20),
                       shape: RoundedRectangleBorder(
@@ -144,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         side: const BorderSide(
                             color: Color.fromARGB(255, 216, 16, 83)),
                       ),
-                      elevation: 0, // No shadow
+                      elevation: 0,
                       textStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

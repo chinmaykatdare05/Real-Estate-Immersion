@@ -12,28 +12,24 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Checks if user is logged in and redirects accordingly
   void checkUserSession(BuildContext context) {
     _auth.authStateChanges().listen((User? user) {
       if (user == null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Login()), // Go to login page
+          MaterialPageRoute(builder: (context) => Login()),
         );
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-              builder: (context) => const HomePage()), // Go to home page
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       }
     });
   }
 
-  // Get current user details
   User? get currentUser => _auth.currentUser;
 
-  // Sign Up with Email & Password
   Future<void> signup({
     required String name,
     required String email,
@@ -42,36 +38,29 @@ class AuthService {
     required BuildContext context,
   }) async {
     try {
-      // Create user using email and password
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Set user data in Firestore
       await _firestore.collection('Users').doc(userCredential.user!.uid).set({
         'Name': name,
         'Email': email,
         'Phone': phoneNumber,
         'Buyer': true,
-        'Password':
-            password, // You should ideally avoid storing plaintext passwords
+        'Password': password,
       });
 
-      // Redirect based on session immediately after signup
       checkUserSession(context);
     } on FirebaseAuthException catch (e) {
-      // Display error messages based on FirebaseAuthException code
       String message = _getErrorMessage(e.code);
       _showSnackBar(context, message);
     } catch (e) {
-      // Catch any other exceptions and display a generic error message
       _showSnackBar(context, "An error occurred: ${e.toString()}");
     }
   }
 
-// Helper method to get error message based on FirebaseAuthException code
   String _getErrorMessage(String errorCode) {
     switch (errorCode) {
       case 'weak-password':
@@ -87,37 +76,30 @@ class AuthService {
     }
   }
 
-// Helper method to show a Snackbar with a given message
   void _showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 
-  // Sign In with Email & Password
   Future<void> signin({
     required String email,
     required String password,
     required BuildContext context,
   }) async {
     try {
-      // Perform sign-in operation
       await _auth.signInWithEmailAndPassword(email: email, password: password);
 
-      // Redirect based on session immediately after sign-in
       checkUserSession(context);
     } on FirebaseAuthException catch (e) {
-      // Custom message mapping for Firebase Auth exceptions
       String message = _getErrorMessage(e.code);
 
       _showToast(message);
     } catch (e) {
-      // Catch any other exceptions and display a generic error message
       _showToast("An error occurred: ${e.toString()}");
     }
   }
 
-// Helper method to show toast messages
   void _showToast(String message) {
     Fluttertoast.showToast(
       msg: message,
@@ -129,21 +111,18 @@ class AuthService {
     );
   }
 
-  // Sign Out
   Future<void> signout({
     required BuildContext context,
   }) async {
     await _auth.signOut();
     await Future.delayed(const Duration(seconds: 1));
 
-    // Redirect to Login Page
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (BuildContext context) => Login()),
     );
   }
 
-  // Reset Password
   Future<void> resetPassword({required String email}) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);

@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PaymentScreen extends StatefulWidget {
-  final Map<String, dynamic>
-      propertyData; // Contains property details including Price
+  final Map<String, dynamic> propertyData;
 
   const PaymentScreen({super.key, required this.propertyData});
 
@@ -14,26 +13,25 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   DateTimeRange? selectedDates;
-  late double price; // Use the price from propertyData
+  late double price;
   final String paymentUrl =
       'https://razorpay.com/payment-link/plink_PimhLgFELheop4';
 
   @override
   void initState() {
     super.initState();
-    // Assuming the price is stored as a string or number in widget.propertyData['Price']
     price =
         double.tryParse(widget.propertyData['Price']?.toString() ?? "0") ?? 0.0;
   }
 
   int getTotalNights() {
     if (selectedDates == null) return 0;
-    return selectedDates!.duration.inDays;
+    return selectedDates!.duration.inDays + 1;
   }
 
   double getDiscount() {
     int nights = getTotalNights();
-    return nights < 30 ? 0.10 : 0.00; // 10% discount if nights < 30
+    return nights < 30 ? 0.10 : 0.00;
   }
 
   double getSubtotal() {
@@ -49,12 +47,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   double getPlatformFees() {
-    double percentageFee = getSubtotal() * 0.005; // 0.50% of subtotal
+    double percentageFee = getSubtotal() * 0.005;
     return percentageFee < 20 ? percentageFee : 20;
   }
 
   double getTaxes() {
-    if (getTotalNights() > 30) return 0; // No tax if nights > 30
+    if (getTotalNights() > 30) return 0;
     double taxableAmount =
         getSubtotal() - getDiscountAmount() - getLongStayDiscount();
     return taxableAmount * 0.18;
@@ -246,7 +244,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               const Divider(),
               const SizedBox(height: 20),
-              // Cancellation Policy
               const Text(
                 'Cancellation Policy',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -256,18 +253,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 'This reservation is non-refundable.',
                 style: TextStyle(fontSize: 16),
               ),
-              const SizedBox(height: 8),
-              const Text(
-                'Learn more',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline),
-              ),
-
               const SizedBox(height: 20),
               const Divider(),
-              // Ground Rules
               const Text(
                 'Ground Rules',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -282,10 +269,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   style: TextStyle(fontSize: 16)),
               const Text('• Treat your Host’s home like your own',
                   style: TextStyle(fontSize: 16)),
-
               const SizedBox(height: 20),
-
-              // Booking Rules
               const Divider(),
               const Text(
                 'Booking Rules',
@@ -300,7 +284,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 '• If booking is above 60 days, 15% discount is applied.',
                 style: TextStyle(fontSize: 16),
               ),
-
               const SizedBox(height: 0),
               const Text(
                 '',
@@ -311,12 +294,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 '',
                 style: TextStyle(fontSize: 16),
               ),
-              // const Divider(),
               const SizedBox(height: 0),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _launchPayment,
+                  onPressed: () {
+                    if (selectedDates == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Please select dates before proceeding.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else {
+                      _launchPayment();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     backgroundColor: const Color.fromARGB(255, 245, 31, 102),

@@ -111,7 +111,7 @@ class ForgotPasswordPage extends StatelessWidget {
               minimumSize: const Size(double.infinity, 48),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
-              ), // Added comma here
+              ),
             ),
             child: const Text("Continue"),
           )
@@ -129,9 +129,7 @@ class ForgotPasswordPage extends StatelessWidget {
           style: TextStyle(color: Color(0xFF757575)),
         ),
         GestureDetector(
-          onTap: () {
-            // Handle navigation to Sign Up
-          },
+          onTap: () {},
           child: const Text(
             "",
             style: TextStyle(

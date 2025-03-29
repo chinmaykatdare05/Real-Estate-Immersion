@@ -31,15 +31,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0; // Tracks which tab is selected
+  int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const ExplorePage(), // Explore page
+    const ExplorePage(),
     const CameraPage(),
-    const ProfileScreen(), // Profile page
+    const ProfileScreen(),
   ];
 
-  // Function to handle tapping on the navigation bar
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -50,13 +49,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: _pages[_selectedIndex], // Display the selected page
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex, // Highlight the selected item
-        onTap: _onItemTapped, // Handle navigation
-        type: BottomNavigationBarType.fixed, // Keeps all items visible
-        selectedItemColor: Colors.red, // Active item color
-        unselectedItemColor: Colors.black54, // Inactive item color
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.black54,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.magnifyingGlass),

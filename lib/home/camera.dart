@@ -14,7 +14,6 @@ class _CameraPageState extends State<CameraPage> {
   @override
   void initState() {
     super.initState();
-    // Use addPostFrameCallback to ensure the context is fully built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _openUnityApp();
     });

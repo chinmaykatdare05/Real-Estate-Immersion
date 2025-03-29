@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'payment.dart';
 
@@ -99,11 +98,10 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
           ),
           body: const ModelViewer(
             backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-            src: 'assets/home.glb', // Use the relative asset path here
+            src: 'assets/home.glb',
             alt: 'A 3D model of my living room',
             ar: true,
             autoRotate: true,
-            // Remove iosSrc if you don't have an iOS USDZ version or update accordingly
             disableZoom: false,
           ),
         ),
@@ -285,7 +283,7 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                         radius: 35,
                         backgroundColor: Colors.deepOrange,
                         child: Text(
-                          widget.sellerName[0], // First letter of the name
+                          widget.sellerName[0],
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 30,
@@ -330,7 +328,6 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                         fontSize: 16, color: Color.fromARGB(255, 11, 7, 235)),
                   ),
                   const SizedBox(height: 8),
-                  // Google Maps widget
                   SizedBox(
                     height: 200,
                     child: GoogleMap(
@@ -360,7 +357,6 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
           ],
         ),
       ),
-      // Bottom bar with price and Reserve button.
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           border: Border(
@@ -389,9 +385,7 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                   onPressed: () {
                     if (widget.model3D) {
                       _show3DModel(context);
-                    } else {
-                      // Reserve action
-                    }
+                    } else {}
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 216, 16, 83),

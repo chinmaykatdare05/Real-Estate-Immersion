@@ -2,15 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter03/firebase_options.dart';
-import 'package:flutter03/home/bottom_navigation.dart'; // Home Page Import
+import 'package:flutter03/home/bottom_navigation.dart';
 import 'package:flutter03/auth/signin.dart';
-import 'package:flutter03/auth/signup.dart'; // Signup import
-import 'package:flutter03/auth/forgot_password.dart'; // Forgot Password import
+import 'package:flutter03/auth/signup.dart';
+import 'package:flutter03/auth/forgot_password.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize Firebase with your Firebase options
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -25,18 +23,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // Add routing for easy navigation
       routes: {
-        '/signup': (context) => SignupPage(), // Signup Page
-        '/forgot_password': (context) =>
-            ForgotPasswordPage(), // Forgot Password Page
+        '/signup': (context) => SignupPage(),
+        '/forgot_password': (context) => ForgotPasswordPage(),
       },
-      home: const AuthWrapper(), // Handles session management
+      home: const AuthWrapper(),
     );
   }
 }
 
-// AuthWrapper: Checks if user is logged in and redirects accordingly
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
 
@@ -46,15 +41,14 @@ class AuthWrapper extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
-          // If user is logged in, go to HomePage
           if (snapshot.hasData) {
             return const HomePage();
           } else {
-            return Login(); // Otherwise, go to Login Page
+            return Login();
           }
         }
         return const Scaffold(
-          body: Center(child: CircularProgressIndicator()), // Show loading
+          body: Center(child: CircularProgressIndicator()),
         );
       },
     );
