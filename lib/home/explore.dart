@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home_details.dart';
 import 'event_page.dart';
 import 'building.dart';
+import 'package:geolocator/geolocator.dart';
 
 int selectedIndex = 0;
 
@@ -20,6 +21,56 @@ Future<List<DocumentSnapshot>> getRecommendedProperties(String address,
   final double userLat = locationData["lat"];
   final double userLng = locationData["lng"];
 
+  // Fetch all properties from Firestore. (Consider refining your query based on your needs.)
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection('Properties')
+      .where('Sale', isEqualTo: selectedIndex == 0)
+      .get();
+  List<DocumentSnapshot> allProperties = snapshot.docs;
+
+  // Filter properties based on distance.
+  List<DocumentSnapshot> recommendedProperties = [];
+  for (var doc in allProperties) {
+    final property = doc.data() as Map<String, dynamic>;
+    // Parse latitude and longitude from the property document.
+    final double? propertyLat =
+        double.tryParse(property['Latitude']?.toString() ?? "");
+    final double? propertyLng =
+        double.tryParse(property['Longitude']?.toString() ?? "");
+    if (propertyLat != null && propertyLng != null) {
+      final double distance =
+          calculateDistance(userLat, userLng, propertyLat, propertyLng);
+      if (distance <= maxDistanceKm) {
+        recommendedProperties.add(doc);
+      }
+    }
+  }
+  // Sort properties by distance from the user location.
+  recommendedProperties.sort((a, b) {
+    final Map<String, dynamic> propA = a.data() as Map<String, dynamic>;
+    final Map<String, dynamic> propB = b.data() as Map<String, dynamic>;
+    final double latA =
+        double.tryParse(propA['Latitude']?.toString() ?? "") ?? 0;
+    final double lngA =
+        double.tryParse(propA['Longitude']?.toString() ?? "") ?? 0;
+    final double latB =
+        double.tryParse(propB['Latitude']?.toString() ?? "") ?? 0;
+    final double lngB =
+        double.tryParse(propB['Longitude']?.toString() ?? "") ?? 0;
+    final double distA = calculateDistance(userLat, userLng, latA, lngA);
+    final double distB = calculateDistance(userLat, userLng, latB, lngB);
+    return distA.compareTo(distB);
+  });
+
+  return recommendedProperties;
+}
+
+/// Recommends properties by filtering Firestore documents based on their proximity to the geocoded [address].
+/// Returns a list of Firestore DocumentSnapshots for properties within [maxDistanceKm].
+Future<List<DocumentSnapshot>> getRecommendedPropertiesByLocation(
+    double userLat, double userLng,
+    {double maxDistanceKm = 10.0}) async {
+  debugPrint("User Lat: $userLat, User Lng: $userLng");
   // Fetch all properties from Firestore. (Consider refining your query based on your needs.)
   QuerySnapshot snapshot = await FirebaseFirestore.instance
       .collection('Properties')
@@ -113,35 +164,66 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Material(
-                        elevation: 5,
-                        borderRadius: BorderRadius.circular(30),
-                        child: TextField(
-                          controller: searchController,
-                          onChanged: (value) async {
-                            if (value.isNotEmpty) {
-                              final recommendedProperties =
-                                  await getRecommendedProperties(value);
-                              setState(() {
-                                searchSuggestions = recommendedProperties;
-                              });
-                            } else {
-                              setState(() {
-                                searchSuggestions = [];
-                              });
-                            }
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.search),
-                            hintText: 'Where to?',
-                            border: OutlineInputBorder(
+                      Row(
+                        children: [
+                          // Expanded search field
+                          Expanded(
+                            child: Material(
+                              elevation: 5,
                               borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
+                              child: TextField(
+                                controller: searchController,
+                                onChanged: (value) async {
+                                  if (value.isNotEmpty) {
+                                    final recommendedProperties =
+                                        await getRecommendedProperties(value);
+                                    setState(() {
+                                      searchSuggestions = recommendedProperties;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      searchSuggestions = [];
+                                    });
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.search),
+                                  hintText: 'Where to?',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                ),
+                              ),
                             ),
-                            filled: true,
-                            fillColor: Colors.white,
                           ),
-                        ),
+                          const SizedBox(width: 8),
+                          // Location button
+                          Material(
+                            elevation: 5,
+                            borderRadius: BorderRadius.circular(30),
+                            child: IconButton(
+                              icon: const Icon(Icons.my_location),
+                              onPressed: () async {
+                                // Get current position using geolocator
+                                final position =
+                                    await Geolocator.getCurrentPosition(
+                                  desiredAccuracy: LocationAccuracy.high,
+                                );
+                                // Call the function with current latitude and longitude
+                                final recommendedPropertiesByLocation =
+                                    await getRecommendedPropertiesByLocation(
+                                        position.latitude, position.longitude);
+                                setState(() {
+                                  searchSuggestions =
+                                      recommendedPropertiesByLocation;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                       if (searchSuggestions.isNotEmpty)
                         Container(
