@@ -4,13 +4,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../home/bottom_navigation.dart';
+import '../buyer/bottom_navigation.dart';
+import '../seller/bottom_navigation.dart';
 import 'signin.dart';
 
+enum UserType { buyer, seller }
+
+// This class handles user authentication and session management using Firebase Auth and Firestore.
+// It provides methods for signing up, signing in, signing out, and resetting passwords.
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  UserType _userType = UserType.buyer;
+
+  UserType get userType => _userType;
+
+  void setUserType(UserType type) {
+    _userType = type;
+  }
 
   void checkUserSession(BuildContext context) {
     _auth.authStateChanges().listen((User? user) {
@@ -20,10 +31,28 @@ class AuthService {
           MaterialPageRoute(builder: (context) => SignIn()),
         );
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const BottomNavigation()),
-        );
+        _firestore.collection('Users').doc(user.uid).get().then((doc) {
+          if (doc.exists) {
+            bool isBuyer = doc['Buyer'] as bool;
+            if (isBuyer) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const BuyerBottomNavigation()),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SellerBottomNavigation()),
+              );
+            }
+          } else {
+            _showSnackBar(context, "User data not found.");
+          }
+        }).catchError((error) {
+          _showSnackBar(context, "An error occurred: ${error.toString()}");
+        });
       }
     });
   }
@@ -48,7 +77,7 @@ class AuthService {
         'Name': name,
         'Email': email,
         'Phone': phoneNumber,
-        'Buyer': true,
+        'Buyer': _userType == UserType.buyer ? true : false,
         'Password': password,
       });
 

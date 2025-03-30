@@ -12,6 +12,7 @@ const authOutlineInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.all(Radius.circular(100)),
 );
 
+// This widget represents the Sign In screen where users can enter their email and password to log in to the app.
 class SignIn extends StatelessWidget {
   SignIn({super.key});
 

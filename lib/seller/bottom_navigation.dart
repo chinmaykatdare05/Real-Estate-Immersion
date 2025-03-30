@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter03/home/explore.dart';
-import 'package:flutter03/home/camera.dart';
-import 'package:flutter03/home/profile.dart';
+import 'package:flutter03/profile.dart';
+import 'package:flutter03/seller/dashboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,29 +11,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Navigation Bar Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const BottomNavigation(),
+    return const MaterialApp(
+      home: SellerBottomNavigation(),
     );
   }
 }
 
-class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({super.key});
+class SellerBottomNavigation extends StatefulWidget {
+  const SellerBottomNavigation({super.key});
 
   @override
-  State<BottomNavigation> createState() => _BottomNavigationState();
+  State<SellerBottomNavigation> createState() => _SellerBottomNavigationState();
 }
 
-class _BottomNavigationState extends State<BottomNavigation> {
+class _SellerBottomNavigationState extends State<SellerBottomNavigation> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const ExplorePage(),
-    const Camera(),
+    const SellerDashboard(
+      sellerId: '',
+      sellerName: '{Seller Name}',
+    ),
     const Profile(),
   ];
 
@@ -58,12 +54,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
         unselectedItemColor: Colors.black54,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.magnifyingGlass),
-            label: 'Explore',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.airbnb),
-            label: 'Camera',
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

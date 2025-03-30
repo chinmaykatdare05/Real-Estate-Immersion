@@ -10,6 +10,8 @@ class Camera extends StatefulWidget {
   State<Camera> createState() => _CameraState();
 }
 
+// This widget is responsible for redirecting the user to a Unity application when the camera page is opened. It uses the Android Intent package to launch the Unity app by specifying its package name and activity name.
+// The widget displays a loading screen with a message indicating that the user is being redirected to Unity.
 class _CameraState extends State<Camera> {
   @override
   void initState() {

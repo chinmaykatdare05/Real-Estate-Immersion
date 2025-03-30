@@ -6,6 +6,8 @@ const authOutlineInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.all(Radius.circular(100)),
 );
 
+// This widget represents the Forgot Password screen where users can enter their email to receive a password reset link.
+// It includes a form with validation for the email input and a button to submit the request.
 class ForgotPassword extends StatelessWidget {
   ForgotPassword({super.key});
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

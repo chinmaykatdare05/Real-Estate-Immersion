@@ -26,7 +26,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   int getTotalNights() {
     if (selectedDates == null) return 0;
-    return selectedDates!.duration.inDays + 1;
+    return selectedDates!.duration.inDays;
   }
 
   double getDiscount() {

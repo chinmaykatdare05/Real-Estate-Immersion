@@ -7,6 +7,9 @@ const authOutlineInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.all(Radius.circular(100)),
 );
 
+// This widget represents the Sign Up screen where users can create a new account.
+// It includes a form with validation for name, email, password, and phone number inputs.
+// The form is validated before submission, and the user is redirected to the home screen upon successful sign up.
 class SignUp extends StatelessWidget {
   SignUp({super.key});
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -179,6 +182,42 @@ class SignUp extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 24),
+                  StatefulBuilder(
+                    builder: (context, setState) {
+                      UserType selectedUserType = _authService.userType;
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ChoiceChip(
+                            label: const Text("Buyer"),
+                            selected: selectedUserType == UserType.buyer,
+                            onSelected: (selected) {
+                              if (selected) {
+                                setState(() {
+                                  selectedUserType = UserType.buyer;
+                                  _authService.setUserType(UserType.buyer);
+                                });
+                              }
+                            },
+                          ),
+                          const SizedBox(width: 16),
+                          ChoiceChip(
+                            label: const Text("Seller"),
+                            selected: selectedUserType == UserType.seller,
+                            onSelected: (selected) {
+                              if (selected) {
+                                setState(() {
+                                  selectedUserType = UserType.seller;
+                                  _authService.setUserType(UserType.seller);
+                                });
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                   const SizedBox(height: 24.0),
                   ElevatedButton(
                     onPressed: () {
@@ -199,7 +238,7 @@ class SignUp extends StatelessWidget {
                       minimumSize: const Size(double.infinity, 48),
                       shape: const StadiumBorder(),
                     ),
-                    child: const Text("Continue"),
+                    child: const Text("Sign Up"),
                   ),
                   SizedBox(height: constraints.maxHeight * 0.1),
                 ],
