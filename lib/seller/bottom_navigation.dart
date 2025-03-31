@@ -28,10 +28,7 @@ class _SellerBottomNavigationState extends State<SellerBottomNavigation> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const SellerDashboard(
-      sellerId: '',
-      sellerName: '{Seller Name}',
-    ),
+    const SellerDashboard(),
     const Profile(),
   ];
 

@@ -1,4 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +19,18 @@ class AddProperty extends StatefulWidget {
 
 class _AddPropertyState extends State<AddProperty> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late Future<DocumentSnapshot> _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _userData = fetchUserData();
+  }
+
+  Future<DocumentSnapshot> fetchUserData() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    return await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+  }
 
   // Controllers for property fields
   final TextEditingController addressController = TextEditingController();
@@ -635,6 +649,13 @@ class _AddPropertyState extends State<AddProperty> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                              final sellerName = (_userData as DocumentSnapshot)
+                                      .get('Seller Name') ??
+                                  '';
+                              final sellerContact =
+                                  (_userData as DocumentSnapshot)
+                                          .get('Seller Contact') ??
+                                      '';
                               final property = {
                                 '3D Model': model3D,
                                 'Address': addressController.text.trim(),
@@ -661,16 +682,14 @@ class _AddPropertyState extends State<AddProperty> {
                                 'Railway Stn': railwayStnController.text.trim(),
                                 'Rooms': roomsController.text.trim(),
                                 'Sale': sale,
-                                'Seller Contact':
-                                    sellerContactController.text.trim(),
-                                'Seller Name': sellerNameController.text.trim(),
+                                'Seller Contact': sellerContact,
+                                'Seller Name': sellerName,
                                 'Washroom': washroomController.text.trim(),
                               };
 
-                              // For demonstration, print the property details
                               debugPrint("Property Details: $property");
 
-                              // Add your submission logic here
+                              // Connect to Firebase and add property
                             }
                           },
                           style: ElevatedButton.styleFrom(

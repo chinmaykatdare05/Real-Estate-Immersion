@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,11 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'add_property.dart';
 
 class SellerDashboard extends StatefulWidget {
-  final String sellerId;
-  final String sellerName;
-
-  const SellerDashboard(
-      {super.key, required this.sellerId, required this.sellerName});
+  const SellerDashboard({super.key});
 
   @override
   _SellerDashboardState createState() => _SellerDashboardState();
@@ -20,6 +17,18 @@ class SellerDashboard extends StatefulWidget {
 class _SellerDashboardState extends State<SellerDashboard> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  late Future<DocumentSnapshot> _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _userData = fetchUserData();
+  }
+
+  Future<DocumentSnapshot> fetchUserData() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    return await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+  }
 
   Future<void> _changePrice(String propertyId, double newPrice) async {
     await _firestore
@@ -42,18 +51,41 @@ class _SellerDashboardState extends State<SellerDashboard> {
     return Scaffold(
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text('Welcome, ${widget.sellerName}!',
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          FutureBuilder<DocumentSnapshot>(
+            future: _userData,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError ||
+                  !snapshot.hasData ||
+                  !snapshot.data!.exists) {
+                return const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text('Error loading user data.',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                );
+              }
+              var userData = snapshot.data!.data() as Map<String, dynamic>;
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text('Welcome, ${userData['Name']}!',
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
+              );
+            },
           ),
           const Divider(),
           Expanded(
             child: StreamBuilder(
               stream: _firestore
                   .collection('Properties')
-                  .where('sellerId', isEqualTo: widget.sellerId)
+                  .where('sellerId',
+                      isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                   .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
