@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 const authOutlineInputBorder = OutlineInputBorder(
   borderSide: BorderSide(color: Color(0xFF757575)),
@@ -59,6 +61,44 @@ class _AddPropertyState extends State<AddProperty> {
   bool parking = false;
   bool wifi = false;
   bool sale = false;
+
+  Future<Map<String, dynamic>?> getLatLngPincode(String address) async {
+    const apiKey = "AIzaSyCQghbrbSPfhZ0GC5fZ5eGhPSofstkt1vU";
+    const baseUrl = "https://maps.googleapis.com/maps/api/geocode/json";
+
+    final uri = Uri.parse(baseUrl).replace(queryParameters: {
+      'address': address,
+      'key': apiKey,
+    });
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      if (data["status"] == "OK") {
+        final results = data["results"][0];
+        final latitude = results["geometry"]["location"]["lat"];
+        final longitude = results["geometry"]["location"]["lng"];
+
+        String? pincode;
+        for (var component in results["address_components"]) {
+          if (component["types"].contains("postal_code")) {
+            pincode = component["long_name"];
+            break;
+          }
+        }
+
+        return {
+          'latitude': latitude,
+          'longitude': longitude,
+          'pincode': pincode,
+        };
+      }
+    }
+
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -656,6 +696,20 @@ class _AddPropertyState extends State<AddProperty> {
                                   (_userData as DocumentSnapshot)
                                           .get('Seller Contact') ??
                                       '';
+                              String latitude = '';
+                              String longitude = '';
+                              String pincode = '';
+
+                              getLatLngPincode(addressController.text.trim())
+                                  .then((result) {
+                                if (result != null) {
+                                  setState(() {
+                                    latitude = result['latitude'].toString();
+                                    longitude = result['longitude'].toString();
+                                    pincode = result['pincode'] ?? '';
+                                  });
+                                }
+                              });
                               final property = {
                                 '3D Model': model3D,
                                 'Address': addressController.text.trim(),
@@ -675,9 +729,9 @@ class _AddPropertyState extends State<AddProperty> {
                                     descriptionController.text.trim(),
                                 'Image': imageController.text.trim(),
                                 'Landmark': landmarkController.text.trim(),
-                                'Latitude': latitudeController.text.trim(),
-                                'Longitude': longitudeController.text.trim(),
-                                'Pincode': pincodeController.text.trim(),
+                                'Latitude': latitude,
+                                'Longitude': longitude,
+                                'Pincode': pincode,
                                 'Price': priceController.text.trim(),
                                 'Railway Stn': railwayStnController.text.trim(),
                                 'Rooms': roomsController.text.trim(),
@@ -686,8 +740,7 @@ class _AddPropertyState extends State<AddProperty> {
                                 'Seller Name': sellerName,
                                 'Washroom': washroomController.text.trim(),
                               };
-
-                              debugPrint("Property Details: $property");
+                              debugPrint(property.toString());
 
                               // Connect to Firebase and add property
                             }

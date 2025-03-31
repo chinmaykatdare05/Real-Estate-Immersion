@@ -186,33 +186,31 @@ class SignUp extends StatelessWidget {
                   StatefulBuilder(
                     builder: (context, setState) {
                       UserType selectedUserType = _authService.userType;
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ChoiceChip(
-                            label: const Text("Buyer"),
-                            selected: selectedUserType == UserType.buyer,
-                            onSelected: (selected) {
-                              if (selected) {
-                                setState(() {
-                                  selectedUserType = UserType.buyer;
-                                  _authService.setUserType(UserType.buyer);
-                                });
-                              }
-                            },
+                      bool isBuyer = selectedUserType == UserType.buyer;
+                      return ToggleButtons(
+                        isSelected: [isBuyer, !isBuyer],
+                        onPressed: (index) {
+                          setState(() {
+                            if (index == 0) {
+                              selectedUserType = UserType.buyer;
+                              _authService.setUserType(UserType.buyer);
+                            } else {
+                              selectedUserType = UserType.seller;
+                              _authService.setUserType(UserType.seller);
+                            }
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        selectedColor: Colors.white,
+                        fillColor: const Color.fromARGB(255, 216, 16, 83),
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Text("Buyer"),
                           ),
-                          const SizedBox(width: 16),
-                          ChoiceChip(
-                            label: const Text("Seller"),
-                            selected: selectedUserType == UserType.seller,
-                            onSelected: (selected) {
-                              if (selected) {
-                                setState(() {
-                                  selectedUserType = UserType.seller;
-                                  _authService.setUserType(UserType.seller);
-                                });
-                              }
-                            },
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Text("Seller"),
                           ),
                         ],
                       );
