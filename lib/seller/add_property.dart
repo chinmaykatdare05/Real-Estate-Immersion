@@ -1,11 +1,12 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter03/seller/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 const authOutlineInputBorder = OutlineInputBorder(
   borderSide: BorderSide(color: Color(0xFF757575)),
@@ -34,6 +35,25 @@ class _AddPropertyState extends State<AddProperty> {
     return await FirebaseFirestore.instance.collection('Users').doc(uid).get();
   }
 
+  Future<String?> uploadImage() async {
+    if (imageController.text.isEmpty) return null;
+    File imageFile = File(imageController.text);
+    if (!imageFile.existsSync()) {
+      return null;
+    }
+    try {
+      String fileName =
+          'property_images/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final ref = FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = ref.putFile(imageFile);
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadURL = await snapshot.ref.getDownloadURL();
+      return downloadURL;
+    } catch (e) {
+      return null;
+    }
+  }
+
   // Controllers for property fields
   final TextEditingController addressController = TextEditingController();
   final TextEditingController acController = TextEditingController();
@@ -43,14 +63,9 @@ class _AddPropertyState extends State<AddProperty> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
   final TextEditingController landmarkController = TextEditingController();
-  final TextEditingController latitudeController = TextEditingController();
-  final TextEditingController longitudeController = TextEditingController();
-  final TextEditingController pincodeController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController railwayStnController = TextEditingController();
   final TextEditingController roomsController = TextEditingController();
-  final TextEditingController sellerContactController = TextEditingController();
-  final TextEditingController sellerNameController = TextEditingController();
   final TextEditingController washroomController = TextEditingController();
 
   // Boolean fields for property and amenities
@@ -61,44 +76,6 @@ class _AddPropertyState extends State<AddProperty> {
   bool parking = false;
   bool wifi = false;
   bool sale = false;
-
-  Future<Map<String, dynamic>?> getLatLngPincode(String address) async {
-    const apiKey = "AIzaSyCQghbrbSPfhZ0GC5fZ5eGhPSofstkt1vU";
-    const baseUrl = "https://maps.googleapis.com/maps/api/geocode/json";
-
-    final uri = Uri.parse(baseUrl).replace(queryParameters: {
-      'address': address,
-      'key': apiKey,
-    });
-
-    final response = await http.get(uri);
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-
-      if (data["status"] == "OK") {
-        final results = data["results"][0];
-        final latitude = results["geometry"]["location"]["lat"];
-        final longitude = results["geometry"]["location"]["lng"];
-
-        String? pincode;
-        for (var component in results["address_components"]) {
-          if (component["types"].contains("postal_code")) {
-            pincode = component["long_name"];
-            break;
-          }
-        }
-
-        return {
-          'latitude': latitude,
-          'longitude': longitude,
-          'pincode': pincode,
-        };
-      }
-    }
-
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +288,6 @@ class _AddPropertyState extends State<AddProperty> {
                           },
                         ),
                         const SizedBox(height: 24),
-
                         TextFormField(
                           controller: areaController
                             ..text = areaController.text.isEmpty
@@ -687,62 +663,99 @@ class _AddPropertyState extends State<AddProperty> {
                         SizedBox(height: constraints.maxHeight * 0.05),
                         // Submit Button
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              final sellerName = (_userData as DocumentSnapshot)
-                                      .get('Seller Name') ??
-                                  '';
-                              final sellerContact =
-                                  (_userData as DocumentSnapshot)
-                                          .get('Seller Contact') ??
-                                      '';
-                              String latitude = '';
-                              String longitude = '';
-                              String pincode = '';
-
-                              getLatLngPincode(addressController.text.trim())
-                                  .then((result) {
-                                if (result != null) {
-                                  setState(() {
-                                    latitude = result['latitude'].toString();
-                                    longitude = result['longitude'].toString();
-                                    pincode = result['pincode'] ?? '';
-                                  });
+                              try {
+                                final DocumentSnapshot userSnapshot =
+                                    await _userData;
+                                if (!userSnapshot.exists) {
+                                  throw Exception("User document not found.");
                                 }
-                              });
-                              final property = {
-                                '3D Model': model3D,
-                                'Address': addressController.text.trim(),
-                                'Amenities': {
-                                  'AC': acController.text.trim(),
-                                  'Furnish': furnish,
-                                  'Gas': gas,
-                                  'Lift': lift,
-                                  'Parking': parking,
-                                  'Water Supply':
-                                      waterSupplyController.text.trim(),
-                                  'Wifi': wifi,
-                                },
-                                'Area': areaController.text.trim(),
-                                'Bus Stop': busStopController.text.trim(),
-                                'Description':
-                                    descriptionController.text.trim(),
-                                'Image': imageController.text.trim(),
-                                'Landmark': landmarkController.text.trim(),
-                                'Latitude': latitude,
-                                'Longitude': longitude,
-                                'Pincode': pincode,
-                                'Price': priceController.text.trim(),
-                                'Railway Stn': railwayStnController.text.trim(),
-                                'Rooms': roomsController.text.trim(),
-                                'Sale': sale,
-                                'Seller Contact': sellerContact,
-                                'Seller Name': sellerName,
-                                'Washroom': washroomController.text.trim(),
-                              };
-                              debugPrint(property.toString());
+                                final data =
+                                    userSnapshot.data() as Map<String, dynamic>;
+                                final sellerName =
+                                    data.containsKey('Seller Name')
+                                        ? data['Seller Name']
+                                        : 'Default Seller Name';
+                                final sellerContact =
+                                    data.containsKey('Seller Contact')
+                                        ? data['Seller Contact']
+                                        : 'Default Contact';
+                                String latitude = '';
+                                String longitude = '';
+                                String pincode = '';
 
-                              // Connect to Firebase and add property
+                                getLatLngPincode(addressController.text.trim())
+                                    .then((result) {
+                                  if (result != null) {
+                                    setState(() {
+                                      latitude = result['latitude'].toString();
+                                      longitude =
+                                          result['longitude'].toString();
+                                      pincode = result['pincode'] ?? '';
+                                    });
+                                  }
+                                });
+                                final String? imageUrl = await uploadImage();
+                                if (imageUrl == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text("Failed to upload image.")),
+                                  );
+                                  return;
+                                }
+                                final property = {
+                                  '3D Model': model3D,
+                                  'Address': addressController.text.trim(),
+                                  'Amenities': {
+                                    'AC': acController.text.trim(),
+                                    'Furnish': furnish,
+                                    'Gas': gas,
+                                    'Lift': lift,
+                                    'Parking': parking,
+                                    'Water Supply':
+                                        waterSupplyController.text.trim(),
+                                    'Wifi': wifi,
+                                  },
+                                  'Area': areaController.text.trim(),
+                                  'Bus Stop': busStopController.text.trim(),
+                                  'Description':
+                                      descriptionController.text.trim(),
+                                  'Image': imageUrl,
+                                  'Landmark': landmarkController.text.trim(),
+                                  'Latitude': latitude,
+                                  'Longitude': longitude,
+                                  'Pincode': pincode,
+                                  'Price': priceController.text.trim(),
+                                  'Railway Stn':
+                                      railwayStnController.text.trim(),
+                                  'Rooms': roomsController.text.trim(),
+                                  'Sale': sale,
+                                  'Seller Contact': sellerContact,
+                                  'Seller Name': sellerName,
+                                  'Washroom': washroomController.text.trim(),
+                                };
+                                debugPrint(property.toString());
+
+                                // Connect to Firebase and add property
+                                await FirebaseFirestore.instance
+                                    .collection('Properties')
+                                    .add(property);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text("Property added successfully!")),
+                                );
+                                _formKey.currentState!.reset();
+                              } catch (e) {
+                                debugPrint("Error adding property: $e");
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Failed to add property. Please try again.")),
+                                );
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
