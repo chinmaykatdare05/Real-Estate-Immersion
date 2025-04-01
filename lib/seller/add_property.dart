@@ -426,8 +426,9 @@ class _AddPropertyState extends State<AddProperty> {
                                 );
 
                                 if (source != null) {
-                                  final pickedFile = await ImagePicker()
+                                  XFile? pickedFile = await ImagePicker()
                                       .pickImage(source: source);
+                                  print(pickedFile?.path);
                                   if (pickedFile != null) {
                                     setState(() {
                                       imageController.text = pickedFile.path;
