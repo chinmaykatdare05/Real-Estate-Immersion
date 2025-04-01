@@ -23,6 +23,8 @@ class AddProperty extends StatefulWidget {
 class _AddPropertyState extends State<AddProperty> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Future<DocumentSnapshot> _userData;
+  String? sellerName;
+  String? sellerContact;
 
   @override
   void initState() {
@@ -672,21 +674,40 @@ class _AddPropertyState extends State<AddProperty> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               try {
-                                final DocumentSnapshot userSnapshot =
-                                    await _userData;
-                                if (!userSnapshot.exists) {
-                                  throw Exception("User document not found.");
-                                }
-                                final data =
-                                    userSnapshot.data() as Map<String, dynamic>;
-                                final sellerName =
-                                    data.containsKey('Seller Name')
-                                        ? data['Seller Name']
-                                        : 'Default Seller Name';
-                                final sellerContact =
-                                    data.containsKey('Seller Contact')
-                                        ? data['Seller Contact']
-                                        : 'Default Contact';
+                                FutureBuilder<DocumentSnapshot>(
+                                  future: _userData,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return const Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Text(
+                                          'Error loading user data.',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      );
+                                    }
+                                    if (!snapshot.hasData ||
+                                        !snapshot.data!.exists) {
+                                      return const Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Text(
+                                          'No user data found.',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      );
+                                    }
+                                    var userData = snapshot.data!.data()
+                                        as Map<String, dynamic>;
+                                    sellerName = userData['Seller Name'];
+                                    sellerContact = userData['Seller Contact'];
+                                    return const SizedBox
+                                        .shrink(); // Placeholder widget
+                                  },
+                                );
                                 String latitude = '';
                                 String longitude = '';
                                 String pincode = '';
