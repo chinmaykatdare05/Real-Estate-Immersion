@@ -35,15 +35,14 @@ class _AddPropertyState extends State<AddProperty> {
     return await FirebaseFirestore.instance.collection('Users').doc(uid).get();
   }
 
-  Future<String?> uploadImage() async {
+  Future<String?> uploadImage(String address) async {
     if (imageController.text.isEmpty) return null;
     File imageFile = File(imageController.text);
     if (!imageFile.existsSync()) {
       return null;
     }
     try {
-      String fileName =
-          'property_images/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      String fileName = '$address/${DateTime.now().millisecondsSinceEpoch}.jpg';
       final ref = FirebaseStorage.instance.ref().child(fileName);
       UploadTask uploadTask = ref.putFile(imageFile);
       TaskSnapshot snapshot = await uploadTask;
@@ -696,7 +695,8 @@ class _AddPropertyState extends State<AddProperty> {
                                     });
                                   }
                                 });
-                                final String? imageUrl = await uploadImage();
+                                final String? imageUrl = await uploadImage(
+                                    addressController.text.trim());
                                 if (imageUrl == null) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
