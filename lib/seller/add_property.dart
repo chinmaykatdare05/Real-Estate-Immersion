@@ -36,9 +36,14 @@ class _AddPropertyState extends State<AddProperty> {
   }
 
   Future<String?> uploadImage(String address) async {
-    if (imageController.text.isEmpty) return null;
+    if (imageController.text.isEmpty) {
+      print("Image path is empty");
+      return null;
+    }
     File imageFile = File(imageController.text);
+    print('Image file path: ${imageController.text}');
     if (!imageFile.existsSync()) {
+      print('File does not exist');
       return null;
     }
     try {
@@ -47,8 +52,10 @@ class _AddPropertyState extends State<AddProperty> {
       UploadTask uploadTask = ref.putFile(imageFile);
       TaskSnapshot snapshot = await uploadTask;
       String downloadURL = await snapshot.ref.getDownloadURL();
+      print('Image uploaded successfully: $downloadURL');
       return downloadURL;
     } catch (e) {
+      print('Error uploading image: $e');
       return null;
     }
   }
