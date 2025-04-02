@@ -700,40 +700,25 @@ class _AddPropertyState extends State<AddProperty> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               try {
-                                FutureBuilder<DocumentSnapshot>(
-                                  future: _userData,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasError) {
-                                      return const Padding(
-                                        padding: EdgeInsets.all(16.0),
-                                        child: Text(
-                                          'Error loading user data.',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      );
-                                    }
-                                    if (!snapshot.hasData ||
-                                        !snapshot.data!.exists) {
-                                      return const Padding(
-                                        padding: EdgeInsets.all(16.0),
-                                        child: Text(
-                                          'No user data found.',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      );
-                                    }
-                                    var userData = snapshot.data!.data()
-                                        as Map<String, dynamic>;
+                                try {
+                                  var snapshot = await _userData;
+                                  if (snapshot.exists) {
+                                    var userData =
+                                        snapshot.data() as Map<String, dynamic>;
                                     sellerName = userData['Name'] ?? 'Seller';
                                     sellerContact = userData['Phone'] ?? '';
-                                    return const SizedBox
-                                        .shrink(); // Placeholder widget
-                                  },
-                                );
+                                  } else {
+                                    throw Exception('No user data found.');
+                                  }
+                                } catch (e) {
+                                  debugPrint('Error loading user data: $e');
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Error loading user data.'),
+                                    ),
+                                  );
+                                  return;
+                                }
                                 String latitude = '';
                                 String longitude = '';
                                 String pincode = '';
