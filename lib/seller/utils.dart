@@ -44,13 +44,8 @@ Future<Map<String, dynamic>?> getLatLngPincode(String address) async {
 
 /// Picks an image from the given source and returns its bytes.
 Future<Uint8List?> pickImage(ImageSource source) async {
-  final ImagePicker imagePicker = ImagePicker();
-  XFile? file = await imagePicker.pickImage(source: source);
-  if (file != null) {
-    return file.readAsBytes();
-  }
-  // Optionally log or show that no image was selected.
-  return null;
+  final XFile? file = await ImagePicker().pickImage(source: source);
+  return file?.readAsBytes();
 }
 
 /// Shows a snack bar with the provided content.

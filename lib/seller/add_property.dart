@@ -1,6 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter03/seller/storage_methods.dart';
@@ -27,7 +26,6 @@ class _AddPropertyState extends State<AddProperty> {
   String? sellerName;
   String? sellerContact;
   String imageUrl = '';
-  XFile? pickedFile;
   Uint8List? imageBytes;
 
   @override
@@ -39,6 +37,54 @@ class _AddPropertyState extends State<AddProperty> {
   Future<DocumentSnapshot> fetchUserData() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     return await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+  }
+
+  Future<void> selectAndUploadImage(ImageSource source) async {
+    // Pick the image using our utility function.
+    Uint8List? pickedImage = await pickImage(source);
+    if (pickedImage != null) {
+      setState(() {
+        imageBytes = pickedImage;
+        imageController.text = "Image selected";
+      });
+    }
+  }
+
+  /// Displays a dialog to let the user choose the image source.
+  Future<ImageSource?> chooseImageSource() async {
+    return await showDialog<ImageSource>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Choose Image Source"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, ImageSource.camera),
+            child: const Text("Camera"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, ImageSource.gallery),
+            child: const Text("Gallery"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<String> handleImageUpload() async {
+    // Upload the image.
+    String imageUrl =
+        await StorageMethods().uploadImage('property_images', imageBytes!);
+    if (imageUrl.isEmpty) {
+      showSnackBar("Failed to upload image.", context);
+      return '';
+    }
+
+    // Show a success message.
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Image uploaded successfully!")),
+    );
+
+    return imageUrl;
   }
 
   // Future<String?> uploadImage(String address, pickedFile) async {
@@ -405,37 +451,14 @@ class _AddPropertyState extends State<AddProperty> {
                                   color: Color(0xFF757575)),
                               onPressed: () async {
                                 final ImageSource? source =
-                                    await showDialog<ImageSource>(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text("Choose Image Source"),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(
-                                            context, ImageSource.camera),
-                                        child: const Text("Camera"),
-                                      ),
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(
-                                            context, ImageSource.gallery),
-                                        child: const Text("Gallery"),
-                                      ),
-                                    ],
-                                  ),
-                                );
-
-                                if (source != null) {
-                                  XFile? pickedFile = await ImagePicker()
-                                      .pickImage(source: source);
-                                  // print(pickedFile?.path);
-                                  if (pickedFile != null) {
-                                    Uint8List bytes =
-                                        await pickedFile.readAsBytes();
-                                    setState(() {
-                                      imageBytes = bytes;
-                                      imageController.text = pickedFile.path;
-                                    });
-                                  }
+                                    await chooseImageSource();
+                                if (source == null) return;
+                                await selectAndUploadImage(source);
+                                // Validate the image selection.
+                                if (imageBytes == null) {
+                                  showSnackBar(
+                                      "Please select an image", context);
+                                  return;
                                 }
                               },
                             ),
@@ -726,24 +749,7 @@ class _AddPropertyState extends State<AddProperty> {
                                     });
                                   }
                                 });
-                                if (imageBytes == null) {
-                                  showSnackBar(
-                                      "Please select an image", context);
-                                  return;
-                                }
-                                String imageUrl = await StorageMethods()
-                                    .uploadImage(
-                                        'property_images', imageBytes!);
-                                if (imageUrl.isEmpty) {
-                                  showSnackBar(
-                                      "Failed to upload image.", context);
-                                  return;
-                                }
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text("Image uploaded successfully!")),
-                                );
+                                imageUrl = handleImageUpload() as String;
                                 final property = {
                                   '3D Model': model3D,
                                   'Address': addressController.text.trim(),

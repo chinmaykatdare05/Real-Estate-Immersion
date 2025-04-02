@@ -10,13 +10,13 @@ class StorageMethods {
   /// Uploads an image to Firebase Storage. If [isPost] is true, a unique ID is added.
   Future<String> uploadImage(String childName, Uint8List file) async {
     // Reference a location with the current user's uid.
-    Reference ref =
-        _storage.ref().child(childName).child(_auth.currentUser!.uid);
-    String id = const Uuid().v1();
-    ref = ref.child(id);
+    Reference ref = _storage
+        .ref()
+        .child(childName)
+        .child(_auth.currentUser!.uid)
+        .child(const Uuid().v1());
     UploadTask uploadTask = ref.putData(file);
     TaskSnapshot snap = await uploadTask;
-    String downloadUrl = await snap.ref.getDownloadURL();
-    return downloadUrl;
+    return await snap.ref.getDownloadURL();
   }
 }
