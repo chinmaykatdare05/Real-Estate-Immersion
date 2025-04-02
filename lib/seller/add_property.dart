@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter03/seller/storage_methods.dart';
 import 'package:flutter03/seller/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'storage_methods.dart';
 
 const authOutlineInputBorder = OutlineInputBorder(
   borderSide: BorderSide(color: Color(0xFF757575)),
@@ -25,6 +27,9 @@ class _AddPropertyState extends State<AddProperty> {
   late Future<DocumentSnapshot> _userData;
   String? sellerName;
   String? sellerContact;
+  String imageUrl = '';
+  XFile? pickedFile;
+  Uint8List? imageBytes;
 
   @override
   void initState() {
@@ -37,30 +42,25 @@ class _AddPropertyState extends State<AddProperty> {
     return await FirebaseFirestore.instance.collection('Users').doc(uid).get();
   }
 
-  Future<String?> uploadImage(String address) async {
-    if (imageController.text.isEmpty) {
-      print("Image path is empty");
-      return null;
-    }
-    File imageFile = File(imageController.text);
-    print('Image file path: ${imageController.text}');
-    if (!imageFile.existsSync()) {
-      print('File does not exist');
-      return null;
-    }
-    try {
-      String fileName = '$address/${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final ref = FirebaseStorage.instance.ref().child(fileName);
-      UploadTask uploadTask = ref.putFile(imageFile);
-      TaskSnapshot snapshot = await uploadTask;
-      String downloadURL = await snapshot.ref.getDownloadURL();
-      print('Image uploaded successfully: $downloadURL');
-      return downloadURL;
-    } catch (e) {
-      print('Error uploading image: $e');
-      return null;
-    }
-  }
+  // Future<String?> uploadImage(String address, pickedFile) async {
+  //   //Get a reference to storage root
+  //   Reference referenceRoot = FirebaseStorage.instance.ref();
+  //   Reference referenceDirImages = referenceRoot.child(address);
+  //   //Create a reference for the image to be stored
+  //   Reference referenceImageToUpload = referenceDirImages.child('name');
+  //   //Handle errors/success
+  //   try {
+  //     //Store the file
+  //     await referenceImageToUpload.putFile(File(pickedFile!.path));
+  //     //Success: get the download URL
+  //     imageUrl = await referenceImageToUpload.getDownloadURL();
+  //     return imageUrl;
+  //   } catch (error) {
+  //     //Handle any errors
+  //     print('Error occurred while uploading image: $error');
+  //     return null;
+  //   }
+  // }
 
   // Controllers for property fields
   final TextEditingController addressController = TextEditingController();
@@ -428,10 +428,13 @@ class _AddPropertyState extends State<AddProperty> {
                                 if (source != null) {
                                   XFile? pickedFile = await ImagePicker()
                                       .pickImage(source: source);
-                                  print(pickedFile?.path);
+                                  // print(pickedFile?.path);
                                   if (pickedFile != null) {
+                                    Uint8List bytes =
+                                        await pickedFile.readAsBytes();
                                     setState(() {
-                                      imageController.text = pickedFile.path;
+                                      imageBytes = bytes;
+                                      imageController.text = pickedFile!.path;
                                     });
                                   }
                                 }
@@ -724,16 +727,24 @@ class _AddPropertyState extends State<AddProperty> {
                                     });
                                   }
                                 });
-                                final String? imageUrl = await uploadImage(
-                                    addressController.text.trim());
-                                if (imageUrl == null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text("Failed to upload image.")),
-                                  );
+                                if (imageBytes == null) {
+                                  showSnackBar(
+                                      "Please select an image", context);
                                   return;
                                 }
+                                String imageUrl = await StorageMethods()
+                                    .uploadImage(
+                                        'property_images', imageBytes!);
+                                if (imageUrl.isEmpty) {
+                                  showSnackBar(
+                                      "Failed to upload image.", context);
+                                  return;
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text("Image uploaded successfully!")),
+                                );
                                 final property = {
                                   '3D Model': model3D,
                                   'Address': addressController.text.trim(),

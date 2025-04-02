@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 Future<Map<String, dynamic>?> getLatLngPincode(String address) async {
   const apiKey = "AIzaSyCQghbrbSPfhZ0GC5fZ5eGhPSofstkt1vU";
@@ -37,4 +40,22 @@ Future<Map<String, dynamic>?> getLatLngPincode(String address) async {
   }
 
   return null;
+}
+
+/// Picks an image from the given source and returns its bytes.
+Future<Uint8List?> pickImage(ImageSource source) async {
+  final ImagePicker imagePicker = ImagePicker();
+  XFile? file = await imagePicker.pickImage(source: source);
+  if (file != null) {
+    return file.readAsBytes();
+  }
+  // Optionally log or show that no image was selected.
+  return null;
+}
+
+/// Shows a snack bar with the provided content.
+void showSnackBar(String content, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(content)),
+  );
 }
