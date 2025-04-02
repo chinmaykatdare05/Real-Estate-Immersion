@@ -39,6 +39,6 @@ flutter {
     source = "../.."
 }
 
-dependencies {
-    implementation 'com.google.firebase:firebase-appcheck-playintegrity:17.0.0' // Example for Play Integrity provider
-}
+// dependencies {
+//     implementation 'com.google.firebase:firebase-appcheck-playintegrity:17.0.0' // Example for Play Integrity provider
+// }

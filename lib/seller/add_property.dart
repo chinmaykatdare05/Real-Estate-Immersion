@@ -2,11 +2,17 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter03/seller/storage_methods.dart';
 import 'package:flutter03/seller/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:dio/dio.dart';
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
+
+String imageUrl = '';
+Uint8List? imageBytes;
 
 const authOutlineInputBorder = OutlineInputBorder(
   borderSide: BorderSide(color: Color(0xFF757575)),
@@ -25,8 +31,6 @@ class _AddPropertyState extends State<AddProperty> {
   late Future<DocumentSnapshot> _userData;
   String? sellerName;
   String? sellerContact;
-  String imageUrl = '';
-  Uint8List? imageBytes;
 
   @override
   void initState() {
@@ -50,6 +54,16 @@ class _AddPropertyState extends State<AddProperty> {
     }
   }
 
+  /// Saves Uint8List data to a temporary file.
+  Future<File> createTempFile(Uint8List data) async {
+    final tempDir = await getTemporaryDirectory();
+    final filePath =
+        '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final file = File(filePath);
+    await file.writeAsBytes(data);
+    return file;
+  }
+
   /// Displays a dialog to let the user choose the image source.
   Future<ImageSource?> chooseImageSource() async {
     return await showDialog<ImageSource>(
@@ -70,42 +84,29 @@ class _AddPropertyState extends State<AddProperty> {
     );
   }
 
-  Future<String> handleImageUpload() async {
-    // Upload the image.
-    String imageUrl =
-        await StorageMethods().uploadImage('property_images', imageBytes!);
-    if (imageUrl.isEmpty) {
-      showSnackBar("Failed to upload image.", context);
-      return '';
+  Future<String?> uploadToCloudinary(File imageFile) async {
+    String cloudName = "dn4o9hggo"; // Get from Cloudinary dashboard
+    String uploadPreset =
+        "Real-Estate-Immersion"; // Copy from Cloudinary settings
+
+    String cloudinaryUrl =
+        "https://api.cloudinary.com/v1_1/$cloudName/image/upload";
+
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(imageFile.path),
+      "upload_preset": uploadPreset, // Using unsigned preset
+    });
+
+    try {
+      Response response = await Dio().post(cloudinaryUrl, data: formData);
+      if (response.statusCode == 200) {
+        return response.data["secure_url"]; // This is the image URL
+      }
+    } catch (e) {
+      log("Upload error: $e");
     }
-
-    // Show a success message.
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Image uploaded successfully!")),
-    );
-
-    return imageUrl;
+    return null;
   }
-
-  // Future<String?> uploadImage(String address, pickedFile) async {
-  //   //Get a reference to storage root
-  //   Reference referenceRoot = FirebaseStorage.instance.ref();
-  //   Reference referenceDirImages = referenceRoot.child(address);
-  //   //Create a reference for the image to be stored
-  //   Reference referenceImageToUpload = referenceDirImages.child('name');
-  //   //Handle errors/success
-  //   try {
-  //     //Store the file
-  //     await referenceImageToUpload.putFile(File(pickedFile!.path));
-  //     //Success: get the download URL
-  //     imageUrl = await referenceImageToUpload.getDownloadURL();
-  //     return imageUrl;
-  //   } catch (error) {
-  //     //Handle any errors
-  //     print('Error occurred while uploading image: $error');
-  //     return null;
-  //   }
-  // }
 
   // Controllers for property fields
   final TextEditingController addressController = TextEditingController();
@@ -749,7 +750,13 @@ class _AddPropertyState extends State<AddProperty> {
                                     });
                                   }
                                 });
-                                imageUrl = handleImageUpload() as String;
+                                // Convert the selected image bytes to a temporary file.
+                                File imageFile =
+                                    await createTempFile(imageBytes!);
+                                // Upload image to Cloudinary
+                                String? imageUrl =
+                                    uploadToCloudinary(imageFile) as String?;
+
                                 final property = {
                                   '3D Model': model3D,
                                   'Address': addressController.text.trim(),
