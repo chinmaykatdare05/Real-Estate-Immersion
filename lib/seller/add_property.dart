@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
-
 import 'package:path_provider/path_provider.dart';
 
 String imageUrl = '';
@@ -755,7 +754,7 @@ class _AddPropertyState extends State<AddProperty> {
                                     await createTempFile(imageBytes!);
                                 // Upload image to Cloudinary
                                 String? imageUrl =
-                                    uploadToCloudinary(imageFile) as String?;
+                                    await uploadToCloudinary(imageFile);
 
                                 final property = {
                                   '3D Model': model3D,
