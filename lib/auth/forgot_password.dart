@@ -1,17 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 const authOutlineInputBorder = OutlineInputBorder(
   borderSide: BorderSide(color: Color(0xFF757575)),
   borderRadius: BorderRadius.all(Radius.circular(100)),
 );
 
-// This widget represents the Forgot Password screen where users can enter their email to receive a password reset link.
-// It includes a form with validation for the email input and a button to submit the request.
 class ForgotPassword extends StatelessWidget {
   ForgotPassword({super.key});
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
+
+  Future<void> _handleForgotPassword(BuildContext context) async {
+    if (_formKey.currentState?.validate() ?? false) {
+      final email = _emailController.text.trim();
+      try {
+        // Query Firestore to check if the email exists in the "users" collection.
+        final QuerySnapshot snapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .where('Email', isEqualTo: email)
+            .get();
+
+        if (snapshot.docs.isEmpty) {
+          // Email does not exist in Firestore.
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Email not found. Please check your entry or sign up.'),
+            ),
+          );
+          return;
+        }
+        // If email exists, send a password reset email using Firebase Auth.
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Password reset email sent. Please check your inbox.'),
+          ),
+        );
+      } catch (e) {
+        // Handle errors (e.g., network issues, invalid email format, etc.)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred. Please try again later.'),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,8 +106,8 @@ class ForgotPassword extends StatelessWidget {
                             border: authOutlineInputBorder,
                             enabledBorder: authOutlineInputBorder,
                             focusedBorder: authOutlineInputBorder.copyWith(
-                                borderSide:
-                                    const BorderSide(color: Color(0xFFFF7643))),
+                                borderSide: const BorderSide(
+                                    color: Color(0xFFFF7643))),
                           ),
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(
@@ -90,11 +128,7 @@ class ForgotPassword extends StatelessWidget {
                         ),
                         const SizedBox(height: 40),
                         ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              // Forgot password functionality here
-                            }
-                          },
+                          onPressed: () => _handleForgotPassword(context),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             backgroundColor:
