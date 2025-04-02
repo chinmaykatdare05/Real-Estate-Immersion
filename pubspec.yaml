@@ -55,6 +55,7 @@ dependencies:
   image_picker: ^1.1.2
   firebase_admin: ^0.3.0+2
   firebase_app_check: ^0.3.2+5
+  uuid: ^4.5.1
 
   #device_apps: ^2.2.0
   #package_info_plus: ^8.2.1

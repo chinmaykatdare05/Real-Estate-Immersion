@@ -1,21 +1,9 @@
 // ignore_for_file: deprecated_member_use, library_private_types_in_public_api, use_super_parameters
-
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'payment.dart';
-
-String sanitizeBase64(String base64String) {
-  if (base64String.startsWith("data:")) {
-    int commaIndex = base64String.indexOf(',');
-    if (commaIndex != -1) {
-      return base64String.substring(commaIndex + 1);
-    }
-  }
-  return base64String;
-}
 
 class HomeDetailsPage extends StatefulWidget {
   final String ac;
@@ -118,8 +106,8 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
             if (widget.image.isNotEmpty)
               Stack(
                 children: [
-                  Image.memory(
-                    base64Decode(sanitizeBase64(widget.image)),
+                  Image.network(
+                    widget.image,
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: 200,

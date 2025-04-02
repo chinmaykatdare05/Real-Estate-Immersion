@@ -1,5 +1,4 @@
 // ignore_for_file: library_private_types_in_public_api, deprecated_member_use, use_build_context_synchronously
-import 'dart:convert';
 import 'utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -578,8 +577,8 @@ class PropertyCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.memory(
-                base64Decode(sanitizeBase64(image)),
+              child: Image.network(
+                image,
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
@@ -628,11 +627,4 @@ class PropertyCard extends StatelessWidget {
       ),
     );
   }
-}
-
-String sanitizeBase64(String base64String) {
-  if (base64String.contains(',')) {
-    base64String = base64String.split(',').last;
-  }
-  return base64String.trim();
 }
