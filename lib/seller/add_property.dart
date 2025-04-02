@@ -728,8 +728,10 @@ class _AddPropertyState extends State<AddProperty> {
                                     }
                                     var userData = snapshot.data!.data()
                                         as Map<String, dynamic>;
-                                    sellerName = userData['Seller Name'];
-                                    sellerContact = userData['Seller Contact'];
+                                    sellerName =
+                                        userData['Seller Name'] ?? 'Seller';
+                                    sellerContact =
+                                        userData['Seller Contact'] ?? '';
                                     return const SizedBox
                                         .shrink(); // Placeholder widget
                                   },
