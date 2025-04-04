@@ -24,11 +24,11 @@ Future<Map<String, dynamic>?> getLatLngPincode(String address) async {
       final longitude = results["geometry"]["location"]["lng"];
 
       String? pincode;
-      for (var component in results["address_components"]) {
-        if (component["types"].contains("postal_code")) {
-          pincode = component["long_name"];
-          break;
-        }
+      try {
+        pincode = results["address_components"].firstWhere((component) =>
+            component["types"].contains("postal_code"))["long_name"];
+      } catch (e) {
+        pincode = null;
       }
 
       return {

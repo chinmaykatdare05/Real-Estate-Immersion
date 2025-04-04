@@ -3,7 +3,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'add_property.dart';
 
 class SellerDashboard extends StatefulWidget {
@@ -15,142 +14,47 @@ class SellerDashboard extends StatefulWidget {
 
 class _SellerDashboardState extends State<SellerDashboard> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-  late Future<DocumentSnapshot> _userData;
-
-  @override
-  void initState() {
-    super.initState();
-    _userData = fetchUserData();
-  }
 
   Future<DocumentSnapshot> fetchUserData() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    return await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+    return await _firestore.collection('Users').doc(uid).get();
   }
 
-  Future<void> _changePrice(String propertyId, double newPrice) async {
-    await _firestore
-        .collection('Properties')
-        .doc(propertyId)
-        .update({'Price': newPrice});
+  Future<void> _changePrice(String propertyId, String newPrice) async {
+    try {
+      await _firestore
+          .collection('Properties')
+          .doc(propertyId)
+          .update({'Price': newPrice});
+    } catch (e) {
+      debugPrint('Error updating price: $e');
+    }
   }
 
-  Future<void> _deleteProperty(String propertyId, String imagePath) async {
+  Future<void> _deleteProperty(String propertyId) async {
     try {
       await _firestore.collection('Properties').doc(propertyId).delete();
-      await _storage.ref(imagePath).delete();
     } catch (e) {
       debugPrint('Error deleting property: $e');
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          FutureBuilder<DocumentSnapshot>(
-            future: _userData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.hasError ||
-                  !snapshot.hasData ||
-                  !snapshot.data!.exists) {
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('Error loading user data.',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                );
-              }
-              var userData = snapshot.data!.data() as Map<String, dynamic>;
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text('Welcome, ${userData['Name']}!',
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
-              );
-            },
-          ),
-          const Divider(),
-          Expanded(
-            child: StreamBuilder(
-              stream: _firestore
-                  .collection('Properties')
-                  .where('sellerId',
-                      isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text('No properties found.'));
-                }
-                return ListView(
-                  children: snapshot.data!.docs.map((doc) {
-                    var data = doc.data() as Map<String, dynamic>;
-                    return ListTile(
-                      title: Text(data['Name'] ?? 'Property'),
-                      subtitle: Text('Price: \$${data['Price']}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () async {
-                              double? newPrice = await _showPriceDialog(
-                                  context, data['Price']);
-                              if (newPrice != null) {
-                                _changePrice(doc.id, newPrice);
-                              }
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () =>
-                                _deleteProperty(doc.id, data['Image']),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddProperty()),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  Future<double?> _showPriceDialog(
-      BuildContext context, double currentPrice) async {
+  Future<String?> _showPriceDialog(
+      BuildContext context, String currentPrice) async {
     TextEditingController priceController =
         TextEditingController(text: currentPrice.toString());
-    return showDialog<double>(
+    return showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Change Price'),
         content: TextField(
           controller: priceController,
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(hintText: 'Enter new price'),
+          decoration: const InputDecoration(
+            hintText: 'Enter new price',
+            border: OutlineInputBorder(),
+          ),
         ),
         actions: [
           TextButton(
@@ -159,14 +63,146 @@ class _SellerDashboardState extends State<SellerDashboard> {
           ),
           TextButton(
             onPressed: () {
-              double? newPrice = double.tryParse(priceController.text);
-              if (newPrice != null) {
-                Navigator.pop(context, newPrice);
-              }
+              String? newPrice = priceController.text;
+              Navigator.pop(context, newPrice);
             },
             child: const Text('Update'),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPropertyList(String sellerName) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore
+          .collection('Properties')
+          .where('Seller Name', isEqualTo: sellerName)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('No properties found.'));
+        }
+        return ListView(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          children: snapshot.data!.docs.map((doc) {
+            var data = doc.data() as Map<String, dynamic>;
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                title: Text(
+                  data['Address'] ?? 'Property',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Price: ₹ ${data['Price']}',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.blueAccent),
+                      onPressed: () async {
+                        String? newPrice =
+                            await _showPriceDialog(context, data['Price']);
+                        if (newPrice != null) {
+                          _changePrice(doc.id, newPrice);
+                          setState(() {});
+                        }
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.redAccent),
+                      onPressed: () => _deleteProperty(doc.id),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      body: FutureBuilder<DocumentSnapshot>(
+        future: fetchUserData(),
+        builder: (context, snapshot) {
+          // Show loading indicator while fetching user data
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          // Display error message if there's an error or data doesn't exist
+          if (snapshot.hasError ||
+              !snapshot.hasData ||
+              !snapshot.data!.exists) {
+            return const Center(
+              child: Text('Error loading user data.'),
+            );
+          }
+          // Get the seller name from the user data. Fallback to email if Name is null.
+          var userData = snapshot.data!.data() as Map<String, dynamic>;
+          final String sellerName =
+              userData['Name'] ?? FirebaseAuth.instance.currentUser!.email!;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 60),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'Welcome, $sellerName!',
+                  style: const TextStyle(
+                      fontSize: 32, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 30),
+              // const Divider(thickness: 1),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                
+                child: Text(
+                  'Your Listed Properties',
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[600]),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(child: _buildPropertyList(sellerName)),
+            ],
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddProperty()),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

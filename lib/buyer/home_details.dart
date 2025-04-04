@@ -110,7 +110,7 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                     widget.image,
                     fit: BoxFit.cover,
                     width: double.infinity,
-                    height: 200,
+                    height: 350,
                   ),
                   Positioned(
                     top: 10,
@@ -120,6 +120,40 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
+                    ),
+                  ),
+                  // New button overlaid at bottom-right corner
+                  Positioned(
+                    bottom: 10,
+                    right: 10,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 4),
+                      backgroundColor: const Color.fromARGB(135, 0, 0, 0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      ),
+                      onPressed: () {
+                      if (widget.model3D) {
+                        _show3DModel(context);
+                      }
+                      },
+                      child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                        '3D Model',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.threed_rotation, color: Colors.white),
+                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -378,88 +412,70 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           border: Border(
-            top: BorderSide(
-              color: Color.fromARGB(255, 231, 229, 229),
-              width: 2,
-            ),
+        top: BorderSide(
+          color: Color.fromARGB(255, 231, 229, 229),
+          width: 2,
+        ),
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 15, 15, 15),
+          padding: const EdgeInsets.fromLTRB(30, 0, 15, 0), // Reduced padding for bottom nav bar
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '₹ ${widget.price}',
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '₹ ${widget.price}',
+            style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (widget.model3D)
+            ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+            builder: (context) => PaymentScreen(propertyData: {
+              'Price': widget.price,
+            }),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (widget.model3D) {
-                    _show3DModel(context);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
-                ),
-                child: widget.model3D
-                    ? const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.threed_rotation, color: Colors.white),
-                          SizedBox(width: 8),
-                          Text(
-                            '3D Model',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      )
-                    : const Text(
-                        'Reserve',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-              ),
-              if (widget.model3D)
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentScreen(propertyData: {
-                                'Price': widget.price,
-                              })),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 25, vertical: 12),
-                  ),
-                  child: const Text(
-                    'Reserve',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 15, // Increased vertical padding for button height
+            ),
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+            colors: [
+              Color.fromARGB(255, 248, 6, 6),
+              Color.fromARGB(255, 240, 102, 102)
             ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 40,
+              vertical: 10, // Increased vertical padding for button height
+            ),
+            child: const Text(
+              'Reserve',
+              style: TextStyle(fontSize: 16, color: Colors.white), // Slightly increased font size
+            ),
+          ),
+            ),
+        ],
           ),
         ),
       ),

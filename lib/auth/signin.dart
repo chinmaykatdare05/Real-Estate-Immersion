@@ -12,12 +12,10 @@ const authOutlineInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.all(Radius.circular(100)),
 );
 
-// This widget represents the Sign In screen where users can enter their email and password to log in to the app.
 class SignIn extends StatelessWidget {
   SignIn({super.key});
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -65,21 +63,9 @@ class SignIn extends StatelessWidget {
                                 const TextStyle(color: Color(0xFF757575)),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(100)),
-                              borderSide: authOutlineInputBorder.borderSide,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(100)),
-                              borderSide: authOutlineInputBorder.borderSide,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(100)),
-                              borderSide: authOutlineInputBorder.borderSide,
-                            ),
+                            border: authOutlineInputBorder,
+                            enabledBorder: authOutlineInputBorder,
+                            focusedBorder: authOutlineInputBorder,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -105,21 +91,9 @@ class SignIn extends StatelessWidget {
                                 const TextStyle(color: Color(0xFF757575)),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(100)),
-                              borderSide: authOutlineInputBorder.borderSide,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(100)),
-                              borderSide: authOutlineInputBorder.borderSide,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(100)),
-                              borderSide: authOutlineInputBorder.borderSide,
-                            ),
+                            border: authOutlineInputBorder,
+                            enabledBorder: authOutlineInputBorder,
+                            focusedBorder: authOutlineInputBorder,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -131,41 +105,61 @@ class SignIn extends StatelessWidget {
                           },
                         ),
                         const SizedBox(height: 24.0),
-                        ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              final email = _emailController.text.trim();
-                              final password = _passwordController.text.trim();
 
-                              try {
-                                await AuthService().signin(
-                                  email: email,
-                                  password: password,
-                                  context: context,
-                                );
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      "SignIn failed. Please try again.",
+                        // Gradient Sign In Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 48,
+                          child: InkWell(
+                            onTap: () async {
+                              if (_formKey.currentState!.validate()) {
+                                final email = _emailController.text.trim();
+                                final password = _passwordController.text.trim();
+
+                                try {
+                                  await AuthService().signin(
+                                    email: email,
+                                    password: password,
+                                    context: context,
+                                  );
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "SignIn failed. Please try again.",
+                                      ),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 216, 16, 83),
                                     ),
-                                    backgroundColor:
-                                        Color.fromARGB(255, 216, 16, 83),
-                                  ),
-                                );
+                                  );
+                                }
                               }
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor:
-                                const Color.fromARGB(255, 216, 16, 83),
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(double.infinity, 48),
-                            shape: const StadiumBorder(),
+                            },
+                            borderRadius: BorderRadius.circular(100),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color.fromARGB(255, 248, 6, 6),
+                                    Color.fromARGB(255, 240, 102, 102)
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Center(
+                                child: const Text(
+                                  "Sign In",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
                           ),
-                          child: const Text("Sign In"),
                         ),
+
                         const SizedBox(height: 30),
                         RichText(
                           text: TextSpan(

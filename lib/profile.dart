@@ -47,7 +47,7 @@ class _ProfileState extends State<Profile> {
         return Scaffold(
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 15.0, 10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 30.0, 15.0, 10.0),
             child: Column(
               children: [
                 const Padding(
@@ -77,16 +77,29 @@ class _ProfileState extends State<Profile> {
                         horizontal: 20, vertical: 20),
                     child: Row(
                       children: [
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundColor:
-                              const Color.fromARGB(255, 216, 16, 83),
-                          child: Text(
-                            userData['Name'][0],
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 239, 238, 234),
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
+                        // Profile icon with gradient shading
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color.fromARGB(255, 248, 6, 6),
+                                Color.fromARGB(255, 240, 102, 102)
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              userData['Name'][0],
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -135,23 +148,35 @@ class _ProfileState extends State<Profile> {
                   child: ElevatedButton(
                     onPressed: _logout,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 216, 16, 83),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 20),
+                      padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: const BorderSide(
-                            color: Color.fromARGB(255, 216, 16, 83)),
                       ),
                       elevation: 0,
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
                     ),
-                    child: const Text(
-                      'Log out',
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 248, 6, 6),
+                            Color.fromARGB(255, 240, 102, 102)
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 20),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Log out',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
                 ),

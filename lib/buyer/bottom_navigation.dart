@@ -61,7 +61,7 @@ class _BuyerBottomNavigationState extends State<BuyerBottomNavigation> {
             label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.airbnb),
+            icon: Icon(FontAwesomeIcons.vrCardboard),
             label: 'Camera',
           ),
           BottomNavigationBarItem(
