@@ -55,13 +55,12 @@ class SignIn extends StatelessWidget {
                                 RegExp(r'[a-zA-Z0-9@._-]')),
                           ],
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Enter your Email",
                             labelText: "Email Address",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintStyle:
-                                const TextStyle(color: Color(0xFF757575)),
-                            contentPadding: const EdgeInsets.symmetric(
+                            hintStyle: TextStyle(color: Color(0xFF757575)),
+                            contentPadding: EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
                             border: authOutlineInputBorder,
                             enabledBorder: authOutlineInputBorder,
@@ -83,13 +82,12 @@ class SignIn extends StatelessWidget {
                           controller: _passwordController,
                           obscureText: true,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Enter your Password",
                             labelText: "Password",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintStyle:
-                                const TextStyle(color: Color(0xFF757575)),
-                            contentPadding: const EdgeInsets.symmetric(
+                            hintStyle: TextStyle(color: Color(0xFF757575)),
+                            contentPadding: EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
                             border: authOutlineInputBorder,
                             enabledBorder: authOutlineInputBorder,
@@ -114,7 +112,8 @@ class SignIn extends StatelessWidget {
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
                                 final email = _emailController.text.trim();
-                                final password = _passwordController.text.trim();
+                                final password =
+                                    _passwordController.text.trim();
 
                                 try {
                                   await AuthService().signin(
@@ -148,8 +147,8 @@ class SignIn extends StatelessWidget {
                                 ),
                                 borderRadius: BorderRadius.circular(100),
                               ),
-                              child: Center(
-                                child: const Text(
+                              child: const Center(
+                                child: Text(
                                   "Sign In",
                                   style: TextStyle(
                                       color: Colors.white,

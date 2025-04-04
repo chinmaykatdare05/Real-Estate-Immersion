@@ -60,13 +60,12 @@ class SignUp extends StatelessWidget {
                                 RegExp(r'[a-zA-Z\s]')),
                           ],
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Enter your Name",
                             labelText: "Name",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintStyle:
-                                const TextStyle(color: Color(0xFF757575)),
-                            contentPadding: const EdgeInsets.symmetric(
+                            hintStyle: TextStyle(color: Color(0xFF757575)),
+                            contentPadding: EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
                             border: authOutlineInputBorder,
                             enabledBorder: authOutlineInputBorder,
@@ -88,13 +87,12 @@ class SignUp extends StatelessWidget {
                                 RegExp(r'[a-zA-Z0-9@._-]')),
                           ],
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Enter your email",
                             labelText: "Email Address",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintStyle:
-                                const TextStyle(color: Color(0xFF757575)),
-                            contentPadding: const EdgeInsets.symmetric(
+                            hintStyle: TextStyle(color: Color(0xFF757575)),
+                            contentPadding: EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
                             border: authOutlineInputBorder,
                             enabledBorder: authOutlineInputBorder,
@@ -116,13 +114,12 @@ class SignUp extends StatelessWidget {
                           controller: passwordController,
                           obscureText: true,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Enter your password",
                             labelText: "Password",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintStyle:
-                                const TextStyle(color: Color(0xFF757575)),
-                            contentPadding: const EdgeInsets.symmetric(
+                            hintStyle: TextStyle(color: Color(0xFF757575)),
+                            contentPadding: EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
                             border: authOutlineInputBorder,
                             enabledBorder: authOutlineInputBorder,
@@ -147,13 +144,12 @@ class SignUp extends StatelessWidget {
                             LengthLimitingTextInputFormatter(10),
                           ],
                           textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Enter your phone number",
                             labelText: "Phone Number",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintStyle:
-                                const TextStyle(color: Color(0xFF757575)),
-                            contentPadding: const EdgeInsets.symmetric(
+                            hintStyle: TextStyle(color: Color(0xFF757575)),
+                            contentPadding: EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 16),
                             border: authOutlineInputBorder,
                             enabledBorder: authOutlineInputBorder,
@@ -185,7 +181,8 @@ class SignUp extends StatelessWidget {
                           borderRadius: BorderRadius.circular(100),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1),
+                              color: const Color.fromARGB(255, 255, 255, 255)
+                                  .withOpacity(0.1),
                               blurRadius: 4,
                               offset: const Offset(0, 2),
                             ),
@@ -193,46 +190,46 @@ class SignUp extends StatelessWidget {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(100),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(100),
                           ),
                           child: ToggleButtons(
-                          isSelected: [isBuyer, !isBuyer],
-                          onPressed: (index) {
-                            setState(() {
-                            if (index == 0) {
-                              _authService.setUserType(UserType.buyer);
-                            } else {
-                              _authService.setUserType(UserType.seller);
-                            }
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(100),
-                          borderColor: Colors.transparent,
-                          selectedBorderColor: Colors.transparent,
-                          selectedColor: Colors.white,
-                          fillColor: const Color.fromARGB(255, 252, 83, 89),
-                          textStyle: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          children: const [
-                            Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                            child: Text("Buyer"),
+                            isSelected: [isBuyer, !isBuyer],
+                            onPressed: (index) {
+                              setState(() {
+                                if (index == 0) {
+                                  _authService.setUserType(UserType.buyer);
+                                } else {
+                                  _authService.setUserType(UserType.seller);
+                                }
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(100),
+                            borderColor: Colors.transparent,
+                            selectedBorderColor: Colors.transparent,
+                            selectedColor: Colors.white,
+                            fillColor: const Color.fromARGB(255, 252, 83, 89),
+                            textStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                            child: Text("Seller"),
-                            ),
-                          ],
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                child: Text("Buyer"),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                child: Text("Seller"),
+                              ),
+                            ],
                           ),
                         ),
-                        );
-                      },
-                      ),
+                      );
+                    },
+                  ),
 
                   const SizedBox(height: 24.0),
 

@@ -81,9 +81,9 @@ class _ProfileState extends State<Profile> {
                         Container(
                           width: 70,
                           height: 70,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            gradient: const LinearGradient(
+                            gradient: LinearGradient(
                               colors: [
                                 Color.fromARGB(255, 248, 6, 6),
                                 Color.fromARGB(255, 240, 102, 102)

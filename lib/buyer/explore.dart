@@ -428,31 +428,29 @@ class _ExplorePageState extends State<ExplorePage> {
                                   duration: const Duration(milliseconds: 250),
                                   curve: Curves.easeInOut,
                                   height: 50,
-                                    decoration: BoxDecoration(
+                                  decoration: BoxDecoration(
                                     gradient: isSelected
-                                      ? const LinearGradient(
-                                        colors: [
-                                          Color.fromARGB(255, 248, 6, 6),
-                                          Color.fromARGB(255, 240, 102, 102)
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        )
-                                      : null,
-                                    color: isSelected
-                                      ? null
-                                      : Colors.white,
+                                        ? const LinearGradient(
+                                            colors: [
+                                              Color.fromARGB(255, 248, 6, 6),
+                                              Color.fromARGB(255, 240, 102, 102)
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          )
+                                        : null,
+                                    color: isSelected ? null : Colors.white,
                                     borderRadius: BorderRadius.circular(30),
                                     boxShadow: isSelected
-                                      ? [
-                                        BoxShadow(
-                                          color:
-                                            Colors.black.withOpacity(0.1),
-                                          blurRadius: 5,
-                                        )
-                                        ]
-                                      : [],
-                                    ),
+                                        ? [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              blurRadius: 5,
+                                            )
+                                          ]
+                                        : [],
+                                  ),
                                   margin: isSelected
                                       ? const EdgeInsets.all(3)
                                       : EdgeInsets.zero,

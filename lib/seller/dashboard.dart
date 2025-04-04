@@ -86,54 +86,63 @@ class _SellerDashboardState extends State<SellerDashboard> {
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return const Center(child: Text('No properties found.'));
         }
-        return ListView(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          children: snapshot.data!.docs.map((doc) {
-            var data = doc.data() as Map<String, dynamic>;
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            var data =
+                snapshot.data!.docs[index].data() as Map<String, dynamic>;
             return Card(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              elevation: 2,
+              margin: const EdgeInsets.only(bottom: 16),
+              elevation: 3,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: ListTile(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                title: Text(
-                  data['Address'] ?? 'Property',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    'Price: ₹ ${data['Price']}',
-                    style: const TextStyle(fontSize: 14),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    data['Address'] ?? 'Property',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blueAccent),
-                      onPressed: () async {
-                        String? newPrice =
-                            await _showPriceDialog(context, data['Price']);
-                        if (newPrice != null) {
-                          _changePrice(doc.id, newPrice);
-                          setState(() {});
-                        }
-                      },
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      'Price: ₹ ${data['Price']}',
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.redAccent),
-                      onPressed: () => _deleteProperty(doc.id),
-                    ),
-                  ],
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit, color: Colors.blueAccent),
+                        onPressed: () async {
+                          String? newPrice =
+                              await _showPriceDialog(context, data['Price']);
+                          if (newPrice != null) {
+                            _changePrice(
+                                snapshot.data!.docs[index].id, newPrice);
+                            setState(() {});
+                          }
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.redAccent),
+                        onPressed: () =>
+                            _deleteProperty(snapshot.data!.docs[index].id),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
-          }).toList(),
+          },
         );
       },
     );
@@ -142,7 +151,6 @@ class _SellerDashboardState extends State<SellerDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: FutureBuilder<DocumentSnapshot>(
         future: fetchUserData(),
         builder: (context, snapshot) {
@@ -177,25 +185,24 @@ class _SellerDashboardState extends State<SellerDashboard> {
               ),
               const SizedBox(height: 30),
               // const Divider(thickness: 1),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   'Your Listed Properties',
                   style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[600]),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               Expanded(child: _buildPropertyList(sellerName)),
             ],
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        
         onPressed: () {
           Navigator.push(
             context,

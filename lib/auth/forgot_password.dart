@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,7 +29,8 @@ class ForgotPassword extends StatelessWidget {
           // Email does not exist in Firestore.
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Email not found. Please check your entry or sign up.'),
+              content:
+                  Text('Email not found. Please check your entry or sign up.'),
             ),
           );
           return;
@@ -36,7 +39,8 @@ class ForgotPassword extends StatelessWidget {
         await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Password reset email sent. Please check your inbox.'),
+            content:
+                Text('Password reset email sent. Please check your inbox.'),
           ),
         );
       } catch (e) {
@@ -92,70 +96,71 @@ class ForgotPassword extends StatelessWidget {
                   Form(
                     key: _formKey,
                     child: Column(
-                        children: [
+                      children: [
                         TextFormField(
                           controller: _emailController,
                           decoration: InputDecoration(
-                          hintText: "Enter your email",
-                          labelText: "Email",
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          hintStyle:
-                            const TextStyle(color: Color(0xFF757575)),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 16),
-                          border: authOutlineInputBorder,
-                          enabledBorder: authOutlineInputBorder,
-                          focusedBorder: authOutlineInputBorder.copyWith(
-                            borderSide: const BorderSide(
-                              color: Color(0xFFFF7643))),
+                            hintText: "Enter your email",
+                            labelText: "Email",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            hintStyle:
+                                const TextStyle(color: Color(0xFF757575)),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 16),
+                            border: authOutlineInputBorder,
+                            enabledBorder: authOutlineInputBorder,
+                            focusedBorder: authOutlineInputBorder.copyWith(
+                                borderSide:
+                                    const BorderSide(color: Color(0xFFFF7643))),
                           ),
                           inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'[a-zA-Z0-9@._-]'))
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[a-zA-Z0-9@._-]'))
                           ],
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Email is required';
-                          }
-                          final emailRegex = RegExp(
-                            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-                          if (!emailRegex.hasMatch(value)) {
-                            return 'Enter a valid email address';
-                          }
-                          return null;
+                            if (value == null || value.isEmpty) {
+                              return 'Email is required';
+                            }
+                            final emailRegex = RegExp(
+                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                            if (!emailRegex.hasMatch(value)) {
+                              return 'Enter a valid email address';
+                            }
+                            return null;
                           },
                         ),
                         const SizedBox(height: 40),
                         ElevatedButton(
                           onPressed: () => _handleForgotPassword(context),
                           style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          minimumSize: const Size(double.infinity, 48),
-                          shape: const StadiumBorder(),
-                          padding: EdgeInsets.zero,
+                            elevation: 0,
+                            minimumSize: const Size(double.infinity, 48),
+                            shape: const StadiumBorder(),
+                            padding: EdgeInsets.zero,
                           ),
                           child: Ink(
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                            colors: [
-                              Color.fromARGB(255, 248, 6, 6),
-                              Color.fromARGB(255, 240, 102, 102)
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color.fromARGB(255, 248, 6, 6),
+                                  Color.fromARGB(255, 240, 102, 102)
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(24)),
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(24)),
-                          ),
-                          child: Container(
-                            alignment: Alignment.center,
-                            constraints: const BoxConstraints(
-                              minHeight: 48, maxWidth: double.infinity),
-                            child: const Text(
-                            "Continue",
-                            style: TextStyle(color: Colors.white),
+                            child: Container(
+                              alignment: Alignment.center,
+                              constraints: const BoxConstraints(
+                                  minHeight: 48, maxWidth: double.infinity),
+                              child: const Text(
+                                "Continue",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                          ),
                           ),
                         ),
                       ],

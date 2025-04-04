@@ -97,235 +97,260 @@ class _PaymentScreenState extends State<PaymentScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Select Dates',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              GestureDetector(
-                onTap: () => _selectDates(context),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        selectedDates == null
-                            ? 'Choose your dates'
-                            : '${selectedDates!.start.day}/${selectedDates!.start.month}/${selectedDates!.start.year} - ${selectedDates!.end.day}/${selectedDates!.end.month}/${selectedDates!.end.year}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const Icon(Icons.calendar_today, color: Colors.grey),
-                    ],
-                  ),
-                ),
-              ),
+              _buildDateSelectionSection(context),
               const SizedBox(height: 20),
-              if (selectedDates != null)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Price Details',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '₹${price.toStringAsFixed(2)} x ${getTotalNights()} nights',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          '₹${getSubtotal().toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    if (getTotalNights() >= 60) ...[
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Long Stay Discount (40%)',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 14, 16, 14)),
-                          ),
-                          Text(
-                            '- ₹${getLongStayDiscount().toStringAsFixed(2)}',
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green),
-                          ),
-                        ],
-                      ),
-                    ],
-                    if (getDiscount() > 0) ...[
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Additional Discount (${(getDiscount() * 100).toInt()}%)',
-                            style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 11, 14, 11)),
-                          ),
-                          Text(
-                            '- ₹${getDiscountAmount().toStringAsFixed(2)}',
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green),
-                          ),
-                        ],
-                      ),
-                    ],
-                    const SizedBox(height: 8),
-                    if (getTotalNights() <= 30) ...[
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Taxes (18%)',
-                              style: TextStyle(fontSize: 16)),
-                          Text(
-                            '₹${getTaxes().toStringAsFixed(2)}',
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                    if (getTotalNights() > 0) ...[
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Platform Fees (0.50% or ₹20)',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color.fromARGB(255, 14, 14, 14))),
-                          Text(
-                            '₹${getPlatformFees().toStringAsFixed(2)}',
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 12, 10, 10)),
-                          ),
-                        ],
-                      ),
-                    ],
-                    const Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Total (INR)',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text(
-                          '₹${getTotalAmount().toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              if (selectedDates != null) _buildPriceDetailsSection(),
               const Divider(),
               const SizedBox(height: 20),
-              const Text(
-                'Cancellation Policy',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'This reservation is non-refundable.',
-                style: TextStyle(fontSize: 16),
-              ),
+              _buildCancellationPolicySection(),
               const SizedBox(height: 20),
               const Divider(),
-              const Text(
-                'Ground Rules',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'We ask every guest to remember a few simple things about what makes a great guest:',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              const Text('• Follow the house rules',
-                  style: TextStyle(fontSize: 16)),
-              const Text('• Treat your Host’s home like your own',
-                  style: TextStyle(fontSize: 16)),
+              _buildGroundRulesSection(),
               const SizedBox(height: 20),
               const Divider(),
-              const Text(
-                'Booking Rules',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+              _buildBookingRulesSection(),
               const SizedBox(height: 20),
-              const Text(
-                '• If booking is above 30 days, 10% discount is applied.',
-                style: TextStyle(fontSize: 16),
-              ),
-              const Text(
-                '• If booking is above 60 days, 15% discount is applied.',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 0),
-              const Text(
-                '',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 0),
-              const Text(
-                '',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 0),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (selectedDates == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content:
-                              Text('Please select dates before proceeding.'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    } else {
-                      _launchPayment();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: const Color.fromARGB(255, 245, 31, 102),
-                  ),
-                  child: const Text(
-                    'Confirm and Pay',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
+              _buildConfirmButton(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateSelectionSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Select Dates',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: () => _selectDates(context),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  selectedDates == null
+                      ? 'Choose your dates'
+                      : '${selectedDates!.start.day}/${selectedDates!.start.month}/${selectedDates!.start.year} - ${selectedDates!.end.day}/${selectedDates!.end.month}/${selectedDates!.end.year}',
+                  style: const TextStyle(fontSize: 16),
                 ),
+                const Icon(Icons.calendar_today, color: Colors.grey),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPriceDetailsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Price Details',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '₹${price.toStringAsFixed(2)} x ${getTotalNights()} nights',
+              style: const TextStyle(fontSize: 16),
+            ),
+            Text(
+              '₹${getSubtotal().toStringAsFixed(2)}',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        if (getTotalNights() >= 60) ...[
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Long Stay Discount (40%)',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromARGB(255, 14, 16, 14)),
+              ),
+              Text(
+                '- ₹${getLongStayDiscount().toStringAsFixed(2)}',
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green),
               ),
             ],
           ),
+        ],
+        if (getDiscount() > 0) ...[
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Additional Discount (${(getDiscount() * 100).toInt()}%)',
+                style: const TextStyle(
+                    fontSize: 16, color: Color.fromARGB(255, 11, 14, 11)),
+              ),
+              Text(
+                '- ₹${getDiscountAmount().toStringAsFixed(2)}',
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green),
+              ),
+            ],
+          ),
+        ],
+        const SizedBox(height: 8),
+        if (getTotalNights() <= 30) ...[
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Taxes (18%)', style: TextStyle(fontSize: 16)),
+              Text(
+                '₹${getTaxes().toStringAsFixed(2)}',
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
+        if (getTotalNights() > 0) ...[
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Platform Fees (0.50% or ₹20)',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromARGB(255, 14, 14, 14)),
+              ),
+              Text(
+                '₹${getPlatformFees().toStringAsFixed(2)}',
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 12, 10, 10)),
+              ),
+            ],
+          ),
+        ],
+        const Divider(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Total (INR)',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '₹${getTotalAmount().toStringAsFixed(2)}',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCancellationPolicySection() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Cancellation Policy',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8),
+        Text(
+          'This reservation is non-refundable.',
+          style: TextStyle(fontSize: 16),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGroundRulesSection() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Ground Rules',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8),
+        Text(
+          'We ask every guest to remember a few simple things about what makes a great guest:',
+          style: TextStyle(fontSize: 16),
+        ),
+        SizedBox(height: 8),
+        Text('• Follow the house rules', style: TextStyle(fontSize: 16)),
+        Text('• Treat your Host’s home like your own',
+            style: TextStyle(fontSize: 16)),
+      ],
+    );
+  }
+
+  Widget _buildBookingRulesSection() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Booking Rules',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 20),
+        Text(
+          '• If booking is above 30 days, 10% discount is applied.',
+          style: TextStyle(fontSize: 16),
+        ),
+        Text(
+          '• If booking is above 60 days, 15% discount is applied.',
+          style: TextStyle(fontSize: 16),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConfirmButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          if (selectedDates == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Please select dates before proceeding.'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          } else {
+            _launchPayment();
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          backgroundColor: const Color.fromARGB(255, 245, 31, 102),
+        ),
+        child: const Text(
+          'Confirm and Pay',
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
     );

@@ -103,305 +103,33 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (widget.image.isNotEmpty)
-              Stack(
-                children: [
-                  Image.network(
-                    widget.image,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 350,
-                  ),
-                  Positioned(
-                    top: 10,
-                    left: 10,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ),
-                  // New button overlaid at bottom-right corner
-                  Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 4),
-                      backgroundColor: const Color.fromARGB(135, 0, 0, 0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      ),
-                      onPressed: () {
-                      if (widget.model3D) {
-                        _show3DModel(context);
-                      }
-                      },
-                      child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                        '3D Model',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Icon(Icons.threed_rotation, color: Colors.white),
-                      ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            if (widget.image.isNotEmpty) _buildHeaderImage(context),
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.address,
-                        style: const TextStyle(
-                            fontSize: 26, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        widget.landmark,
-                        style: TextStyle(
-                            fontSize: 16, color: Colors.grey.shade600),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${widget.rooms} rooms, ${widget.washroom} washrooms, ${widget.area} sqft',
-                        style: TextStyle(
-                            fontSize: 14, color: Colors.grey.shade700),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Pincode: ${widget.pincode}',
-                        style: TextStyle(
-                            fontSize: 14, color: Colors.grey.shade700),
-                      ),
-                    ],
-                  ),
+                  _buildPropertyInfo(),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Description',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    widget.description,
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                  ),
+                  _buildDescription(),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'What this place offers',
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      if (widget.ac != '0')
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: const Icon(FontAwesomeIcons.snowflake,
-                              color: Colors.blue),
-                          title: const Text('Air Conditioning'),
-                          subtitle: Text(widget.ac),
-                        ),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(FontAwesomeIcons.couch,
-                            color: Colors.blue),
-                        title: const Text('Living Room'),
-                        subtitle:
-                            Text(widget.furnish ? 'Furnished' : 'Unfurnished'),
-                      ),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(FontAwesomeIcons.fire,
-                            color: Colors.blue),
-                        title: const Text('Kitchen'),
-                        subtitle:
-                            Text(widget.gas ? 'Gas Stove' : 'No Gas Stove'),
-                      ),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(FontAwesomeIcons.elevator,
-                            color: Colors.blue),
-                        title: const Text('Building Facilities'),
-                        subtitle:
-                            Text(widget.lift ? 'Lift available' : 'No Lift'),
-                      ),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(FontAwesomeIcons.car,
-                            color: Colors.blue),
-                        title: const Text('Parking'),
-                        subtitle: Text(widget.parking
-                            ? 'Parking available'
-                            : 'No Parking'),
-                      ),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(FontAwesomeIcons.water,
-                            color: Colors.blue),
-                        title: const Text('Water Supply'),
-                        subtitle: Text("Water Supply - ${widget.waterSupply}"),
-                      ),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(FontAwesomeIcons.wifi,
-                            color: Colors.blue),
-                        title: const Text('Internet'),
-                        subtitle:
-                            Text(widget.wifi ? 'Wifi available' : 'No Wifi'),
-                      ),
-                    ],
-                  ),
+                  _buildOffers(),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Nearest Transit',
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(FontAwesomeIcons.busAlt,
-                            color: Colors.blue),
-                        title: const Text('Bus Stop'),
-                        subtitle: Text(widget.busStop),
-                      ),
-                      const SizedBox(height: 12),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(FontAwesomeIcons.train,
-                            color: Colors.blue),
-                        title: const Text('Train Station'),
-                        subtitle: Text(widget.railwayStn),
-                      ),
-                    ],
-                  ),
+                  _buildTransitInfo(),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Meet your Host',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundColor: Colors.deepOrange,
-                        child: Text(
-                          widget.sellerName[0],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 30),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.sellerName,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              widget.sellerContact,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildHostInfo(),
                   const SizedBox(height: 16),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Where you'll be",
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        widget.address,
-                        style: TextStyle(fontSize: 16, color: Colors.grey[800]),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border:
-                              Border.all(color: Colors.grey.shade300, width: 1),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: SizedBox(
-                            height: 300,
-                            child: GoogleMap(
-                              initialCameraPosition: CameraPosition(
-                                target: LatLng(
-                                  double.parse(widget.latitude),
-                                  double.parse(widget.longitude),
-                                ),
-                                zoom: 14,
-                              ),
-                              markers: {
-                                Marker(
-                                  markerId: const MarkerId('location'),
-                                  position: LatLng(
-                                    double.parse(widget.latitude),
-                                    double.parse(widget.longitude),
-                                  ),
-                                ),
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildLocationInfo(),
                   const SizedBox(height: 16),
                 ],
               ),
@@ -409,74 +137,342 @@ class _HomeDetailsPageState extends State<HomeDetailsPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-        top: BorderSide(
-          color: Color.fromARGB(255, 231, 229, 229),
-          width: 2,
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+
+  Widget _buildHeaderImage(BuildContext context) {
+    return Stack(
+      children: [
+        Image.network(
+          widget.image,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: 350,
         ),
+        Positioned(
+          top: 10,
+          left: 10,
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 0, 15, 0), // Reduced padding for bottom nav bar
-          child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '₹ ${widget.price}',
-            style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-            ),
-          ),
-          if (widget.model3D)
-            ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-            builder: (context) => PaymentScreen(propertyData: {
-              'Price': widget.price,
-            }),
+        Positioned(
+          bottom: 10,
+          right: 10,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              backgroundColor: const Color.fromARGB(135, 0, 0, 0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
             ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 15, // Increased vertical padding for button height
+            onPressed: () {
+              if (widget.model3D) _show3DModel(context);
+            },
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '3D Model',
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                ),
+                SizedBox(width: 4),
+                Icon(Icons.threed_rotation, color: Colors.white),
+              ],
             ),
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-            colors: [
-              Color.fromARGB(255, 248, 6, 6),
-              Color.fromARGB(255, 240, 102, 102)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPropertyInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.address,
+          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          widget.landmark,
+          style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '${widget.rooms} rooms, ${widget.washroom} washrooms, ${widget.area} sqft',
+          style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Pincode: ${widget.pincode}',
+          style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDescription() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Description',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          widget.description,
+          style: const TextStyle(fontSize: 16, color: Colors.black),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOffers() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'What this place offers',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        if (widget.ac != '0')
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(FontAwesomeIcons.snowflake, color: Colors.blue),
+            title: const Text('Air Conditioning'),
+            subtitle: Text(widget.ac),
+          ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(FontAwesomeIcons.couch, color: Colors.blue),
+          title: const Text('Living Room'),
+          subtitle: Text(widget.furnish ? 'Furnished' : 'Unfurnished'),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(FontAwesomeIcons.fire, color: Colors.blue),
+          title: const Text('Kitchen'),
+          subtitle: Text(widget.gas ? 'Gas Stove' : 'No Gas Stove'),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(FontAwesomeIcons.elevator, color: Colors.blue),
+          title: const Text('Building Facilities'),
+          subtitle: Text(widget.lift ? 'Lift available' : 'No Lift'),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(FontAwesomeIcons.car, color: Colors.blue),
+          title: const Text('Parking'),
+          subtitle: Text(widget.parking ? 'Parking available' : 'No Parking'),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(FontAwesomeIcons.water, color: Colors.blue),
+          title: const Text('Water Supply'),
+          subtitle: Text("Water Supply - ${widget.waterSupply}"),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(FontAwesomeIcons.wifi, color: Colors.blue),
+          title: const Text('Internet'),
+          subtitle: Text(widget.wifi ? 'Wifi available' : 'No Wifi'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTransitInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Nearest Transit',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(FontAwesomeIcons.busAlt, color: Colors.blue),
+          title: const Text('Bus Stop'),
+          subtitle: Text(widget.busStop),
+        ),
+        const SizedBox(height: 12),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(FontAwesomeIcons.train, color: Colors.blue),
+          title: const Text('Train Station'),
+          subtitle: Text(widget.railwayStn),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHostInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Meet your Host',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            CircleAvatar(
+              radius: 35,
+              backgroundColor: Colors.deepOrange,
+              child: Text(
+                widget.sellerName[0],
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              borderRadius: BorderRadius.circular(20),
             ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 40,
-              vertical: 10, // Increased vertical padding for button height
+            const SizedBox(width: 30),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.sellerName,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    widget.sellerContact,
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
             ),
-            child: const Text(
-              'Reserve',
-              style: TextStyle(fontSize: 16, color: Colors.white), // Slightly increased font size
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLocationInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Where you'll be",
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          widget.address,
+          style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              height: 300,
+              child: GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                    double.parse(widget.latitude),
+                    double.parse(widget.longitude),
+                  ),
+                  zoom: 14,
+                ),
+                markers: {
+                  Marker(
+                    markerId: const MarkerId('location'),
+                    position: LatLng(
+                      double.parse(widget.latitude),
+                      double.parse(widget.longitude),
+                    ),
+                  ),
+                },
+              ),
             ),
           ),
-            ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBottomNavigationBar(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Color.fromARGB(255, 231, 229, 229),
+            width: 2,
           ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(30, 0, 15, 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '₹ ${widget.price}',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            if (widget.model3D)
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          PaymentScreen(propertyData: {'Price': widget.price}),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 248, 6, 6),
+                        Color.fromARGB(255, 240, 102, 102)
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  child: const Text(
+                    'Reserve',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
