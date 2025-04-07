@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter03/auth/signup.dart';
 import 'package:flutter03/auth/forgot_password.dart';
-import 'package:flutter03/auth/auth_service.dart';
+import 'package:flutter03/auth_service.dart';
 
 const authOutlineInputBorder = OutlineInputBorder(
   borderSide: BorderSide(color: Color(0xFF757575)),
