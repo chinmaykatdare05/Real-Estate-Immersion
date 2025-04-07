@@ -3,35 +3,27 @@ import 'utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home_details.dart';
-import 'event_page.dart';
-import 'building.dart';
 import 'package:geolocator/geolocator.dart';
 
 int selectedIndex = 0;
 
-/// Recommends properties by filtering Firestore documents based on their proximity to the geocoded [address].
-/// Returns a list of Firestore DocumentSnapshots for properties within [maxDistanceKm].
 Future<List<DocumentSnapshot>> getRecommendedProperties(String address,
     {double maxDistanceKm = 10.0}) async {
-  // Get the geocoded location from the user-entered address.
   final locationData = await getLatLngPincode(address);
   if (locationData == null) return [];
 
   final double userLat = locationData["lat"];
   final double userLng = locationData["lng"];
 
-  // Fetch all properties from Firestore. (Consider refining your query based on your needs.)
   QuerySnapshot snapshot = await FirebaseFirestore.instance
       .collection('Properties')
       .where('Sale', isEqualTo: selectedIndex == 0)
       .get();
   List<DocumentSnapshot> allProperties = snapshot.docs;
 
-  // Filter properties based on distance.
   List<DocumentSnapshot> recommendedProperties = [];
   for (var doc in allProperties) {
     final property = doc.data() as Map<String, dynamic>;
-    // Parse latitude and longitude from the property document.
     final double? propertyLat =
         double.tryParse(property['Latitude']?.toString() ?? "");
     final double? propertyLng =
@@ -44,7 +36,6 @@ Future<List<DocumentSnapshot>> getRecommendedProperties(String address,
       }
     }
   }
-  // Sort properties by distance from the user location.
   recommendedProperties.sort((a, b) {
     final Map<String, dynamic> propA = a.data() as Map<String, dynamic>;
     final Map<String, dynamic> propB = b.data() as Map<String, dynamic>;
@@ -64,24 +55,19 @@ Future<List<DocumentSnapshot>> getRecommendedProperties(String address,
   return recommendedProperties;
 }
 
-/// Recommends properties by filtering Firestore documents based on their proximity to the geocoded [address].
-/// Returns a list of Firestore DocumentSnapshots for properties within [maxDistanceKm].
 Future<List<DocumentSnapshot>> getRecommendedPropertiesByLocation(
     double userLat, double userLng,
     {double maxDistanceKm = 10.0}) async {
   debugPrint("User Lat: $userLat, User Lng: $userLng");
-  // Fetch all properties from Firestore. (Consider refining your query based on your needs.)
   QuerySnapshot snapshot = await FirebaseFirestore.instance
       .collection('Properties')
       .where('Sale', isEqualTo: selectedIndex == 0)
       .get();
   List<DocumentSnapshot> allProperties = snapshot.docs;
 
-  // Filter properties based on distance.
   List<DocumentSnapshot> recommendedProperties = [];
   for (var doc in allProperties) {
     final property = doc.data() as Map<String, dynamic>;
-    // Parse latitude and longitude from the property document.
     final double? propertyLat =
         double.tryParse(property['Latitude']?.toString() ?? "");
     final double? propertyLng =
@@ -94,7 +80,6 @@ Future<List<DocumentSnapshot>> getRecommendedPropertiesByLocation(
       }
     }
   }
-  // Sort properties by distance from the user location.
   recommendedProperties.sort((a, b) {
     final Map<String, dynamic> propA = a.data() as Map<String, dynamic>;
     final Map<String, dynamic> propB = b.data() as Map<String, dynamic>;
@@ -126,26 +111,6 @@ class _ExplorePageState extends State<ExplorePage> {
   final List<String> categories = ['Buy', 'Rent'];
   List<DocumentSnapshot> searchSuggestions = [];
 
-  final List<Map<String, dynamic>> propertyTypes = [
-    {'name': 'Event', 'icon': Icons.event},
-    {'name': 'Building', 'icon': Icons.apartment},
-    {'name': 'Pool', 'icon': Icons.pool},
-    {'name': 'Garden', 'icon': Icons.park},
-    {'name': 'Resort', 'icon': Icons.beach_access},
-    {'name': 'Concert', 'icon': Icons.music_note},
-    {'name': 'Function', 'icon': Icons.event_seat},
-  ];
-
-  final List<Color> pastelColors = [
-    Colors.pink.shade50,
-    Colors.blue.shade50,
-    Colors.orange.shade50,
-    Colors.green.shade50,
-    Colors.yellow.shade50,
-    Colors.purple.shade50,
-    Colors.teal.shade50,
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,7 +130,6 @@ class _ExplorePageState extends State<ExplorePage> {
                     children: [
                       Row(
                         children: [
-                          // Expanded search field
                           Expanded(
                             child: Material(
                               elevation: 5,
@@ -199,19 +163,16 @@ class _ExplorePageState extends State<ExplorePage> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          // Location button
                           Material(
                             elevation: 5,
                             borderRadius: BorderRadius.circular(30),
                             child: IconButton(
                               icon: const Icon(Icons.my_location),
                               onPressed: () async {
-                                // Get current position using geolocator
                                 final position =
                                     await Geolocator.getCurrentPosition(
                                   desiredAccuracy: LocationAccuracy.high,
                                 );
-                                // Call the function with current latitude and longitude
                                 final recommendedPropertiesByLocation =
                                     await getRecommendedPropertiesByLocation(
                                         position.latitude, position.longitude);
@@ -330,78 +291,6 @@ class _ExplorePageState extends State<ExplorePage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: propertyTypes.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final property = entry.value;
-                      final backgroundColor =
-                          pastelColors[index % pastelColors.length];
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                        child: InkWell(
-                          onTap: () {
-                            if (property['name'] == 'Event') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const EventPage(),
-                                ),
-                              );
-                            } else if (property['name'] == 'Building') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const BuildingPage(),
-                                ),
-                              );
-                            }
-                          },
-                          child: Container(
-                            width: 85,
-                            height: 67,
-                            decoration: BoxDecoration(
-                              color: backgroundColor,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  property['icon'],
-                                  size: 25,
-                                  color: Colors.black54,
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  property['name'].toString().toUpperCase(),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                const Divider(
-                  color: Color.fromARGB(255, 237, 232, 232),
-                  thickness: 1,
-                  indent: 0,
-                  endIndent: 0,
-                ),
-                const SizedBox(height: 02),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 10),
@@ -472,6 +361,12 @@ class _ExplorePageState extends State<ExplorePage> {
                       }),
                     ),
                   ),
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 237, 232, 232),
+                  thickness: 1,
+                  indent: 0,
+                  endIndent: 0,
                 ),
                 const SizedBox(height: 10),
                 StreamBuilder<QuerySnapshot>(

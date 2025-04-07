@@ -336,7 +336,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Please select dates before proceeding.'),
-                backgroundColor: Colors.red,
               ),
             );
           } else {
